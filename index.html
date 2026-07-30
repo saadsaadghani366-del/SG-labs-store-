@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="pageTitle">SG Labs Store</title>
+  <!-- PWA Manifest Link -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#238636">
   <style>
     :root {
       --bg-color: #0d1117;
@@ -196,7 +199,7 @@
     <p id="heroDesc">Explore high-quality electronic kits, robotics components, and smart automation modules.</p>
   </div>
 
-  <!-- About & Features Section -->
+  <!-- About & Views Section -->
   <div class="info-section">
     <div class="box">
       <h3>About Us</h3>
@@ -405,8 +408,6 @@
       }).then(() => {
         closeSettingsModal();
         alert("Website settings updated successfully!");
-      }).catch((error) => {
-        alert("Error saving: " + error.message);
       });
     }
 
@@ -414,7 +415,7 @@
       const name = document.getElementById('pName').value;
       const price = document.getElementById('pPrice').value;
       const image = document.getElementById('pImg').value;
-      const desc = document.getElementById('pDesc').value;
+      const desc = document.getElementById('pDesc5').value || document.getElementById('pDesc').value;
 
       if (!name || !price) {
         alert("Please enter Name and Price!");
