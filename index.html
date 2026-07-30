@@ -32,17 +32,22 @@
       align-items: center;
       gap: 12px;
     }
-    .logo-icon {
+    .logo-box {
+      width: 45px;
+      height: 45px;
+      border-radius: 8px;
+      overflow: hidden;
       background: var(--accent);
-      color: white;
-      font-weight: bold;
-      font-size: 1.2rem;
-      width: 40px;
-      height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+    }
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     h1 { margin: 0; color: #58a6ff; font-size: 1.4rem; }
     .subtitle { font-size: 0.8rem; color: #8b949e; margin: 0; }
@@ -93,10 +98,14 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
     }
     .btn-danger { background: #da3633; }
     .btn-secondary { background: #21262d; border: 1px solid var(--border); color: #c9d1d9; }
-    
+    .btn-whatsapp { background: #25d366; }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -158,13 +167,14 @@
 
   <header>
     <div class="logo-area">
-      <div class="logo-icon" id="logoText">SG</div>
+      <div class="logo-box" id="logoContainer">SG</div>
       <div>
         <h1 id="brandName">SG Labs Store</h1>
         <p class="subtitle" id="brandSub">Official Project & Hardware Kits</p>
       </div>
     </div>
-    <div style="display: flex; gap: 10px;">
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <a id="whatsappBtn" href="https://wa.me/923043337555" target="_blank" class="btn btn-whatsapp">💬 WhatsApp</a>
       <button class="btn btn-secondary" onclick="openSettingsModal()" id="settingsBtn" style="display:none;">⚙️ Settings</button>
       <button class="btn" onclick="openOwnerPanel()">Owner Panel</button>
     </div>
@@ -217,12 +227,16 @@
   <!-- Website Settings Modal -->
   <div class="modal" id="settingsModal">
     <div class="modal-content">
-      <h2>Edit Website Content</h2>
-      <label style="font-size: 0.85srem; color: #8b949e;">Brand / Store Name:</label>
+      <h2>Edit Website Settings & Content</h2>
+      
+      <label style="font-size: 0.85rem; color: #8b949e;">Store Name:</label>
       <input type="text" id="sBrandName" placeholder="Store Name">
       
-      <label style="font-size: 0.85rem; color: #8b949e;">Logo Initials (e.g. SG):</label>
-      <input type="text" id="sLogo" placeholder="Logo Text">
+      <label style="font-size: 0.85rem; color: #8b949e;">Logo Image URL (or text initials like SG):</label>
+      <input type="text" id="sLogo" placeholder="Logo Image URL or SG">
+
+      <label style="font-size: 0.85rem; color: #8b949e;">WhatsApp Contact Number (e.g. 923043337555):</label>
+      <input type="text" id="sPhone" placeholder="923043337555">
 
       <label style="font-size: 0.85rem; color: #8b949e;">Hero Title:</label>
       <input type="text" id="sHeroTitle" placeholder="Hero Title">
@@ -258,6 +272,7 @@
       const brand = s.brandName || "SG Labs Store";
       const logo = s.logoText || "SG";
       const sub = s.brandSub || "Official Project & Hardware Kits";
+      const phone = s.phone || "923043337555";
       const hTitle = s.heroTitle || "Welcome to SG Labs Store";
       const hDesc = s.heroDesc || "Explore high-quality electronic kits, robotics components, and smart automation modules.";
       const about = s.aboutText || "Saad Gadgets Lab provides hands-on technical workshops, custom robotics prototyping, and student-friendly electronics components.";
@@ -265,11 +280,18 @@
 
       document.getElementById('pageTitle').innerText = brand;
       document.getElementById('brandName').innerText = brand;
-      document.getElementById('logoText').innerText = logo;
       document.getElementById('brandSub').innerText = sub;
       document.getElementById('heroTitle').innerText = hTitle;
       document.getElementById('heroDesc').innerText = hDesc;
       document.getElementById('aboutText').innerText = about;
+      document.getElementById('whatsappBtn.href').href = "https://wa.me/" + phone;
+
+      const logoBox = document.getElementById('logoContainer');
+      if (logo.startsWith('http://') || logo.startsWith('https://')) {
+        logoBox.innerHTML = `<img src="${logo}" alt="Logo">`;
+      } else {
+        logoBox.innerText = logo;
+      }
 
       const fList = document.getElementById('featuresList');
       fList.innerHTML = '';
@@ -324,6 +346,7 @@
         const s = snapshot.val() || {};
         document.getElementById('sBrandName').value = s.brandName || "SG Labs Store";
         document.getElementById('sLogo').value = s.logoText || "SG";
+        document.getElementById('sPhone').value = s.phone || "923043337555";
         document.getElementById('sHeroTitle').value = s.heroTitle || "Welcome to SG Labs Store";
         document.getElementById('sHeroDesc').value = s.heroDesc || "";
         document.getElementById('sAbout').value = s.aboutText || "";
@@ -339,13 +362,14 @@
     function saveSettings() {
       const brandName = document.getElementById('sBrandName').value;
       const logoText = document.getElementById('sLogo').value;
+      const phone = document.getElementById('sPhone').value;
       const heroTitle = document.getElementById('sHeroTitle').value;
       const heroDesc = document.getElementById('sHeroDesc').value;
       const aboutText = document.getElementById('sAbout').value;
       const features = document.getElementById('sFeatures').value;
 
       database.ref('settings').set({
-        brandName, logoText, heroTitle, heroDesc, aboutText, features
+        brandName, logoText, phone, heroTitle, heroDesc, aboutText, features
       }).then(() => {
         closeSettingsModal();
         alert("Website settings updated successfully!");
@@ -359,7 +383,7 @@
       const desc = document.getElementById('pDesc').value;
 
       if (!name || !price) {
-        alert("Please enter Name and Price!");
+        alert("Please enter Name and Profile/Price!");
         return;
       }
 
