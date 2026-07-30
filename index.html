@@ -62,7 +62,7 @@
     .hero h2 { margin: 0 0 10px; color: #ffffff; font-size: 2rem; }
     .hero p { color: #8b949e; margin: 0; font-size: 1.1rem; max-width: 700px; margin-left: auto; margin-right: auto; }
 
-    /* About & Features Section */
+    /* About & Views Section */
     .info-section {
       max-width: 1200px;
       margin: 30px auto;
@@ -158,6 +158,16 @@
       border-radius: 4px;
       box-sizing: border-box;
     }
+    .view-counter {
+      background: #1f6feb22;
+      border: 1px solid #1f6feb55;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #58a6ff;
+    }
   </style>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -199,6 +209,9 @@
         <li>Custom Smart City Models</li>
         <li>20-in-1 Inventor Kits</li>
       </ul>
+      <div class="view-counter" id="viewCounterDisplay">
+        Total Views: <span id="viewCount">Loading...</span>
+      </div>
     </div>
   </div>
 
@@ -232,7 +245,7 @@
       <label style="font-size: 0.85rem; color: #8b949e;">Store Name:</label>
       <input type="text" id="sBrandName" placeholder="Store Name">
       
-      <label style="font-size: 0.85rem; color: #8b949e;">Logo Image URL (or text initials like SG):</label>
+      <label style="font-size: 0.85rem; color: #8b949e;">Logo Image URL (or text like SG):</label>
       <input type="text" id="sLogo" placeholder="Logo Image URL or SG">
 
       <label style="font-size: 0.85rem; color: #8b949e;">WhatsApp Contact Number (e.g. 923043337555):</label>
@@ -266,6 +279,17 @@
 
     window.isOwnerAdmin = false;
 
+    // View Counter Logic
+    const viewsRef = database.ref('stats/views');
+    viewsRef.transaction((currentViews) => {
+      return (currentViews || 0) + 1;
+    });
+
+    viewsRef.on('value', (snapshot) => {
+      const count = snapshot.val() || 0;
+      document.getElementById('viewCount').innerText = count;
+    });
+
     // Load Settings / Content
     database.ref('settings').on('value', (snapshot) => {
       const s = snapshot.val() || {};
@@ -284,22 +308,24 @@
       document.getElementById('heroTitle').innerText = hTitle;
       document.getElementById('heroDesc').innerText = hDesc;
       document.getElementById('aboutText').innerText = about;
-      document.getElementById('whatsappBtn.href').href = "https://wa.me/" + phone;
+      document.getElementById('whatsappBtn').href = "https://wa.me/" + phone;
 
       const logoBox = document.getElementById('logoContainer');
-      if (logo.startsWith('http://') || logo.startsWith('https://')) {
+      if (logo && (logo.startsWith('http://') || logo.startsWith('https://'))) {
         logoBox.innerHTML = `<img src="${logo}" alt="Logo">`;
       } else {
-        logoBox.innerText = logo;
+        logoBox.innerText = logo || "SG";
       }
 
       const fList = document.getElementById('featuresList');
       fList.innerHTML = '';
-      features.split('\n').forEach(f => {
-        if(f.trim() !== '') {
-          fList.innerHTML += `<li>${f}</li>`;
-        }
-      });
+      if (features) {
+        features.split('\n').forEach(f => {
+          if(f.trim() !== '') {
+            fList.innerHTML += `<li>${f}</li>`;
+          }
+        });
+      }
     });
 
     // Load Products
@@ -369,10 +395,18 @@
       const features = document.getElementById('sFeatures').value;
 
       database.ref('settings').set({
-        brandName, logoText, phone, heroTitle, heroDesc, aboutText, features
+        brandName: brandName || "",
+        logoText: logoText || "SG",
+        phone: phone || "923043337555",
+        heroTitle: heroTitle || "",
+        heroDesc: heroDesc || "",
+        aboutText: aboutText || "",
+        features: features || ""
       }).then(() => {
         closeSettingsModal();
         alert("Website settings updated successfully!");
+      }).catch((error) => {
+        alert("Error saving: " + error.message);
       });
     }
 
@@ -383,7 +417,7 @@
       const desc = document.getElementById('pDesc').value;
 
       if (!name || !price) {
-        alert("Please enter Name and Profile/Price!");
+        alert("Please enter Name and Price!");
         return;
       }
 
