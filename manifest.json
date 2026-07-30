@@ -1,0 +1,20 @@
+{
+  "name": "Saad Gadgets Lab",
+  "short_name": "SG Labs",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#238636",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/3mdfkkLb",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.ibb.co/3mdfkkLb",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
