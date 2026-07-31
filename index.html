@@ -25,7 +25,7 @@
         header { 
             background: #000814; 
             color: white; 
-            padding: 15px 30px; 
+            padding: 12px 30px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
@@ -35,16 +35,15 @@
         .logo-area {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
-        .logo-box {
-            background: var(--accent-color);
-            color: #0d1b2a;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 18px;
+        .site-logo {
+            height: 45px;
+            width: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
         }
 
         .header-actions {
@@ -262,7 +261,7 @@
     <!-- Header Section -->
     <header>
         <div class="logo-area">
-            <div class="logo-box" id="display-logo">SG</div>
+            <img src="image_6592e3.jpg" alt="SG Labs Logo" class="site-logo">
             <h2 id="display-store-name" style="margin:0;">Saad Gadgets Lab</h2>
         </div>
         <div class="header-actions">
@@ -291,7 +290,7 @@
             </div>
             <h2>Featured Lab Overview</h2>
             <div id="display-home-content" style="background: #1b263b; padding: 15px; border-radius: 6px; border: 1px solid #415a77;">
-                Welcome! Click on **"⚙️ Admin Panel"** at the top right, enter PIN **1947**, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.
+                Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter PIN <b>1947</b>, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.
             </div>
         </div>
 
@@ -369,9 +368,6 @@
                 <label>Store Name:</label>
                 <input type="text" id="input-store-name" value="Saad Gadgets Lab">
 
-                <label>Logo Text / Short Name:</label>
-                <input type="text" id="input-logo" value="SG">
-
                 <label>WhatsApp Order Number (e.g. 923043337555):</label>
                 <input type="text" id="input-whatsapp" value="923043337555">
 
@@ -382,10 +378,10 @@
                 <textarea id="input-hero-desc" rows="2">Your ultimate destination for robotics projects, kits, and electronics tools.</textarea>
                 
                 <label>Home Page Welcome Box Text:</label>
-                <textarea id="input-home-content" rows="2">Welcome! Click on **"⚙️ Admin Panel"** at the top right, enter PIN **1947**, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.</textarea>
+                <textarea id="input-home-content" rows="2">Welcome! Click on "⚙️ Admin Panel" at the top right, enter PIN 1947, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.</textarea>
 
                 <label>About Us Page Content Text:</label>
-                <textarea id="input-about-text" rows="3">Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators. Founder: Mohammad Saad Ghani. Location: Lahore, Pakistan</textarea>
+                <textarea id="input-about-text" rows="3">Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan</textarea>
             </div>
 
             <!-- Add New Product Form -->
@@ -420,11 +416,10 @@
     <script>
         let siteSettings = {
             storeName: "Saad Gadgets Lab",
-            logo: "SG",
             whatsapp: "923043337555",
             heroTitle: "Welcome to Saad Gadgets Lab",
             heroDesc: "Your ultimate destination for robotics projects, kits, and electronics tools.",
-            homeContent: "Welcome! Click on **\"⚙️ Admin Panel\"** at the top right, enter PIN **1947**, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.",
+            homeContent: 'Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter PIN <b>1947</b>, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.',
             aboutText: "Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan"
         };
 
@@ -499,7 +494,6 @@
 
         function openAdminModal() {
             document.getElementById('input-store-name').value = siteSettings.storeName;
-            document.getElementById('input-logo').value = siteSettings.logo;
             document.getElementById('input-whatsapp').value = siteSettings.whatsapp;
             document.getElementById('input-hero-title').value = siteSettings.heroTitle;
             document.getElementById('input-hero-desc').value = siteSettings.heroDesc;
@@ -515,7 +509,6 @@
 
         function saveAdminSettings() {
             siteSettings.storeName = document.getElementById('input-store-name').value;
-            siteSettings.logo = document.getElementById('input-logo').value;
             siteSettings.whatsapp = document.getElementById('input-whatsapp').value;
             siteSettings.heroTitle = document.getElementById('input-hero-title').value;
             siteSettings.heroDesc = document.getElementById('input-hero-desc').value;
@@ -523,7 +516,6 @@
             siteSettings.aboutText = document.getElementById('input-about-text').value;
 
             document.getElementById('display-store-name').innerText = siteSettings.storeName;
-            document.getElementById('display-logo').innerText = siteSettings.logo;
             document.getElementById('page-title').innerText = siteSettings.storeName;
             document.getElementById('display-hero-title').innerText = siteSettings.heroTitle;
             document.getElementById('display-hero-desc').innerText = siteSettings.heroDesc;
@@ -538,8 +530,11 @@
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-page'));
             document.querySelectorAll('.navbar button').forEach(btn => btn.classList.remove('active-tab'));
 
-            document.getElementById('page-' + pageName).classList.add('active-page');
-            document.getElementById('nav-' + pageName).classList.add('active-tab');
+            let targetPage = document.getElementById('page-' + pageName);
+            let targetNav = document.getElementById('nav-' + pageName);
+
+            if (targetPage) targetPage.classList.add('active-page');
+            if (targetNav) targetNav.classList.add('active-tab');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
