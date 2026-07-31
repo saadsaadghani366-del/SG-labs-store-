@@ -69,7 +69,7 @@
             color: white;
         }
 
-        /* 5-6 Page Navigation Menu Bar */
+        /* 6-Page Navigation Menu Bar */
         .navbar {
             background: #1b263b;
             display: flex;
@@ -202,16 +202,16 @@
             padding: 30px;
             border-radius: 8px;
             width: 90%;
-            max-width: 550px;
+            max-width: 600px;
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
             border: 1px solid #415a77;
         }
 
-        .modal-content h2 { margin-top: 0; color: #00b4d8; }
+        .modal-content h2, .modal-content h3 { margin-top: 0; color: #00b4d8; }
         .modal-content label { display: block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; color: #e0e1dd; }
-        .modal-content input, .modal-content textarea {
+        .modal-content input, .modal-content textarea, .modal-content select {
             width: 100%;
             padding: 10px;
             background: #0d1b2a;
@@ -219,6 +219,7 @@
             color: white;
             border-radius: 4px;
             box-sizing: border-box;
+            font-family: inherit;
         }
 
         .modal-buttons {
@@ -229,6 +230,24 @@
 
         .save-btn { background: var(--success-color); color: #0d1b2a; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         .cancel-btn { background: #d90429; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        
+        .admin-add-box {
+            background: #0d1b2a;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #415a77;
+            margin-top: 20px;
+        }
+        
+        .empty-msg {
+            color: #94a3b8;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+            background: #1b263b;
+            border-radius: 6px;
+            border: 1px dashed #415a77;
+        }
     </style>
 </head>
 <body>
@@ -241,7 +260,7 @@
         </div>
         <div class="header-actions">
             <div class="cart-icon" onclick="switchPage('cart')">🛒 Cart (<span id="cart-count">0</span>)</div>
-            <button class="admin-btn" onclick="openAdminModal()">⚙️ Settings</button>
+            <button class="admin-btn" onclick="openAdminModal()">⚙️ Settings & Add Items</button>
         </div>
     </header>
 
@@ -264,51 +283,33 @@
                 <p id="display-hero-desc">Your ultimate destination for robotics projects, kits, and electronics tools.</p>
             </div>
             <h2>Featured Lab Overview</h2>
-            <p>Welcome to Saad Gadgets Lab! Explore our dedicated sections for high-end student inventor kits, microcontrollers, and electronic hardware components. Use the navigation bar above to browse through individual pages.</p>
+            <p>Welcome to Saad Gadgets Lab! Click on the **"⚙️ Settings & Add Items"** button at the top right to start adding your project kits, items, and tools.</p>
         </div>
 
         <!-- PAGE 2: PROJECT KITS -->
         <div id="page-kits" class="page-section">
             <h2>Project Kits Page</h2>
-            <p>Discover our range of hands-on learning kits built for engineering students and creators.</p>
-            <div class="product-grid">
-                <div class="product-card">
-                    <h3>20-in-1 Inventor Kit</h3>
-                    <p>Complete robotics and electronics kit designed for students.</p>
-                    <p><strong>Price: 2500 PKR</strong></p>
-                    <label>Quantity: <input type="number" id="kit1-qty" value="1" min="1"></label>
-                    <button onclick="addToCart('20-in-1 Inventor Kit', 2500, 'kit1-qty')">Add to Cart</button>
-                </div>
+            <p>Explore our latest project kits below.</p>
+            <div class="product-grid" id="grid-kits">
+                <!-- Completely Empty by Default -->
             </div>
         </div>
 
         <!-- PAGE 3: PROJECT ITEMS -->
         <div id="page-items" class="page-section">
             <h2>Project Items Page</h2>
-            <p>Browse individual hardware items, sensors, and processor boards.</p>
-            <div class="product-grid">
-                <div class="product-card">
-                    <h3>Arduino Uno R3</h3>
-                    <p>Original microcontroller board for prototyping & automation.</p>
-                    <p><strong>Price: 1800 PKR</strong></p>
-                    <label>Quantity: <input type="number" id="item1-qty" value="1" min="1"></label>
-                    <button onclick="addToCart('Arduino Uno R3', 1800, 'item1-qty')">Add to Cart</button>
-                </div>
+            <p>Explore individual hardware items and components below.</p>
+            <div class="product-grid" id="grid-items">
+                <!-- Completely Empty by Default -->
             </div>
         </div>
 
         <!-- PAGE 4: PROJECT TOOLS -->
         <div id="page-tools" class="page-section">
             <h2>Project Tools Page</h2>
-            <p>Essential workbench utilities and assembly accessories.</p>
-            <div class="product-grid">
-                <div class="product-card">
-                    <h3>Soldering Iron Kit</h3>
-                    <p>Reliable soldering tool kit for electronic circuit assembly.</p>
-                    <p><strong>Price: 1200 PKR</strong></p>
-                    <label>Quantity: <input type="number" id="tool1-qty" value="1" min="1"></label>
-                    <button onclick="addToCart('Soldering Iron Kit', 1200, 'tool1-qty')">Add to Cart</button>
-                </div>
+            <p>Explore essential workbench tools below.</p>
+            <div class="product-grid" id="grid-tools">
+                <!-- Completely Empty by Default -->
             </div>
         </div>
 
@@ -353,10 +354,10 @@
 
     </div>
 
-    <!-- Admin Settings Modal -->
+    <!-- Admin Settings & Add Item Modal (No Lock Required) -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content">
-            <h2>Edit Website Settings & Content</h2>
+            <h2>Website Settings & Product Management</h2>
             
             <label>Store Name:</label>
             <input type="text" id="input-store-name" value="Saad Gadgets Lab">
@@ -371,11 +372,34 @@
             <input type="text" id="input-hero-title" value="Welcome to Saad Gadgets Lab">
 
             <label>Hero Description:</label>
-            <textarea id="input-hero-desc" rows="3">Your ultimate destination for robotics projects, kits, and electronics tools.</textarea>
+            <textarea id="input-hero-desc" rows="2">Your ultimate destination for robotics projects, kits, and electronics tools.</textarea>
 
-            <div class="modal-buttons">
-                <button class="save-btn" onclick="saveAdminSettings()">Save Changes</button>
-                <button class="cancel-btn" onclick="closeAdminModal()">Cancel</button>
+            <!-- Add New Product Form Inside Admin Panel -->
+            <div class="admin-add-box">
+                <h3>➕ Add New Item to Website</h3>
+                
+                <label>Select Page Category:</label>
+                <select id="new-item-category">
+                    <option value="kits">Project Kits</option>
+                    <option value="items">Project Items</option>
+                    <option value="tools">Project Tools</option>
+                </select>
+
+                <label>Product Name:</label>
+                <input type="text" id="new-item-name" placeholder="e.g. 20-in-1 Inventor Kit">
+
+                <label>Price (PKR):</label>
+                <input type="number" id="new-item-price" placeholder="e.g. 2500">
+
+                <label>Product Description:</label>
+                <textarea id="new-item-desc" rows="2" placeholder="Short description of the item..."></textarea>
+
+                <button class="save-btn" style="width:100%; margin-top:15px;" onclick="addNewProduct()">Add Item to Catalog</button>
+            </div>
+
+            <div class="modal-buttons" style="margin-top: 25px;">
+                <button class="save-btn" onclick="saveAdminSettings()">Save All Changes</button>
+                <button class="cancel-btn" onclick="closeAdminModal()">Close</button>
             </div>
         </div>
     </div>
@@ -388,6 +412,61 @@
             heroTitle: "Welcome to Saad Gadgets Lab",
             heroDesc: "Your ultimate destination for robotics projects, kits, and electronics tools."
         };
+
+        // All sections start completely empty as requested
+        let products = [];
+
+        function renderProducts() {
+            let kitHTML = '';
+            let itemHTML = '';
+            let toolHTML = '';
+
+            let kitCount = 0;
+            let itemCount = 0;
+            let toolCount = 0;
+
+            products.forEach((p, index) => {
+                let card = `
+                    <div class="product-card">
+                        <h3>${p.name}</h3>
+                        <p>${p.desc}</p>
+                        <p><strong>Price: ${p.price} PKR</strong></p>
+                        <label>Quantity: <input type="number" id="prod-${index}-qty" value="1" min="1"></label>
+                        <button onclick="addToCart('${p.name}', ${p.price}, 'prod-${index}-qty')">Add to Cart</button>
+                    </div>
+                `;
+
+                if (p.category === 'kits') { kitHTML += card; kitCount++; }
+                else if (p.category === 'items') { itemHTML += card; itemCount++; }
+                else if (p.category === 'tools') { toolHTML += card; toolCount++; }
+            });
+
+            document.getElementById('grid-kits').innerHTML = kitCount > 0 ? kitHTML : '<div class="empty-msg">No project kits added yet. Open Settings to add kits.</div>';
+            document.getElementById('grid-items').innerHTML = itemCount > 0 ? itemHTML : '<div class="empty-msg">No project items added yet. Open Settings to add items.</div>';
+            document.getElementById('grid-tools').innerHTML = toolCount > 0 ? toolHTML : '<div class="empty-msg">No project tools added yet. Open Settings to add tools.</div>';
+        }
+
+        function addNewProduct() {
+            let category = document.getElementById('new-item-category').value;
+            let name = document.getElementById('new-item-name').value;
+            let price = parseInt(document.getElementById('new-item-price').value);
+            let desc = document.getElementById('new-item-desc').value;
+
+            if (!name || isNaN(price) || !desc) {
+                alert("Please fill in all product details correctly!");
+                return;
+            }
+
+            products.push({ id: Date.now(), category, name, price, desc });
+            renderProducts();
+
+            // Clear inputs
+            document.getElementById('new-item-name').value = '';
+            document.getElementById('new-item-price').value = '';
+            document.getElementById('new-item-desc').value = '';
+
+            alert("New item successfully added to the website catalog!");
+        }
 
         function openAdminModal() {
             document.getElementById('input-store-name').value = siteSettings.storeName;
@@ -508,6 +587,11 @@
             let whatsappURL = `https://wa.me/${siteSettings.whatsapp}?text=${message}`;
             window.open(whatsappURL, '_blank');
         }
+
+        // Initialize empty grids on load
+        window.onload = function() {
+            renderProducts();
+        };
     </script>
 </body>
 </html>
