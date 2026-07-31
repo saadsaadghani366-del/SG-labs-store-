@@ -1,443 +1,495 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">SG Labs Store</title>
-  <!-- PWA Manifest Link -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#238636">
-  <style>
-    :root {
-      --bg-color: #0d1117;
-      --card-bg: #161b22;
-      --accent: #238636;
-      --text: #c9d1d9;
-      --border: #30363d;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text);
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      padding: 15px 30px;
-    }
-    .logo-area {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .logo-box {
-      width: 45px;
-      height: 45px;
-      border-radius: 8px;
-      overflow: hidden;
-      background: var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-    }
-    .logo-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    h1 { margin: 0; color: #58a6ff; font-size: 1.4rem; }
-    .subtitle { font-size: 0.8rem; color: #8b949e; margin: 0; }
-    
-    /* Hero Banner */
-    .hero {
-      background: linear-gradient(135deg, #1f6feb22, #23863622);
-      border-bottom: 1px solid var(--border);
-      padding: 40px 20px;
-      text-align: center;
-    }
-    .hero h2 { margin: 0 0 10px; color: #ffffff; font-size: 2rem; }
-    .hero p { color: #8b949e; margin: 0; font-size: 1.1rem; max-width: 700px; margin-left: auto; margin-right: auto; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">سعد گیجٹس لاب - Saad Gadgets Lab</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
 
-    /* About & Views Section */
-    .info-section {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 0 20px;
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 30px;
-    }
-    @media(max-width: 768px) {
-      .info-section { grid-template-columns: 1fr; }
-    }
-    .box {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
-    }
-    .box h3 { margin-top: 0; color: #58a6ff; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-    .features-list { padding-left: 20px; margin: 10px 0; color: #8b949e; }
-    .features-list li { margin-bottom: 6px; }
+        body { 
+            font-family: 'Tahoma', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            margin: 0; 
+            padding: 0; 
+        }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px 40px 20px;
-    }
+        header { 
+            background: var(--primary-color); 
+            color: white; 
+            padding: 15px 30px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
 
-    .btn {
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      text-decoration: none;
-      display: inline-block;
-      text-align: center;
-    }
-    .btn-danger { background: #da3633; }
-    .btn-secondary { background: #21262d; border: 1px solid var(--border); color: #c9d1d9; }
-    .btn-whatsapp { background: #25d366; }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 6px;
-    }
-    .card h3 { margin: 10px 0 5px; color: white; }
-    .price { color: #3fb950; font-weight: bold; font-size: 1.1rem; margin: 10px 0; }
-    
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .modal-content {
-      background: var(--card-bg);
-      padding: 25px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 450px;
-      border: 1px solid var(--border);
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 8px;
-      margin: 8px 0;
-      background: #0d1117;
-      border: 1px solid var(--border);
-      color: white;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    .view-counter {
-      background: #1f6feb22;
-      border: 1px solid #1f6feb55;
-      padding: 10px;
-      border-radius: 6px;
-      text-align: center;
-      margin-top: 15px;
-      font-weight: bold;
-      color: #58a6ff;
-    }
-  </style>
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+        .logo-box {
+            background: var(--accent-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .cart-icon, .admin-btn { 
+            cursor: pointer; 
+            background: var(--accent-color); 
+            color: white;
+            padding: 8px 15px; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            border: none;
+            font-size: 14px;
+        }
+
+        .admin-btn {
+            background: #34495e;
+        }
+
+        .container { 
+            max-width: 1000px; 
+            margin: 20px auto; 
+            padding: 20px; 
+            background: var(--card-bg); 
+            border-radius: 8px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.05); 
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 30px 20px;
+            background: #eef2f3;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .hero-section h1 {
+            margin: 0 0 10px 0;
+            color: var(--primary-color);
+        }
+
+        .hero-section p {
+            color: #666;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .nav-tabs { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            flex-wrap: wrap; 
+        }
+
+        .nav-tabs button { 
+            padding: 10px 20px; 
+            background: #3498db; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            transition: background 0.2s;
+        }
+
+        .nav-tabs button:hover { 
+            background: #2980b9; 
+        }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; 
+        }
+
+        .product-card { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            border-radius: 6px; 
+            background: #fafafa; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .product-card h3 { margin: 0 0 10px 0; color: #333; }
+        .product-card p { color: #666; font-size: 14px; line-height: 1.4; }
+        .product-card input { width: 60px; padding: 5px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        
+        .product-card button { 
+            background: var(--success-color); 
+            color: white; 
+            border: none; 
+            padding: 8px 12px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: bold;
+        }
+        .product-card button:hover { background: #218838; }
+        
+        #checkout-section { 
+            margin-top: 30px; 
+            border-top: 2px solid #eee; 
+            padding-top: 20px; 
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group textarea { 
+            width: 100%; 
+            padding: 10px; 
+            box-sizing: border-box; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            font-family: inherit;
+        }
+
+        .confirm-btn { 
+            background: #e67e22; 
+            color: white; 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: bold;
+        }
+        .confirm-btn:hover { background: #d35400; }
+
+        /* ایڈمن ماڈل پینل (پاپ اپ) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #1e272e;
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 550px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .modal-content h2 { margin-top: 0; color: #f1f2f6; }
+        .modal-content label { display: block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; color: #dcdde1; }
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            background: #2f3640;
+            border: 1px solid #718093;
+            color: white;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .save-btn { background: var(--success-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .cancel-btn { background: var(--accent-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+    </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo-area">
-      <div class="logo-box" id="logoContainer">SG</div>
-      <div>
-        <h1 id="brandName">SG Labs Store</h1>
-        <p class="subtitle" id="brandSub">Official Project & Hardware Kits</p>
-      </div>
+    <!-- ہیڈر سیکشن -->
+    <header>
+        <div class="logo-area">
+            <div class="logo-box" id="display-logo">SG</div>
+            <h2 id="display-store-name" style="margin:0;">Saad Gadgets Lab</h2>
+        </div>
+        <div class="header-actions">
+            <div class="cart-icon" onclick="scrollToCheckout()">🛒 کارٹ (<span id="cart-count">0</span>)</div>
+            <button class="admin-btn" onclick="openAdminModal()">⚙️ سیٹنگز</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- ہیرو سیکشن -->
+        <div class="hero-section" id="hero-box">
+            <h1 id="display-hero-title">Welcome to Saad Gadgets Lab</h1>
+            <p id="display-hero-desc">طلباء اور انجینئرز کے لیے بہترین روبوٹکس پروجیکٹس، کٹس اور ٹولز کا گھر۔</p>
+        </div>
+
+        <!-- نیویگیٹ کرنے والے ٹیبز -->
+        <div class="nav-tabs">
+            <button onclick="showSection('kits')">پروجیکٹ کٹس</button>
+            <button onclick="showSection('items')">پروجیکٹ آئٹمز</button>
+            <button onclick="showSection('tools')">پروجیکٹ ٹولز</button>
+        </div>
+
+        <!-- 1. پروجیکٹ کٹس سیکشن -->
+        <div id="kits" class="section active">
+            <h2>پروجیکٹ کٹس</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <h3>20-in-1 Inventor Kit</h3>
+                    <p>اسکول اور کالج کے طلباء کے لیے مکمل روبوٹکس لرننگ کٹ۔</p>
+                    <p><strong>قیمت: 2500 روپے</strong></p>
+                    <label>مقدار: <input type="number" id="kit1-qty" value="1" min="1"></label>
+                    <button onclick="addToCart('20-in-1 Inventor Kit', 2500, 'kit1-qty')">کارٹ میں شامل کریں</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. پروجیکٹ آئٹمز سیکشن -->
+        <div id="items" class="section">
+            <h2>پروجیکٹ آئٹمز</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <h3>Arduino Uno R3</h3>
+                    <p>پروٹو ٹائپنگ اور آٹومیشن کے لیے اصل مائیکرو کنٹرولر۔</p>
+                    <p><strong>قیمت: 1800 روپے</strong></p>
+                    <label>مقدار: <input type="number" id="item1-qty" value="1" min="1"></label>
+                    <button onclick="addToCart('Arduino Uno R3', 1800, 'item1-qty')">کارٹ میں شامل کریں</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. پروجیکٹ ٹولز سیکشن -->
+        <div id="tools" class="section">
+            <h2>پروجیکٹ ٹولز</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <h3>Soldering Iron Kit</h3>
+                    <p>الیکٹرونکس کے جوڑ لگانے کے لیے پائیدار سولڈرنگ کٹ۔</p>
+                    <p><strong>قیمت: 1200 روپے</strong></p>
+                    <label>مقدار: <input type="number" id="tool1-qty" value="1" min="1"></label>
+                    <button onclick="addToCart('Soldering Iron Kit', 1200, 'tool1-qty')">کارٹ میں شامل کریں</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- چیک آؤٹ اور آرڈر فارم -->
+        <div id="checkout-section">
+            <h3>آپ کا شاپنگ کارٹ</h3>
+            <div id="cart-items-list" style="background: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #eee;">
+                کارٹ فی الحال خالی ہے۔
+            </div>
+            <h4>کل قیمت: <span id="total-price">0</span> روپے</h4>
+
+            <hr style="margin: 25px 0; border:0; border-top:1px solid #ddd;">
+
+            <h3>کسٹمر کی معلومات</h3>
+            <div class="form-group">
+                <label>پورا نام (Name):</label>
+                <input type="text" id="cust-name" placeholder="اپنا نام لکھیں">
+            </div>
+            <div class="form-group">
+                <label>فون نمبر (Phone Number):</label>
+                <input type="text" id="cust-phone" placeholder="03XXXXXXXXX">
+            </div>
+            <div class="form-group">
+                <label>لوکیشن / پتہ (Location / Address):</label>
+                <input type="text" id="cust-address" placeholder="اپنا شہر اور مکمل پتہ لکھیں">
+            </div>
+            <div class="form-group">
+                <label>ای میل (Email):</label>
+                <input type="email" id="cust-email" placeholder="example@email.com">
+            </div>
+
+            <button class="confirm-btn" onclick="sendToWhatsApp()">آرڈر کنفرم کریں (WhatsApp پر بھیجیں)</button>
+        </div>
     </div>
-    <div style="display: flex; gap: 10px; align-items: center;">
-      <a id="whatsappBtn" href="https://wa.me/923043337555" target="_blank" class="btn btn-whatsapp">💬 WhatsApp</a>
-      <button class="btn btn-secondary" onclick="openSettingsModal()" id="settingsBtn" style="display:none;">⚙️ Settings</button>
-      <button class="btn" onclick="openOwnerPanel()">Owner Panel</button>
+
+    <!-- ایڈمن سیٹنگز ماڈل (پاپ اپ پینل) -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-content">
+            <h2>Edit Website Settings & Content</h2>
+            
+            <label>Store Name:</label>
+            <input type="text" id="input-store-name" value="Saad Gadgets Lab">
+
+            <label>Logo Text / Short Name:</label>
+            <input type="text" id="input-logo" value="SG">
+
+            <label>WhatsApp Contact Number (e.g. 923043337555):</label>
+            <input type="text" id="input-whatsapp" value="923043337555">
+
+            <label>Hero Title:</label>
+            <input type="text" id="input-hero-title" value="Welcome to Saad Gadgets Lab">
+
+            <label>Hero Description:</label>
+            <textarea id="input-hero-desc" rows="3">طلباء اور انجینئرز کے لیے بہترین روبوٹکس پروجیکٹس، کٹس اور ٹولز کا گھر۔</textarea>
+
+            <div class="modal-buttons">
+                <button class="save-btn" onclick="saveAdminSettings()">Save Changes</button>
+                <button class="cancel-btn" onclick="closeAdminModal()">Cancel</button>
+            </div>
+        </div>
     </div>
-  </header>
 
-  <!-- Front Page Hero Section -->
-  <div class="hero">
-    <h2 id="heroTitle">Welcome to SG Labs Store</h2>
-    <p id="heroDesc">Explore high-quality electronic kits, robotics components, and smart automation modules.</p>
-  </div>
+    <script>
+        // سیٹنگز کی ڈیفالٹ ویلیوز
+        let siteSettings = {
+            storeName: "Saad Gadgets Lab",
+            logo: "SG",
+            whatsapp: "923043337555",
+            heroTitle: "Welcome to Saad Gadgets Lab",
+            heroDesc: "طلباء اور انجینئرز کے لیے بہترین روبوٹکس پروجیکٹس، کٹس اور ٹولز کا گھر۔"
+        };
 
-  <!-- About & Views Section -->
-  <div class="info-section">
-    <div class="box">
-      <h3>About Us</h3>
-      <p id="aboutText" style="color: #8b949e; line-height: 1.5;">Saad Gadgets Lab provides hands-on technical workshops, custom robotics prototyping, and student-friendly electronics components.</p>
-    </div>
-    <div class="box">
-      <h3>Key Features</h3>
-      <ul class="features-list" id="featuresList">
-        <li>Arduino & IoT Solutions</li>
-        <li>Custom Smart City Models</li>
-        <li>20-in-1 Inventor Kits</li>
-      </ul>
-      <div class="view-counter" id="viewCounterDisplay">
-        Total Views: <span id="viewCount">Loading...</span>
-      </div>
-    </div>
-  </div>
+        // ایڈمن پینل اوپن اور کلوز کرنے کے فنکشنز
+        function openAdminModal() {
+            document.getElementById('input-store-name').value = siteSettings.storeName;
+            document.getElementById('input-logo').value = siteSettings.logo;
+            document.getElementById('input-whatsapp').value = siteSettings.whatsapp;
+            document.getElementById('input-hero-title').value = siteSettings.heroTitle;
+            document.getElementById('input-hero-desc').value = siteSettings.heroDesc;
+            
+            document.getElementById('adminModal').style.display = 'flex';
+        }
 
-  <div class="container">
-    <h3 style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-top: 30px;">Available Products</h3>
-    <main class="grid" id="productsGrid">
-      <p style="color: #8b949e;">Loading products...</p>
-    </main>
-  </div>
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
 
-  <!-- Add Product Modal -->
-  <div class="modal" id="ownerModal">
-    <div class="modal-content">
-      <h2>Add New Product</h2>
-      <input type="text" id="pName" placeholder="Product Name">
-      <input type="number" id="pPrice" placeholder="Price (PKR)">
-      <input type="text" id="pImg" placeholder="Image URL">
-      <textarea id="pDesc" placeholder="Description"></textarea>
-      <div style="display: flex; gap: 10px; margin-top: 10px;">
-        <button class="btn" onclick="addProduct()">Add Product</button>
-        <button class="btn btn-danger" onclick="closeOwnerPanel()">Cancel</button>
-      </div>
-    </div>
-  </div>
+        // سیٹنگز سیভ کرنے کا فنکشن
+        function saveAdminSettings() {
+            siteSettings.storeName = document.getElementById('input-store-name').value;
+            siteSettings.logo = document.getElementById('input-logo').value;
+            siteSettings.whatsapp = document.getElementById('input-whatsapp').value;
+            siteSettings.heroTitle = document.getElementById('input-hero-title').value;
+            siteSettings.heroDesc = document.getElementById('input-hero-desc').value;
 
-  <!-- Website Settings Modal -->
-  <div class="modal" id="settingsModal">
-    <div class="modal-content">
-      <h2>Edit Website Settings & Content</h2>
-      
-      <label style="font-size: 0.85rem; color: #8b949e;">Store Name:</label>
-      <input type="text" id="sBrandName" placeholder="Store Name">
-      
-      <label style="font-size: 0.85rem; color: #8b949e;">Logo Image URL (or text like SG):</label>
-      <input type="text" id="sLogo" placeholder="Logo Image URL or SG">
+            // ویب سائٹ پر نئی ویلیوز اپڈیٹ کرنا
+            document.getElementById('display-store-name').innerText = siteSettings.storeName;
+            document.getElementById('display-logo').innerText = siteSettings.logo;
+            document.getElementById('page-title').innerText = siteSettings.storeName;
+            document.getElementById('display-hero-title').innerText = siteSettings.heroTitle;
+            document.getElementById('display-hero-desc').innerText = siteSettings.heroDesc;
 
-      <label style="font-size: 0.85rem; color: #8b949e;">WhatsApp Contact Number (e.g. 923043337555):</label>
-      <input type="text" id="sPhone" placeholder="923043337555">
+            closeAdminModal();
+            alert("سیٹنگز کامیابی کے ساتھ اپڈیٹ ہو گئی ہیں!");
+        }
 
-      <label style="font-size: 0.85rem; color: #8b949e;">Hero Title:</label>
-      <input type="text" id="sHeroTitle" placeholder="Hero Title">
+        // زمرے (Tabs) بدلنے کا فنکشن
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
 
-      <label style="font-size: 0.85rem; color: #8b949e;">Hero Description:</label>
-      <textarea id="sHeroDesc" placeholder="Hero Description"></textarea>
+        let cart = [];
 
-      <label style="font-size: 0.85rem; color: #8b949e;">About Us Text:</label>
-      <textarea id="sAbout" placeholder="About Us"></textarea>
+        // کارٹ میں چیز شامل کرنے کا فنکشن
+        function addToCart(name, price, qtyId) {
+            let qty = parseInt(document.getElementById(qtyId).value);
+            let existingItem = cart.find(item => item.name === name);
+            
+            if (existingItem) {
+                existingItem.qty += qty;
+            } else {
+                cart.push({ name: name, price: price, qty: qty });
+            }
+            updateCartUI();
+            alert(name + " کارٹ میں شامل کر دی گئی ہے!");
+        }
 
-      <label style="font-size: 0.85rem; color: #8b949e;">Key Features (One per line):</label>
-      <textarea id="sFeatures" placeholder="Feature 1&#10;Feature 2"></textarea>
+        // کارٹ کی سکرین اپڈیٹ کرنا
+        function updateCartUI() {
+            let cartList = document.getElementById('cart-items-list');
+            let cartCount = document.getElementById('cart-count');
+            let totalPriceElem = document.getElementById('total-price');
 
-      <div style="display: flex; gap: 10px; margin-top: 15px;">
-        <button class="btn" onclick="saveSettings()">Save Changes</button>
-        <button class="btn btn-danger" onclick="closeSettingsModal()">Cancel</button>
-      </div>
-    </div>
-  </div>
+            if (cart.length === 0) {
+                cartList.innerHTML = "کارٹ فی الحال خالی ہے۔";
+                cartCount.innerText = 0;
+                totalPriceElem.innerText = 0;
+                return;
+            }
 
-  <script>
-    const firebaseConfig = {
-      databaseURL: "https://sg-labs-store-default-rtdb.firebaseio.com"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+            let html = "<ul style='margin:0; padding-right: 20px;'>";
+            let totalCount = 0;
+            let totalPrice = 0;
 
-    window.isOwnerAdmin = false;
+            cart.forEach(item => {
+                let itemTotal = item.price * item.qty;
+                html += `<li>${item.name} - قیمت: ${item.price} × مقدار: ${item.qty} = <strong>${itemTotal} روپے</strong></li>`;
+                totalCount += item.qty;
+                totalPrice += itemTotal;
+            });
 
-    // View Counter Logic
-    const viewsRef = database.ref('stats/views');
-    viewsRef.transaction((currentViews) => {
-      return (currentViews || 0) + 1;
-    });
+            html += "</ul>";
+            cartList.innerHTML = html;
+            cartCount.innerText = totalCount;
+            totalPriceElem.innerText = totalPrice;
+        }
 
-    viewsRef.on('value', (snapshot) => {
-      const count = snapshot.val() || 0;
-      document.getElementById('viewCount').innerText = count;
-    });
+        function scrollToCheckout() {
+            document.getElementById('checkout-section').scrollIntoView({ behavior: 'smooth' });
+        }
 
-    // Load Settings / Content
-    database.ref('settings').on('value', (snapshot) => {
-      const s = snapshot.val() || {};
-      const brand = s.brandName || "SG Labs Store";
-      const logo = s.logoText || "SG";
-      const sub = s.brandSub || "Official Project & Hardware Kits";
-      const phone = s.phone || "923043337555";
-      const hTitle = s.heroTitle || "Welcome to SG Labs Store";
-      const hDesc = s.heroDesc || "Explore high-quality electronic kits, robotics components, and smart automation modules.";
-      const about = s.aboutText || "Saad Gadgets Lab provides hands-on technical workshops, custom robotics prototyping, and student-friendly electronics components.";
-      const features = s.features || "Arduino & IoT Solutions\nCustom Smart City Models\n20-in-1 Inventor Kits";
+        // واٹس ایپ پر آرڈر بھیجنے کا فنکشن
+        function sendToWhatsApp() {
+            let name = document.getElementById('cust-name').value;
+            let phone = document.getElementById('cust-phone').value;
+            let address = document.getElementById('cust-address').value;
+            let email = document.getElementById('cust-email').value;
 
-      document.getElementById('pageTitle').innerText = brand;
-      document.getElementById('brandName').innerText = brand;
-      document.getElementById('brandSub').innerText = sub;
-      document.getElementById('heroTitle').innerText = hTitle;
-      document.getElementById('heroDesc').innerText = hDesc;
-      document.getElementById('aboutText').innerText = about;
-      document.getElementById('whatsappBtn').href = "https://wa.me/" + phone;
+            if (cart.length === 0) {
+                alert("براہ کرم پہلے کارٹ میں کوئی چیز شامل کریں!");
+                return;
+            }
+            if (!name || !phone || !address) {
+                alert("براہ کرم نام، فون نمبر اور لوکیشن لازمی پُر کریں!");
+                return;
+            }
 
-      const logoBox = document.getElementById('logoContainer');
-      if (logo && (logo.startsWith('http://') || logo.startsWith('https://'))) {
-        logoBox.innerHTML = `<img src="${logo}" alt="Logo">`;
-      } else {
-        logoBox.innerText = logo || "SG";
-      }
+            let message = `*نیا آرڈر موصول ہوا ہے - ${siteSettings.storeName}*%0A%0A`;
+            message += `*گاہک کا نام:* ${name}%0A`;
+            message += `*فون نمبر:* ${phone}%0A`;
+            message += `*پتہ / لوکیشن:* ${address}%0A`;
+            message += `*ای میل:* ${email}%0A%0A`;
+            message += `*آرڈر کی تفصیلات:*%0A`;
 
-      const fList = document.getElementById('featuresList');
-      fList.innerHTML = '';
-      if (features) {
-        features.split('\n').forEach(f => {
-          if(f.trim() !== '') {
-            fList.innerHTML += `<li>${f}</li>`;
-          }
-        });
-      }
-    });
+            let totalPrice = 0;
+            cart.forEach(item => {
+                let itemTotal = item.price * item.qty;
+                message += `- ${item.name} (${item.qty} عدد) = ${itemTotal} روپے%0A`;
+                totalPrice += itemTotal;
+            });
 
-    // Load Products
-    database.ref('products').on('value', (snapshot) => {
-      const grid = document.getElementById('productsGrid');
-      grid.innerHTML = '';
-      const data = snapshot.val();
-      if (!data) {
-        grid.innerHTML = '<p style="color: #8b949e;">No products available right now.</p>';
-        return;
-      }
-      for (let id in data) {
-        const item = data[id];
-        grid.innerHTML += `
-          <div class="card">
-            <img src="${item.image || 'https://via.placeholder.com/200'}" alt="${item.name}">
-            <h3>${item.name}</h3>
-            <p style="font-size: 0.9rem; color: #8b949e; flex-grow: 1;">${item.desc || ''}</p>
-            <div class="price">Rs. ${item.price}</div>
-            ${window.isOwnerAdmin ? `<button class="btn btn-danger" onclick="deleteProduct('${id}')">Delete Product</button>` : ''}
-          </div>
-        `;
-      }
-    });
+            message += `%0A*کل قیمت:* ${totalPrice} روپے`;
 
-    function openOwnerPanel() {
-      const pin = prompt("Enter Owner PIN:");
-      if (pin === "1947") {
-        window.isOwnerAdmin = true;
-        document.getElementById('settingsBtn').style.display = 'block';
-        document.getElementById('ownerModal').style.display = 'flex';
-        database.ref('products').once('value', () => {}); 
-      } else if (pin) {
-        alert("Incorrect PIN!");
-      }
-    }
-
-    function closeOwnerPanel() {
-      document.getElementById('ownerModal').style.display = 'none';
-    }
-
-    function openSettingsModal() {
-      database.ref('settings').once('value').then((snapshot) => {
-        const s = snapshot.val() || {};
-        document.getElementById('sBrandName').value = s.brandName || "SG Labs Store";
-        document.getElementById('sLogo').value = s.logoText || "SG";
-        document.getElementById('sPhone').value = s.phone || "923043337555";
-        document.getElementById('sHeroTitle').value = s.heroTitle || "Welcome to SG Labs Store";
-        document.getElementById('sHeroDesc').value = s.heroDesc || "";
-        document.getElementById('sAbout').value = s.aboutText || "";
-        document.getElementById('sFeatures').value = s.features || "";
-        document.getElementById('settingsModal').style.display = 'flex';
-      });
-    }
-
-    function closeSettingsModal() {
-      document.getElementById('settingsModal').style.display = 'none';
-    }
-
-    function saveSettings() {
-      const brandName = document.getElementById('sBrandName').value;
-      const logoText = document.getElementById('sLogo').value;
-      const phone = document.getElementById('sPhone').value;
-      const heroTitle = document.getElementById('sHeroTitle').value;
-      const heroDesc = document.getElementById('sHeroDesc').value;
-      const aboutText = document.getElementById('sAbout').value;
-      const features = document.getElementById('sFeatures').value;
-
-      database.ref('settings').set({
-        brandName: brandName || "",
-        logoText: logoText || "SG",
-        phone: phone || "923043337555",
-        heroTitle: heroTitle || "",
-        heroDesc: heroDesc || "",
-        aboutText: aboutText || "",
-        features: features || ""
-      }).then(() => {
-        closeSettingsModal();
-        alert("Website settings updated successfully!");
-      });
-    }
-
-    function addProduct() {
-      const name = document.getElementById('pName').value;
-      const price = document.getElementById('pPrice').value;
-      const image = document.getElementById('pImg').value;
-      const desc = document.getElementById('pDesc5').value || document.getElementById('pDesc').value;
-
-      if (!name || !price) {
-        alert("Please enter Name and Price!");
-        return;
-      }
-
-      database.ref('products').push({
-        name, price, image, desc
-      }).then(() => {
-        closeOwnerPanel();
-        document.getElementById('pName').value = '';
-        document.getElementById('pPrice').value = '';
-        document.getElementById('pImg').value = '';
-        document.getElementById('pDesc').value = '';
-      });
-    }
-
-    function deleteProduct(id) {
-      if (confirm("Are you sure you want to delete this product?")) {
-        database.ref('products/' + id).remove();
-      }
-    }
-  </script>
+            let whatsappURL = `https://wa.me/${siteSettings.whatsapp}?text=${message}`;
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
 </body>
 </html>
