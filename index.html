@@ -260,7 +260,7 @@
         </div>
         <div class="header-actions">
             <div class="cart-icon" onclick="switchPage('cart')">🛒 Cart (<span id="cart-count">0</span>)</div>
-            <button class="admin-btn" onclick="openAdminModal()">⚙️ Settings & Add Items</button>
+            <button class="admin-btn" onclick="checkAdminPin()">⚙️ Settings & Add Items</button>
         </div>
     </header>
 
@@ -283,7 +283,7 @@
                 <p id="display-hero-desc">Your ultimate destination for robotics projects, kits, and electronics tools.</p>
             </div>
             <h2>Featured Lab Overview</h2>
-            <p>Welcome to Saad Gadgets Lab! Click on the **"⚙️ Settings & Add Items"** button at the top right to start adding your project kits, items, and tools.</p>
+            <p>Welcome to Saad Gadgets Lab! Click on the **"⚙️ Settings & Add Items"** button at the top right, enter PIN code **1947**, and start adding your project kits, items, and tools.</p>
         </div>
 
         <!-- PAGE 2: PROJECT KITS -->
@@ -354,7 +354,7 @@
 
     </div>
 
-    <!-- Admin Settings & Add Item Modal (No Lock Required) -->
+    <!-- Admin Settings & Add Item Modal (PIN Protected) -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content">
             <h2>Website Settings & Product Management</h2>
@@ -466,6 +466,16 @@
             document.getElementById('new-item-desc').value = '';
 
             alert("New item successfully added to the website catalog!");
+        }
+
+        // PIN Code Authentication Function
+        function checkAdminPin() {
+            let enteredPin = prompt("Enter Admin PIN Code:");
+            if (enteredPin === "1947") {
+                openAdminModal();
+            } else if (enteredPin !== null) {
+                alert("Incorrect PIN Code! Access Denied.");
+            }
         }
 
         function openAdminModal() {
