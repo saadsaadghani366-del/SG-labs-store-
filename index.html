@@ -69,7 +69,7 @@
             color: white;
         }
 
-        /* 6-Page Navigation Menu Bar */
+        /* Navigation Menu Bar */
         .navbar {
             background: #1b263b;
             display: flex;
@@ -156,8 +156,15 @@
             cursor: pointer; 
             width: 100%; 
             font-weight: bold;
+            margin-top: 5px;
         }
         .product-card button:hover { background: #38b000; }
+
+        .delete-btn {
+            background: #d90429 !important;
+            color: white !important;
+        }
+        .delete-btn:hover { background: #ef233c !important; }
         
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #e0e1dd; }
@@ -202,7 +209,7 @@
             padding: 30px;
             border-radius: 8px;
             width: 90%;
-            max-width: 600px;
+            max-width: 650px;
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
@@ -225,13 +232,13 @@
         .modal-buttons {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .save-btn { background: var(--success-color); color: #0d1b2a; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         .cancel-btn { background: #d90429; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         
-        .admin-add-box {
+        .admin-box {
             background: #0d1b2a;
             padding: 15px;
             border-radius: 6px;
@@ -260,11 +267,11 @@
         </div>
         <div class="header-actions">
             <div class="cart-icon" onclick="switchPage('cart')">🛒 Cart (<span id="cart-count">0</span>)</div>
-            <button class="admin-btn" onclick="checkAdminPin()">⚙️ Settings & Add Items</button>
+            <button class="admin-btn" onclick="checkAdminPin()">⚙️ Admin Panel</button>
         </div>
     </header>
 
-    <!-- 6-Page Navigation Menu Bar -->
+    <!-- Navigation Menu Bar -->
     <nav class="navbar">
         <button id="nav-home" class="active-tab" onclick="switchPage('home')">Home Page</button>
         <button id="nav-kits" onclick="switchPage('kits')">Project Kits</button>
@@ -278,47 +285,45 @@
 
         <!-- PAGE 1: HOME PAGE -->
         <div id="page-home" class="page-section active-page">
-            <div class="hero-section" id="hero-box">
+            <div class="hero-section">
                 <h1 id="display-hero-title">Welcome to Saad Gadgets Lab</h1>
                 <p id="display-hero-desc">Your ultimate destination for robotics projects, kits, and electronics tools.</p>
             </div>
             <h2>Featured Lab Overview</h2>
-            <p>Welcome to Saad Gadgets Lab! Click on the **"⚙️ Settings & Add Items"** button at the top right, enter PIN code **1947**, and start adding your project kits, items, and tools.</p>
+            <div id="display-home-content" style="background: #1b263b; padding: 15px; border-radius: 6px; border: 1px solid #415a77;">
+                Welcome! Click on **"⚙️ Admin Panel"** at the top right, enter PIN **1947**, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.
+            </div>
         </div>
 
         <!-- PAGE 2: PROJECT KITS -->
         <div id="page-kits" class="page-section">
             <h2>Project Kits Page</h2>
             <p>Explore our latest project kits below.</p>
-            <div class="product-grid" id="grid-kits">
-                <!-- Completely Empty by Default -->
-            </div>
+            <div class="product-grid" id="grid-kits"></div>
         </div>
 
         <!-- PAGE 3: PROJECT ITEMS -->
         <div id="page-items" class="page-section">
             <h2>Project Items Page</h2>
             <p>Explore individual hardware items and components below.</p>
-            <div class="product-grid" id="grid-items">
-                <!-- Completely Empty by Default -->
-            </div>
+            <div class="product-grid" id="grid-items"></div>
         </div>
 
         <!-- PAGE 4: PROJECT TOOLS -->
         <div id="page-tools" class="page-section">
             <h2>Project Tools Page</h2>
             <p>Explore essential workbench tools below.</p>
-            <div class="product-grid" id="grid-tools">
-                <!-- Completely Empty by Default -->
-            </div>
+            <div class="product-grid" id="grid-tools"></div>
         </div>
 
         <!-- PAGE 5: ABOUT US -->
         <div id="page-about" class="page-section">
-            <h2>About Saad Gadgets Lab</h2>
-            <p>Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.</p>
-            <p>Founder: Mohammad Saad Ghani</p>
-            <p>Location: Lahore, Pakistan</p>
+            <h2>About Us</h2>
+            <div id="display-about-text" style="background: #1b263b; padding: 15px; border-radius: 6px; border: 1px solid #415a77; line-height: 1.6;">
+                Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br>
+                <strong>Founder:</strong> Mohammad Saad Ghani<br>
+                <strong>Location:</strong> Lahore, Pakistan
+            </div>
         </div>
 
         <!-- PAGE 6: CART & CHECKOUT -->
@@ -354,30 +359,38 @@
 
     </div>
 
-    <!-- Admin Settings & Add Item Modal (PIN Protected) -->
+    <!-- Complete PIN Protected Admin Modal Control Center -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content">
-            <h2>Website Settings & Product Management</h2>
+            <h2>⚙️ Complete Website Control Center</h2>
             
-            <label>Store Name:</label>
-            <input type="text" id="input-store-name" value="Saad Gadgets Lab">
+            <div class="admin-box">
+                <h3>1. General Website Settings (Front Page & Header)</h3>
+                <label>Store Name:</label>
+                <input type="text" id="input-store-name" value="Saad Gadgets Lab">
 
-            <label>Logo Text / Short Name:</label>
-            <input type="text" id="input-logo" value="SG">
+                <label>Logo Text / Short Name:</label>
+                <input type="text" id="input-logo" value="SG">
 
-            <label>WhatsApp Contact Number (e.g. 923043337555):</label>
-            <input type="text" id="input-whatsapp" value="923043337555">
+                <label>WhatsApp Order Number (e.g. 923043337555):</label>
+                <input type="text" id="input-whatsapp" value="923043337555">
 
-            <label>Hero Title:</label>
-            <input type="text" id="input-hero-title" value="Welcome to Saad Gadgets Lab">
+                <label>Hero Title (Main Banner):</label>
+                <input type="text" id="input-hero-title" value="Welcome to Saad Gadgets Lab">
 
-            <label>Hero Description:</label>
-            <textarea id="input-hero-desc" rows="2">Your ultimate destination for robotics projects, kits, and electronics tools.</textarea>
-
-            <!-- Add New Product Form Inside Admin Panel -->
-            <div class="admin-add-box">
-                <h3>➕ Add New Item to Website</h3>
+                <label>Hero Description:</label>
+                <textarea id="input-hero-desc" rows="2">Your ultimate destination for robotics projects, kits, and electronics tools.</textarea>
                 
+                <label>Home Page Welcome Box Text:</label>
+                <textarea id="input-home-content" rows="2">Welcome! Click on **"⚙️ Admin Panel"** at the top right, enter PIN **1947**, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.</textarea>
+
+                <label>About Us Page Content Text:</label>
+                <textarea id="input-about-text" rows="3">Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators. Founder: Mohammad Saad Ghani. Location: Lahore, Pakistan</textarea>
+            </div>
+
+            <!-- Add New Product Form -->
+            <div class="admin-box">
+                <h3>2. Add New Product / Item</h3>
                 <label>Select Page Category:</label>
                 <select id="new-item-category">
                     <option value="kits">Project Kits</option>
@@ -392,14 +405,14 @@
                 <input type="number" id="new-item-price" placeholder="e.g. 2500">
 
                 <label>Product Description:</label>
-                <textarea id="new-item-desc" rows="2" placeholder="Short description of the item..."></textarea>
+                <textarea id="new-item-desc" rows="2" placeholder="Short description..."></textarea>
 
                 <button class="save-btn" style="width:100%; margin-top:15px;" onclick="addNewProduct()">Add Item to Catalog</button>
             </div>
 
-            <div class="modal-buttons" style="margin-top: 25px;">
-                <button class="save-btn" onclick="saveAdminSettings()">Save All Changes</button>
-                <button class="cancel-btn" onclick="closeAdminModal()">Close</button>
+            <div class="modal-buttons">
+                <button class="save-btn" onclick="saveAdminSettings()">Save All Website Changes</button>
+                <button class="cancel-btn" onclick="closeAdminModal()">Close Panel</button>
             </div>
         </div>
     </div>
@@ -410,20 +423,16 @@
             logo: "SG",
             whatsapp: "923043337555",
             heroTitle: "Welcome to Saad Gadgets Lab",
-            heroDesc: "Your ultimate destination for robotics projects, kits, and electronics tools."
+            heroDesc: "Your ultimate destination for robotics projects, kits, and electronics tools.",
+            homeContent: "Welcome! Click on **\"⚙️ Admin Panel\"** at the top right, enter PIN **1947**, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.",
+            aboutText: "Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan"
         };
 
-        // All sections start completely empty as requested
         let products = [];
 
         function renderProducts() {
-            let kitHTML = '';
-            let itemHTML = '';
-            let toolHTML = '';
-
-            let kitCount = 0;
-            let itemCount = 0;
-            let toolCount = 0;
+            let kitHTML = '', itemHTML = '', toolHTML = '';
+            let kitCount = 0, itemCount = 0, toolCount = 0;
 
             products.forEach((p, index) => {
                 let card = `
@@ -433,6 +442,7 @@
                         <p><strong>Price: ${p.price} PKR</strong></p>
                         <label>Quantity: <input type="number" id="prod-${index}-qty" value="1" min="1"></label>
                         <button onclick="addToCart('${p.name}', ${p.price}, 'prod-${index}-qty')">Add to Cart</button>
+                        <button class="delete-btn" onclick="checkDeletePin(${p.id})">❌ Delete Item</button>
                     </div>
                 `;
 
@@ -441,9 +451,9 @@
                 else if (p.category === 'tools') { toolHTML += card; toolCount++; }
             });
 
-            document.getElementById('grid-kits').innerHTML = kitCount > 0 ? kitHTML : '<div class="empty-msg">No project kits added yet. Open Settings to add kits.</div>';
-            document.getElementById('grid-items').innerHTML = itemCount > 0 ? itemHTML : '<div class="empty-msg">No project items added yet. Open Settings to add items.</div>';
-            document.getElementById('grid-tools').innerHTML = toolCount > 0 ? toolHTML : '<div class="empty-msg">No project tools added yet. Open Settings to add tools.</div>';
+            document.getElementById('grid-kits').innerHTML = kitCount > 0 ? kitHTML : '<div class="empty-msg">No project kits added yet. Use Admin Panel to add items.</div>';
+            document.getElementById('grid-items').innerHTML = itemCount > 0 ? itemHTML : '<div class="empty-msg">No project items added yet. Use Admin Panel to add items.</div>';
+            document.getElementById('grid-tools').innerHTML = toolCount > 0 ? toolHTML : '<div class="empty-msg">No project tools added yet. Use Admin Panel to add items.</div>';
         }
 
         function addNewProduct() {
@@ -460,17 +470,26 @@
             products.push({ id: Date.now(), category, name, price, desc });
             renderProducts();
 
-            // Clear inputs
             document.getElementById('new-item-name').value = '';
             document.getElementById('new-item-price').value = '';
             document.getElementById('new-item-desc').value = '';
-
-            alert("New item successfully added to the website catalog!");
+            alert("New item successfully added!");
         }
 
-        // PIN Code Authentication Function
+        function checkDeletePin(id) {
+            let enteredPin = prompt("Enter Admin PIN Code (1947) to Delete:");
+            if (enteredPin === "1947") {
+                if (confirm("Are you sure you want to delete this item?")) {
+                    products = products.filter(p => p.id !== id);
+                    renderProducts();
+                }
+            } else if (enteredPin !== null) {
+                alert("Incorrect PIN! Action Denied.");
+            }
+        }
+
         function checkAdminPin() {
-            let enteredPin = prompt("Enter Admin PIN Code:");
+            let enteredPin = prompt("Enter Admin PIN Code (1947):");
             if (enteredPin === "1947") {
                 openAdminModal();
             } else if (enteredPin !== null) {
@@ -484,6 +503,8 @@
             document.getElementById('input-whatsapp').value = siteSettings.whatsapp;
             document.getElementById('input-hero-title').value = siteSettings.heroTitle;
             document.getElementById('input-hero-desc').value = siteSettings.heroDesc;
+            document.getElementById('input-home-content').value = siteSettings.homeContent;
+            document.getElementById('input-about-text').value = siteSettings.aboutText;
             
             document.getElementById('adminModal').style.display = 'flex';
         }
@@ -498,18 +519,21 @@
             siteSettings.whatsapp = document.getElementById('input-whatsapp').value;
             siteSettings.heroTitle = document.getElementById('input-hero-title').value;
             siteSettings.heroDesc = document.getElementById('input-hero-desc').value;
+            siteSettings.homeContent = document.getElementById('input-home-content').value;
+            siteSettings.aboutText = document.getElementById('input-about-text').value;
 
             document.getElementById('display-store-name').innerText = siteSettings.storeName;
             document.getElementById('display-logo').innerText = siteSettings.logo;
             document.getElementById('page-title').innerText = siteSettings.storeName;
             document.getElementById('display-hero-title').innerText = siteSettings.heroTitle;
             document.getElementById('display-hero-desc').innerText = siteSettings.heroDesc;
+            document.getElementById('display-home-content').innerHTML = siteSettings.homeContent;
+            document.getElementById('display-about-text').innerHTML = siteSettings.aboutText;
 
             closeAdminModal();
-            alert("Settings updated successfully!");
+            alert("All website settings updated successfully!");
         }
 
-        // Multi-page switcher logic for 6 separate pages
         function switchPage(pageName) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-page'));
             document.querySelectorAll('.navbar button').forEach(btn => btn.classList.remove('active-tab'));
@@ -547,8 +571,7 @@
             }
 
             let html = "<ul style='margin:0; padding-left: 20px;'>";
-            let totalCount = 0;
-            let totalPrice = 0;
+            let totalCount = 0, totalPrice = 0;
 
             cart.forEach(item => {
                 let itemTotal = item.price * item.qty;
@@ -598,7 +621,6 @@
             window.open(whatsappURL, '_blank');
         }
 
-        // Initialize empty grids on load
         window.onload = function() {
             renderProducts();
         };
