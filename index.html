@@ -22,7 +22,7 @@
             padding: 0; 
         }
 
-        /* Updated Professional Header Design */
+        /* Professional Header Design */
         header { 
             background: #000814; 
             color: white; 
@@ -282,7 +282,7 @@
 </head>
 <body>
 
-    <!-- Header Section (Two-Layer Design: Logo & Title on Top, Actions Below) -->
+    <!-- Header Section -->
     <header>
         <div class="header-top-row">
             <img src="image_6592e3.jpg" alt="SG Labs Logo" class="site-logo">
@@ -290,7 +290,7 @@
         </div>
         <div class="header-actions">
             <div class="cart-icon" onclick="switchPage('cart')">🛒 Cart (<span id="cart-count">0</span>)</div>
-            <button class="admin-btn" onclick="checkAdminPin()">⚙️ Admin Panel</button>
+            <button class="admin-btn" onclick="verifyAdminAccess()">⚙️ Admin Panel</button>
         </div>
     </header>
 
@@ -309,12 +309,12 @@
         <!-- PAGE 1: HOME PAGE -->
         <div id="page-home" class="page-section active-page">
             <div class="hero-section">
-                <h1 id="display-hero-title">Welcome to Saad Gadgets Lab</h1>
-                <p id="display-hero-desc">Your ultimate destination for robotics projects, kits, and electronics tools.</p>
+                <h1 id="display-hero-title">Empowering Pakistan's Future Through Smart City Innovation</h1>
+                <p id="display-hero-desc">Welcome to Saad Gadgets Lab — pioneering hands-on robotics, microcontroller systems, and advanced smart city prototyping right here in Lahore to transform Pakistan's technological landscape.</p>
             </div>
             <h2>Featured Lab Overview</h2>
             <div id="display-home-content" style="background: #1b263b; padding: 15px; border-radius: 6px; border: 1px solid #415a77;">
-                Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter PIN <b>1947</b>, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.
+                Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.
             </div>
         </div>
 
@@ -382,7 +382,7 @@
 
     </div>
 
-    <!-- Complete PIN Protected Admin Modal Control Center -->
+    <!-- Admin Modal Control Center -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content">
             <h2>⚙️ Complete Website Control Center</h2>
@@ -396,13 +396,13 @@
                 <input type="text" id="input-whatsapp" value="923043337555">
 
                 <label>Hero Title (Main Banner):</label>
-                <input type="text" id="input-hero-title" value="Welcome to Saad Gadgets Lab">
+                <input type="text" id="input-hero-title" value="Empowering Pakistan's Future Through Smart City Innovation">
 
                 <label>Hero Description:</label>
-                <textarea id="input-hero-desc" rows="2">Your ultimate destination for robotics projects, kits, and electronics tools.</textarea>
+                <textarea id="input-hero-desc" rows="2">Welcome to Saad Gadgets Lab — pioneering hands-on robotics, microcontroller systems, and advanced smart city prototyping right here in Lahore to transform Pakistan's technological landscape.</textarea>
                 
                 <label>Home Page Welcome Box Text:</label>
-                <textarea id="input-home-content" rows="2">Welcome! Click on "⚙️ Admin Panel" at the top right, enter PIN 1947, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.</textarea>
+                <textarea id="input-home-content" rows="2">Welcome! Click on "⚙️ Admin Panel" at the top right, enter your secure PIN to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.</textarea>
 
                 <label>About Us Page Content Text:</label>
                 <textarea id="input-about-text" rows="3">Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan</textarea>
@@ -419,10 +419,10 @@
                 </select>
 
                 <label>Product Name:</label>
-                <input type="text" id="new-item-name" placeholder="e.g. 20-in-1 Inventor Kit">
+                <input type="text" id="new-item-name" placeholder="e.g. Smart City Automation Hub Kit">
 
                 <label>Price (PKR):</label>
-                <input type="number" id="new-item-price" placeholder="e.g. 2500">
+                <input type="number" id="new-item-price" placeholder="e.g. 4500">
 
                 <label>Product Description:</label>
                 <textarea id="new-item-desc" rows="2" placeholder="Short description..."></textarea>
@@ -441,13 +441,36 @@
         let siteSettings = {
             storeName: "Saad Gadgets Lab",
             whatsapp: "923043337555",
-            heroTitle: "Welcome to Saad Gadgets Lab",
-            heroDesc: "Your ultimate destination for robotics projects, kits, and electronics tools.",
-            homeContent: 'Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter PIN <b>1947</b>, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.',
+            heroTitle: "Empowering Pakistan's Future Through Smart City Innovation",
+            heroDesc: "Welcome to Saad Gadgets Lab — pioneering hands-on robotics, microcontroller systems, and advanced smart city prototyping right here in Lahore to transform Pakistan's technological landscape.",
+            homeContent: 'Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.',
             aboutText: "Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan"
         };
 
-        let products = [];
+        // Pre-loaded professional products based on your choices
+        let products = [
+            { id: 1, category: 'kits', name: 'Smart City Automation Hub Kit', price: 4500, desc: 'A comprehensive smart city prototyping kit featuring microcontroller integration, automated barriers, traffic light simulation, and environmental sensors for advanced makers.' },
+            { id: 2, category: 'kits', name: 'Arduino Beginner Starter Pack', price: 2800, desc: 'Perfect for absolute beginners. Includes a compatible microcontroller board, breadboard, jumper wires, LEDs, and essential sensors to start learning programming and electronics.' },
+            { id: 3, category: 'items', name: 'IoT & Wireless Control Module', price: 1500, desc: 'Advanced wireless connectivity module enabling Bluetooth and Wi-Fi control for robotics, smart home automation, and remote-controlled IoT projects.' },
+            { id: 4, category: 'tools', name: 'Prototyping & Lab Toolkit', price: 3500, desc: 'Essential workbench kit for makers and engineers, including testing wires, precision components, and fundamental electronics tools for seamless building.' }
+        ];
+
+        let isAdminLoggedIn = false;
+
+        function verifyAdminAccess() {
+            if (isAdminLoggedIn) {
+                openAdminModal();
+                return;
+            }
+
+            let enteredPin = prompt("Enter Admin PIN Code:");
+            if (enteredPin === "1947") {
+                isAdminLoggedIn = true;
+                openAdminModal();
+            } else if (enteredPin !== null) {
+                alert("Incorrect PIN Code! Access Denied.");
+            }
+        }
 
         function renderProducts() {
             let kitHTML = '', itemHTML = '', toolHTML = '';
@@ -492,11 +515,11 @@
             document.getElementById('new-item-name').value = '';
             document.getElementById('new-item-price').value = '';
             document.getElementById('new-item-desc').value = '';
-            alert("New item successfully added!");
+            alert("New item successfully added to catalog!");
         }
 
         function checkDeletePin(id) {
-            let enteredPin = prompt("Enter Admin PIN Code (1947) to Delete:");
+            let enteredPin = prompt("Enter Admin PIN Code to Delete:");
             if (enteredPin === "1947") {
                 if (confirm("Are you sure you want to delete this item?")) {
                     products = products.filter(p => p.id !== id);
@@ -504,15 +527,6 @@
                 }
             } else if (enteredPin !== null) {
                 alert("Incorrect PIN! Action Denied.");
-            }
-        }
-
-        function checkAdminPin() {
-            let enteredPin = prompt("Enter Admin PIN Code (1947):");
-            if (enteredPin === "1947") {
-                openAdminModal();
-            } else if (enteredPin !== null) {
-                alert("Incorrect PIN Code! Access Denied.");
             }
         }
 
