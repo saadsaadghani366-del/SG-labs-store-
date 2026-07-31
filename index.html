@@ -25,7 +25,7 @@
         header { 
             background: #000814; 
             color: white; 
-            padding: 15px 30px; 
+            padding: 12px 30px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
@@ -35,16 +35,15 @@
         .logo-area {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
-        .logo-box {
-            background: var(--accent-color);
-            color: #0d1b2a;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 18px;
+        .site-logo {
+            height: 45px;
+            width: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
         }
 
         .header-actions {
@@ -262,7 +261,8 @@
     <!-- Header Section -->
     <header>
         <div class="logo-area">
-            <div class="logo-box" id="display-logo">SG</div>
+            <!-- Yahan aapka original logo image tag lag gaya hai -->
+            <img src="image_6592e3.jpg" alt="SG Labs Logo" class="site-logo">
             <h2 id="display-store-name" style="margin:0;">Saad Gadgets Lab</h2>
         </div>
         <div class="header-actions">
@@ -369,9 +369,6 @@
                 <label>Store Name:</label>
                 <input type="text" id="input-store-name" value="Saad Gadgets Lab">
 
-                <label>Logo Text / Short Name:</label>
-                <input type="text" id="input-logo" value="SG">
-
                 <label>WhatsApp Order Number (e.g. 923043337555):</label>
                 <input type="text" id="input-whatsapp" value="923043337555">
 
@@ -420,7 +417,6 @@
     <script>
         let siteSettings = {
             storeName: "Saad Gadgets Lab",
-            logo: "SG",
             whatsapp: "923043337555",
             heroTitle: "Welcome to Saad Gadgets Lab",
             heroDesc: "Your ultimate destination for robotics projects, kits, and electronics tools.",
@@ -499,7 +495,6 @@
 
         function openAdminModal() {
             document.getElementById('input-store-name').value = siteSettings.storeName;
-            document.getElementById('input-logo').value = siteSettings.logo;
             document.getElementById('input-whatsapp').value = siteSettings.whatsapp;
             document.getElementById('input-hero-title').value = siteSettings.heroTitle;
             document.getElementById('input-hero-desc').value = siteSettings.heroDesc;
@@ -515,7 +510,6 @@
 
         function saveAdminSettings() {
             siteSettings.storeName = document.getElementById('input-store-name').value;
-            siteSettings.logo = document.getElementById('input-logo').value;
             siteSettings.whatsapp = document.getElementById('input-whatsapp').value;
             siteSettings.heroTitle = document.getElementById('input-hero-title').value;
             siteSettings.heroDesc = document.getElementById('input-hero-desc').value;
@@ -523,7 +517,6 @@
             siteSettings.aboutText = document.getElementById('input-about-text').value;
 
             document.getElementById('display-store-name').innerText = siteSettings.storeName;
-            document.getElementById('display-logo').innerText = siteSettings.logo;
             document.getElementById('page-title').innerText = siteSettings.storeName;
             document.getElementById('display-hero-title').innerText = siteSettings.heroTitle;
             document.getElementById('display-hero-desc').innerText = siteSettings.heroDesc;
@@ -570,7 +563,7 @@
                 return;
             }
 
-            let html = "<ul style='margin:0; padding-left: 20px;'>";
+            let html = "<ul style='margin:0; padding-left: 20px;'>`;
             let totalCount = 0, totalPrice = 0;
 
             cart.forEach(item => {
