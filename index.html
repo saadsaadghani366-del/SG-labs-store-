@@ -69,6 +69,34 @@
             color: white;
         }
 
+        /* 5-6 Page Navigation Menu Bar */
+        .navbar {
+            background: #1b263b;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            border-bottom: 2px solid #415a77;
+            flex-wrap: wrap;
+        }
+
+        .navbar button {
+            background: transparent;
+            color: #e0e1dd;
+            border: none;
+            padding: 8px 16px;
+            font-size: 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .navbar button:hover, .navbar button.active-tab {
+            background: #00b4d8;
+            color: #0d1b2a;
+        }
+
         .container { 
             max-width: 1000px; 
             margin: 20px auto; 
@@ -78,9 +106,12 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.5); 
         }
 
+        .page-section { display: none; }
+        .page-section.active-page { display: block; }
+
         .hero-section {
             text-align: center;
-            padding: 30px 20px;
+            padding: 40px 20px;
             background: #1b263b;
             border-radius: 6px;
             margin-bottom: 20px;
@@ -97,32 +128,6 @@
             margin: 0;
             font-size: 16px;
         }
-
-        .nav-tabs { 
-            display: flex; 
-            gap: 10px; 
-            margin-bottom: 20px; 
-            flex-wrap: wrap; 
-        }
-
-        .nav-tabs button { 
-            padding: 10px 20px; 
-            background: #0077b6; 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            transition: background 0.2s;
-        }
-
-        .nav-tabs button:hover { 
-            background: #00b4d8; 
-            color: #0d1b2a;
-        }
-
-        .section { display: none; }
-        .section.active { display: block; }
 
         .product-grid { 
             display: grid; 
@@ -154,12 +159,6 @@
         }
         .product-card button:hover { background: #38b000; }
         
-        #checkout-section { 
-            margin-top: 30px; 
-            border-top: 2px solid #415a77; 
-            padding-top: 20px; 
-        }
-
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #e0e1dd; }
         .form-group input, .form-group textarea { 
@@ -241,28 +240,37 @@
             <h2 id="display-store-name" style="margin:0;">Saad Gadgets Lab</h2>
         </div>
         <div class="header-actions">
-            <div class="cart-icon" onclick="scrollToCheckout()">🛒 Cart (<span id="cart-count">0</span>)</div>
+            <div class="cart-icon" onclick="switchPage('cart')">🛒 Cart (<span id="cart-count">0</span>)</div>
             <button class="admin-btn" onclick="openAdminModal()">⚙️ Settings</button>
         </div>
     </header>
 
+    <!-- 6-Page Navigation Menu Bar -->
+    <nav class="navbar">
+        <button id="nav-home" class="active-tab" onclick="switchPage('home')">Home Page</button>
+        <button id="nav-kits" onclick="switchPage('kits')">Project Kits</button>
+        <button id="nav-items" onclick="switchPage('items')">Project Items</button>
+        <button id="nav-tools" onclick="switchPage('tools')">Project Tools</button>
+        <button id="nav-about" onclick="switchPage('about')">About Us</button>
+        <button id="nav-cart" onclick="switchPage('cart')">Cart & Checkout</button>
+    </nav>
+
     <div class="container">
-        <!-- Hero Section -->
-        <div class="hero-section" id="hero-box">
-            <h1 id="display-hero-title">Welcome to Saad Gadgets Lab</h1>
-            <p id="display-hero-desc">Your ultimate destination for robotics projects, kits, and electronics tools.</p>
+
+        <!-- PAGE 1: HOME PAGE -->
+        <div id="page-home" class="page-section active-page">
+            <div class="hero-section" id="hero-box">
+                <h1 id="display-hero-title">Welcome to Saad Gadgets Lab</h1>
+                <p id="display-hero-desc">Your ultimate destination for robotics projects, kits, and electronics tools.</p>
+            </div>
+            <h2>Featured Lab Overview</h2>
+            <p>Welcome to Saad Gadgets Lab! Explore our dedicated sections for high-end student inventor kits, microcontrollers, and electronic hardware components. Use the navigation bar above to browse through individual pages.</p>
         </div>
 
-        <!-- Navigation Tabs -->
-        <div class="nav-tabs">
-            <button onclick="showSection('kits')">Project Kits</button>
-            <button onclick="showSection('items')">Project Items</button>
-            <button onclick="showSection('tools')">Project Tools</button>
-        </div>
-
-        <!-- 1. Project Kits Section -->
-        <div id="kits" class="section active">
-            <h2>Project Kits</h2>
+        <!-- PAGE 2: PROJECT KITS -->
+        <div id="page-kits" class="page-section">
+            <h2>Project Kits Page</h2>
+            <p>Discover our range of hands-on learning kits built for engineering students and creators.</p>
             <div class="product-grid">
                 <div class="product-card">
                     <h3>20-in-1 Inventor Kit</h3>
@@ -274,9 +282,10 @@
             </div>
         </div>
 
-        <!-- 2. Project Items Section -->
-        <div id="items" class="section">
-            <h2>Project Items</h2>
+        <!-- PAGE 3: PROJECT ITEMS -->
+        <div id="page-items" class="page-section">
+            <h2>Project Items Page</h2>
+            <p>Browse individual hardware items, sensors, and processor boards.</p>
             <div class="product-grid">
                 <div class="product-card">
                     <h3>Arduino Uno R3</h3>
@@ -288,9 +297,10 @@
             </div>
         </div>
 
-        <!-- 3. Project Tools Section -->
-        <div id="tools" class="section">
-            <h2>Project Tools</h2>
+        <!-- PAGE 4: PROJECT TOOLS -->
+        <div id="page-tools" class="page-section">
+            <h2>Project Tools Page</h2>
+            <p>Essential workbench utilities and assembly accessories.</p>
             <div class="product-grid">
                 <div class="product-card">
                     <h3>Soldering Iron Kit</h3>
@@ -302,9 +312,17 @@
             </div>
         </div>
 
-        <!-- Checkout and Order Form -->
-        <div id="checkout-section">
-            <h3>Your Shopping Cart</h3>
+        <!-- PAGE 5: ABOUT US -->
+        <div id="page-about" class="page-section">
+            <h2>About Saad Gadgets Lab</h2>
+            <p>Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.</p>
+            <p>Founder: Mohammad Saad Ghani</p>
+            <p>Location: Lahore, Pakistan</p>
+        </div>
+
+        <!-- PAGE 6: CART & CHECKOUT -->
+        <div id="page-cart" class="page-section">
+            <h2>Shopping Cart & Checkout</h2>
             <div id="cart-items-list" style="background: #0d1b2a; padding: 15px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #415a77;">
                 Your cart is currently empty.
             </div>
@@ -332,6 +350,7 @@
 
             <button class="confirm-btn" onclick="sendToWhatsApp()">Confirm Order (Send via WhatsApp)</button>
         </div>
+
     </div>
 
     <!-- Admin Settings Modal -->
@@ -401,9 +420,14 @@
             alert("Settings updated successfully!");
         }
 
-        function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
+        // Multi-page switcher logic for 6 separate pages
+        function switchPage(pageName) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-page'));
+            document.querySelectorAll('.navbar button').forEach(btn => btn.classList.remove('active-tab'));
+
+            document.getElementById('page-' + pageName).classList.add('active-page');
+            document.getElementById('nav-' + pageName).classList.add('active-tab');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         let cart = [];
@@ -448,10 +472,6 @@
             cartList.innerHTML = html;
             cartCount.innerText = totalCount;
             totalPriceElem.innerText = totalPrice;
-        }
-
-        function scrollToCheckout() {
-            document.getElementById('checkout-section').scrollIntoView({ behavior: 'smooth' });
         }
 
         function sendToWhatsApp() {
