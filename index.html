@@ -22,45 +22,69 @@
             padding: 0; 
         }
 
+        /* Updated Professional Header Design */
         header { 
             background: #000814; 
             color: white; 
-            padding: 12px 30px; 
+            padding: 15px 30px; 
             display: flex; 
-            justify-content: space-between; 
+            flex-direction: column; 
             align-items: center; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            gap: 12px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+            border-bottom: 2px solid #415a77;
         }
 
-        .logo-area {
+        .header-top-row {
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
         }
 
         .site-logo {
-            height: 45px;
-            width: 45px;
+            height: 75px;
+            width: 75px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--accent-color);
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
+        }
+
+        #display-store-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: 0.5px;
         }
 
         .header-actions {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding-top: 5px;
+            border-top: 1px solid rgba(65, 90, 119, 0.4);
         }
 
         .cart-icon, .admin-btn { 
             cursor: pointer; 
             background: var(--accent-color); 
             color: #0d1b2a;
-            padding: 8px 15px; 
-            border-radius: 5px; 
+            padding: 8px 18px; 
+            border-radius: 6px; 
             font-weight: bold; 
             border: none;
             font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .cart-icon:hover, .admin-btn:hover {
+            transform: translateY(-2px);
         }
 
         .admin-btn {
@@ -258,11 +282,11 @@
 </head>
 <body>
 
-    <!-- Header Section -->
+    <!-- Header Section (Two-Layer Design: Logo & Title on Top, Actions Below) -->
     <header>
-        <div class="logo-area">
+        <div class="header-top-row">
             <img src="image_6592e3.jpg" alt="SG Labs Logo" class="site-logo">
-            <h2 id="display-store-name" style="margin:0;">Saad Gadgets Lab</h2>
+            <h1 id="display-store-name">Saad Gadgets Lab</h1>
         </div>
         <div class="header-actions">
             <div class="cart-icon" onclick="switchPage('cart')">🛒 Cart (<span id="cart-count">0</span>)</div>
@@ -290,7 +314,7 @@
             </div>
             <h2>Featured Lab Overview</h2>
             <div id="display-home-content" style="background: #1b263b; padding: 15px; border-radius: 6px; border: 1px solid #415a77;">
-                Welcome! Click on **"⚙️ Admin Panel"** at the top right, enter PIN **1947**, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.
+                Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter PIN <b>1947</b>, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.
             </div>
         </div>
 
@@ -378,10 +402,10 @@
                 <textarea id="input-hero-desc" rows="2">Your ultimate destination for robotics projects, kits, and electronics tools.</textarea>
                 
                 <label>Home Page Welcome Box Text:</label>
-                <textarea id="input-home-content" rows="2">Welcome! Click on **"⚙️ Admin Panel"** at the top right, enter PIN **1947**, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.</textarea>
+                <textarea id="input-home-content" rows="2">Welcome! Click on "⚙️ Admin Panel" at the top right, enter PIN 1947, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.</textarea>
 
                 <label>About Us Page Content Text:</label>
-                <textarea id="input-about-text" rows="3">Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators. Founder: Mohammad Saad Ghani. Location: Lahore, Pakistan</textarea>
+                <textarea id="input-about-text" rows="3">Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan</textarea>
             </div>
 
             <!-- Add New Product Form -->
@@ -419,7 +443,7 @@
             whatsapp: "923043337555",
             heroTitle: "Welcome to Saad Gadgets Lab",
             heroDesc: "Your ultimate destination for robotics projects, kits, and electronics tools.",
-            homeContent: "Welcome! Click on **\"⚙️ Admin Panel\"** at the top right, enter PIN **1947**, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.",
+            homeContent: 'Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter PIN <b>1947</b>, to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.',
             aboutText: "Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan"
         };
 
@@ -530,8 +554,11 @@
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-page'));
             document.querySelectorAll('.navbar button').forEach(btn => btn.classList.remove('active-tab'));
 
-            document.getElementById('page-' + pageName).classList.add('active-page');
-            document.getElementById('nav-' + pageName).classList.add('active-tab');
+            let targetPage = document.getElementById('page-' + pageName);
+            let targetNav = document.getElementById('nav-' + pageName);
+
+            if (targetPage) targetPage.classList.add('active-page');
+            if (targetNav) targetNav.classList.add('active-tab');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
