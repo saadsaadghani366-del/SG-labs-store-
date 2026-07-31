@@ -723,7 +723,8 @@
             });
             message += `%0A*Total Price:* ${totalPrice} PKR`;
 
-            let whatsappURL = `https://wa.me/${siteSettings.whatsapp}?text=${message}`;
+            let waNumber = (siteSettings && siteSettings.whatsapp) ? siteSettings.whatsapp : "923043337555";
+            let whatsappURL = `https://wa.me/${waNumber}?text=${message}`;
             window.open(whatsappURL, '_blank');
         }
     </script>
