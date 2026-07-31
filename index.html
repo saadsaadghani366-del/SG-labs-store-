@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">سعد گیجٹس لاب - Saad Gadgets Lab</title>
+    <title id="page-title">Saad Gadgets Lab</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --accent-color: #e74c3c;
-            --success-color: #27ae60;
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-color: #333333;
+            --primary-color: #1b263b;
+            --accent-color: #00b4d8;
+            --success-color: #2ec4b6;
+            --bg-color: #0d1b2a;
+            --card-bg: #1b263b;
+            --text-color: #ffffff;
         }
 
         body { 
@@ -23,13 +23,13 @@
         }
 
         header { 
-            background: var(--primary-color); 
+            background: #000814; 
             color: white; 
             padding: 15px 30px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
         .logo-area {
@@ -40,7 +40,7 @@
 
         .logo-box {
             background: var(--accent-color);
-            color: white;
+            color: #0d1b2a;
             padding: 8px 15px;
             border-radius: 5px;
             font-weight: bold;
@@ -56,7 +56,7 @@
         .cart-icon, .admin-btn { 
             cursor: pointer; 
             background: var(--accent-color); 
-            color: white;
+            color: #0d1b2a;
             padding: 8px 15px; 
             border-radius: 5px; 
             font-weight: bold; 
@@ -65,33 +65,35 @@
         }
 
         .admin-btn {
-            background: #34495e;
+            background: #415a77;
+            color: white;
         }
 
         .container { 
             max-width: 1000px; 
             margin: 20px auto; 
             padding: 20px; 
-            background: var(--card-bg); 
+            background: #22334b; 
             border-radius: 8px; 
-            box-shadow: 0 0 10px rgba(0,0,0,0.05); 
+            box-shadow: 0 0 10px rgba(0,0,0,0.5); 
         }
 
         .hero-section {
             text-align: center;
             padding: 30px 20px;
-            background: #eef2f3;
+            background: #1b263b;
             border-radius: 6px;
             margin-bottom: 20px;
+            border: 1px solid #415a77;
         }
 
         .hero-section h1 {
             margin: 0 0 10px 0;
-            color: var(--primary-color);
+            color: #00b4d8;
         }
 
         .hero-section p {
-            color: #666;
+            color: #e0e1dd;
             margin: 0;
             font-size: 16px;
         }
@@ -105,7 +107,7 @@
 
         .nav-tabs button { 
             padding: 10px 20px; 
-            background: #3498db; 
+            background: #0077b6; 
             color: white; 
             border: none; 
             border-radius: 5px; 
@@ -115,7 +117,8 @@
         }
 
         .nav-tabs button:hover { 
-            background: #2980b9; 
+            background: #00b4d8; 
+            color: #0d1b2a;
         }
 
         .section { display: none; }
@@ -128,20 +131,20 @@
         }
 
         .product-card { 
-            border: 1px solid #ddd; 
+            border: 1px solid #415a77; 
             padding: 15px; 
             border-radius: 6px; 
-            background: #fafafa; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            background: #1b263b; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .product-card h3 { margin: 0 0 10px 0; color: #333; }
-        .product-card p { color: #666; font-size: 14px; line-height: 1.4; }
-        .product-card input { width: 60px; padding: 5px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .product-card h3 { margin: 0 0 10px 0; color: #00b4d8; }
+        .product-card p { color: #e0e1dd; font-size: 14px; line-height: 1.4; }
+        .product-card input { width: 60px; padding: 5px; margin-bottom: 10px; border: 1px solid #415a77; border-radius: 4px; background: #0d1b2a; color: white; }
         
         .product-card button { 
             background: var(--success-color); 
-            color: white; 
+            color: #0d1b2a; 
             border: none; 
             padding: 8px 12px; 
             border-radius: 4px; 
@@ -149,27 +152,29 @@
             width: 100%; 
             font-weight: bold;
         }
-        .product-card button:hover { background: #218838; }
+        .product-card button:hover { background: #38b000; }
         
         #checkout-section { 
             margin-top: 30px; 
-            border-top: 2px solid #eee; 
+            border-top: 2px solid #415a77; 
             padding-top: 20px; 
         }
 
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #e0e1dd; }
         .form-group input, .form-group textarea { 
             width: 100%; 
             padding: 10px; 
             box-sizing: border-box; 
-            border: 1px solid #ccc; 
+            border: 1px solid #415a77; 
             border-radius: 4px; 
             font-family: inherit;
+            background: #0d1b2a;
+            color: white;
         }
 
         .confirm-btn { 
-            background: #e67e22; 
+            background: #f77f00; 
             color: white; 
             padding: 12px 20px; 
             border: none; 
@@ -179,21 +184,21 @@
             width: 100%; 
             font-weight: bold;
         }
-        .confirm-btn:hover { background: #d35400; }
+        .confirm-btn:hover { background: #fcbf49; color: #0d1b2a; }
 
-        /* ایڈمن ماڈل پینل (پاپ اپ) */
+        /* Admin Settings Modal */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.8);
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
 
         .modal-content {
-            background: #1e272e;
+            background: #1b263b;
             color: white;
             padding: 30px;
             border-radius: 8px;
@@ -201,16 +206,17 @@
             max-width: 550px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border: 1px solid #415a77;
         }
 
-        .modal-content h2 { margin-top: 0; color: #f1f2f6; }
-        .modal-content label { display: block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; color: #dcdde1; }
+        .modal-content h2 { margin-top: 0; color: #00b4d8; }
+        .modal-content label { display: block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; color: #e0e1dd; }
         .modal-content input, .modal-content textarea {
             width: 100%;
             padding: 10px;
-            background: #2f3640;
-            border: 1px solid #718093;
+            background: #0d1b2a;
+            border: 1px solid #415a77;
             color: white;
             border-radius: 4px;
             box-sizing: border-box;
@@ -222,113 +228,113 @@
             margin-top: 20px;
         }
 
-        .save-btn { background: var(--success-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .cancel-btn { background: var(--accent-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .save-btn { background: var(--success-color); color: #0d1b2a; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .cancel-btn { background: #d90429; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- ہیڈر سیکشن -->
+    <!-- Header Section -->
     <header>
         <div class="logo-area">
             <div class="logo-box" id="display-logo">SG</div>
             <h2 id="display-store-name" style="margin:0;">Saad Gadgets Lab</h2>
         </div>
         <div class="header-actions">
-            <div class="cart-icon" onclick="scrollToCheckout()">🛒 کارٹ (<span id="cart-count">0</span>)</div>
-            <button class="admin-btn" onclick="openAdminModal()">⚙️ سیٹنگز</button>
+            <div class="cart-icon" onclick="scrollToCheckout()">🛒 Cart (<span id="cart-count">0</span>)</div>
+            <button class="admin-btn" onclick="openAdminModal()">⚙️ Settings</button>
         </div>
     </header>
 
     <div class="container">
-        <!-- ہیرو سیکشن -->
+        <!-- Hero Section -->
         <div class="hero-section" id="hero-box">
             <h1 id="display-hero-title">Welcome to Saad Gadgets Lab</h1>
-            <p id="display-hero-desc">طلباء اور انجینئرز کے لیے بہترین روبوٹکس پروجیکٹس، کٹس اور ٹولز کا گھر۔</p>
+            <p id="display-hero-desc">Your ultimate destination for robotics projects, kits, and electronics tools.</p>
         </div>
 
-        <!-- نیویگیٹ کرنے والے ٹیبز -->
+        <!-- Navigation Tabs -->
         <div class="nav-tabs">
-            <button onclick="showSection('kits')">پروجیکٹ کٹس</button>
-            <button onclick="showSection('items')">پروجیکٹ آئٹمز</button>
-            <button onclick="showSection('tools')">پروجیکٹ ٹولز</button>
+            <button onclick="showSection('kits')">Project Kits</button>
+            <button onclick="showSection('items')">Project Items</button>
+            <button onclick="showSection('tools')">Project Tools</button>
         </div>
 
-        <!-- 1. پروجیکٹ کٹس سیکشن -->
+        <!-- 1. Project Kits Section -->
         <div id="kits" class="section active">
-            <h2>پروجیکٹ کٹس</h2>
+            <h2>Project Kits</h2>
             <div class="product-grid">
                 <div class="product-card">
                     <h3>20-in-1 Inventor Kit</h3>
-                    <p>اسکول اور کالج کے طلباء کے لیے مکمل روبوٹکس لرننگ کٹ۔</p>
-                    <p><strong>قیمت: 2500 روپے</strong></p>
-                    <label>مقدار: <input type="number" id="kit1-qty" value="1" min="1"></label>
-                    <button onclick="addToCart('20-in-1 Inventor Kit', 2500, 'kit1-qty')">کارٹ میں شامل کریں</button>
+                    <p>Complete robotics and electronics kit designed for students.</p>
+                    <p><strong>Price: 2500 PKR</strong></p>
+                    <label>Quantity: <input type="number" id="kit1-qty" value="1" min="1"></label>
+                    <button onclick="addToCart('20-in-1 Inventor Kit', 2500, 'kit1-qty')">Add to Cart</button>
                 </div>
             </div>
         </div>
 
-        <!-- 2. پروجیکٹ آئٹمز سیکشن -->
+        <!-- 2. Project Items Section -->
         <div id="items" class="section">
-            <h2>پروجیکٹ آئٹمز</h2>
+            <h2>Project Items</h2>
             <div class="product-grid">
                 <div class="product-card">
                     <h3>Arduino Uno R3</h3>
-                    <p>پروٹو ٹائپنگ اور آٹومیشن کے لیے اصل مائیکرو کنٹرولر۔</p>
-                    <p><strong>قیمت: 1800 روپے</strong></p>
-                    <label>مقدار: <input type="number" id="item1-qty" value="1" min="1"></label>
-                    <button onclick="addToCart('Arduino Uno R3', 1800, 'item1-qty')">کارٹ میں شامل کریں</button>
+                    <p>Original microcontroller board for prototyping & automation.</p>
+                    <p><strong>Price: 1800 PKR</strong></p>
+                    <label>Quantity: <input type="number" id="item1-qty" value="1" min="1"></label>
+                    <button onclick="addToCart('Arduino Uno R3', 1800, 'item1-qty')">Add to Cart</button>
                 </div>
             </div>
         </div>
 
-        <!-- 3. پروجیکٹ ٹولز سیکشن -->
+        <!-- 3. Project Tools Section -->
         <div id="tools" class="section">
-            <h2>پروجیکٹ ٹولز</h2>
+            <h2>Project Tools</h2>
             <div class="product-grid">
                 <div class="product-card">
                     <h3>Soldering Iron Kit</h3>
-                    <p>الیکٹرونکس کے جوڑ لگانے کے لیے پائیدار سولڈرنگ کٹ۔</p>
-                    <p><strong>قیمت: 1200 روپے</strong></p>
-                    <label>مقدار: <input type="number" id="tool1-qty" value="1" min="1"></label>
-                    <button onclick="addToCart('Soldering Iron Kit', 1200, 'tool1-qty')">کارٹ میں شامل کریں</button>
+                    <p>Reliable soldering tool kit for electronic circuit assembly.</p>
+                    <p><strong>Price: 1200 PKR</strong></p>
+                    <label>Quantity: <input type="number" id="tool1-qty" value="1" min="1"></label>
+                    <button onclick="addToCart('Soldering Iron Kit', 1200, 'tool1-qty')">Add to Cart</button>
                 </div>
             </div>
         </div>
 
-        <!-- چیک آؤٹ اور آرڈر فارم -->
+        <!-- Checkout and Order Form -->
         <div id="checkout-section">
-            <h3>آپ کا شاپنگ کارٹ</h3>
-            <div id="cart-items-list" style="background: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #eee;">
-                کارٹ فی الحال خالی ہے۔
+            <h3>Your Shopping Cart</h3>
+            <div id="cart-items-list" style="background: #0d1b2a; padding: 15px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #415a77;">
+                Your cart is currently empty.
             </div>
-            <h4>کل قیمت: <span id="total-price">0</span> روپے</h4>
+            <h4>Total Price: <span id="total-price">0</span> PKR</h4>
 
-            <hr style="margin: 25px 0; border:0; border-top:1px solid #ddd;">
+            <hr style="margin: 25px 0; border:0; border-top:1px solid #415a77;">
 
-            <h3>کسٹمر کی معلومات</h3>
+            <h3>Customer Information</h3>
             <div class="form-group">
-                <label>پورا نام (Name):</label>
-                <input type="text" id="cust-name" placeholder="اپنا نام لکھیں">
+                <label>Full Name:</label>
+                <input type="text" id="cust-name" placeholder="Enter your full name">
             </div>
             <div class="form-group">
-                <label>فون نمبر (Phone Number):</label>
+                <label>Phone Number:</label>
                 <input type="text" id="cust-phone" placeholder="03XXXXXXXXX">
             </div>
             <div class="form-group">
-                <label>لوکیشن / پتہ (Location / Address):</label>
-                <input type="text" id="cust-address" placeholder="اپنا شہر اور مکمل پتہ لکھیں">
+                <label>Location / Address:</label>
+                <input type="text" id="cust-address" placeholder="Enter your city and complete address">
             </div>
             <div class="form-group">
-                <label>ای میل (Email):</label>
+                <label>Email:</label>
                 <input type="email" id="cust-email" placeholder="example@email.com">
             </div>
 
-            <button class="confirm-btn" onclick="sendToWhatsApp()">آرڈر کنفرم کریں (WhatsApp پر بھیجیں)</button>
+            <button class="confirm-btn" onclick="sendToWhatsApp()">Confirm Order (Send via WhatsApp)</button>
         </div>
     </div>
 
-    <!-- ایڈمن سیٹنگز ماڈل (پاپ اپ پینل) -->
+    <!-- Admin Settings Modal -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content">
             <h2>Edit Website Settings & Content</h2>
@@ -346,7 +352,7 @@
             <input type="text" id="input-hero-title" value="Welcome to Saad Gadgets Lab">
 
             <label>Hero Description:</label>
-            <textarea id="input-hero-desc" rows="3">طلباء اور انجینئرز کے لیے بہترین روبوٹکس پروجیکٹس، کٹس اور ٹولز کا گھر۔</textarea>
+            <textarea id="input-hero-desc" rows="3">Your ultimate destination for robotics projects, kits, and electronics tools.</textarea>
 
             <div class="modal-buttons">
                 <button class="save-btn" onclick="saveAdminSettings()">Save Changes</button>
@@ -356,16 +362,14 @@
     </div>
 
     <script>
-        // سیٹنگز کی ڈیفالٹ ویلیوز
         let siteSettings = {
             storeName: "Saad Gadgets Lab",
             logo: "SG",
             whatsapp: "923043337555",
             heroTitle: "Welcome to Saad Gadgets Lab",
-            heroDesc: "طلباء اور انجینئرز کے لیے بہترین روبوٹکس پروجیکٹس، کٹس اور ٹولز کا گھر۔"
+            heroDesc: "Your ultimate destination for robotics projects, kits, and electronics tools."
         };
 
-        // ایڈمن پینل اوپن اور کلوز کرنے کے فنکشنز
         function openAdminModal() {
             document.getElementById('input-store-name').value = siteSettings.storeName;
             document.getElementById('input-logo').value = siteSettings.logo;
@@ -380,7 +384,6 @@
             document.getElementById('adminModal').style.display = 'none';
         }
 
-        // سیٹنگز سیভ کرنے کا فنکشن
         function saveAdminSettings() {
             siteSettings.storeName = document.getElementById('input-store-name').value;
             siteSettings.logo = document.getElementById('input-logo').value;
@@ -388,7 +391,6 @@
             siteSettings.heroTitle = document.getElementById('input-hero-title').value;
             siteSettings.heroDesc = document.getElementById('input-hero-desc').value;
 
-            // ویب سائٹ پر نئی ویلیوز اپڈیٹ کرنا
             document.getElementById('display-store-name').innerText = siteSettings.storeName;
             document.getElementById('display-logo').innerText = siteSettings.logo;
             document.getElementById('page-title').innerText = siteSettings.storeName;
@@ -396,10 +398,9 @@
             document.getElementById('display-hero-desc').innerText = siteSettings.heroDesc;
 
             closeAdminModal();
-            alert("سیٹنگز کامیابی کے ساتھ اپڈیٹ ہو گئی ہیں!");
+            alert("Settings updated successfully!");
         }
 
-        // زمرے (Tabs) بدلنے کا فنکشن
         function showSection(sectionId) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
@@ -407,7 +408,6 @@
 
         let cart = [];
 
-        // کارٹ میں چیز شامل کرنے کا فنکشن
         function addToCart(name, price, qtyId) {
             let qty = parseInt(document.getElementById(qtyId).value);
             let existingItem = cart.find(item => item.name === name);
@@ -418,29 +418,28 @@
                 cart.push({ name: name, price: price, qty: qty });
             }
             updateCartUI();
-            alert(name + " کارٹ میں شامل کر دی گئی ہے!");
+            alert(name + " added to cart successfully!");
         }
 
-        // کارٹ کی سکرین اپڈیٹ کرنا
         function updateCartUI() {
             let cartList = document.getElementById('cart-items-list');
             let cartCount = document.getElementById('cart-count');
             let totalPriceElem = document.getElementById('total-price');
 
             if (cart.length === 0) {
-                cartList.innerHTML = "کارٹ فی الحال خالی ہے۔";
+                cartList.innerHTML = "Your cart is currently empty.";
                 cartCount.innerText = 0;
                 totalPriceElem.innerText = 0;
                 return;
             }
 
-            let html = "<ul style='margin:0; padding-right: 20px;'>";
+            let html = "<ul style='margin:0; padding-left: 20px;'>";
             let totalCount = 0;
             let totalPrice = 0;
 
             cart.forEach(item => {
                 let itemTotal = item.price * item.qty;
-                html += `<li>${item.name} - قیمت: ${item.price} × مقدار: ${item.qty} = <strong>${itemTotal} روپے</strong></li>`;
+                html += `<li>${item.name} - Price: ${item.price} PKR × Qty: ${item.qty} = <strong>${itemTotal} PKR</strong></li>`;
                 totalCount += item.qty;
                 totalPrice += itemTotal;
             });
@@ -455,7 +454,6 @@
             document.getElementById('checkout-section').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // واٹس ایپ پر آرڈر بھیجنے کا فنکشن
         function sendToWhatsApp() {
             let name = document.getElementById('cust-name').value;
             let phone = document.getElementById('cust-phone').value;
@@ -463,29 +461,29 @@
             let email = document.getElementById('cust-email').value;
 
             if (cart.length === 0) {
-                alert("براہ کرم پہلے کارٹ میں کوئی چیز شامل کریں!");
+                alert("Please add items to your cart first!");
                 return;
             }
             if (!name || !phone || !address) {
-                alert("براہ کرم نام، فون نمبر اور لوکیشن لازمی پُر کریں!");
+                alert("Please fill in your name, phone number, and location!");
                 return;
             }
 
-            let message = `*نیا آرڈر موصول ہوا ہے - ${siteSettings.storeName}*%0A%0A`;
-            message += `*گاہک کا نام:* ${name}%0A`;
-            message += `*فون نمبر:* ${phone}%0A`;
-            message += `*پتہ / لوکیشن:* ${address}%0A`;
-            message += `*ای میل:* ${email}%0A%0A`;
-            message += `*آرڈر کی تفصیلات:*%0A`;
+            let message = `*New Order Received - ${siteSettings.storeName}*%0A%0A`;
+            message += `*Customer Name:* ${name}%0A`;
+            message += `*Phone Number:* ${phone}%0A`;
+            message += `*Address / Location:* ${address}%0A`;
+            message += `*Email:* ${email}%0A%0A`;
+            message += `*Order Details:*%0A`;
 
             let totalPrice = 0;
             cart.forEach(item => {
                 let itemTotal = item.price * item.qty;
-                message += `- ${item.name} (${item.qty} عدد) = ${itemTotal} روپے%0A`;
+                message += `- ${item.name} (${item.qty} pcs) = ${itemTotal} PKR%0A`;
                 totalPrice += itemTotal;
             });
 
-            message += `%0A*کل قیمت:* ${totalPrice} روپے`;
+            message += `%0A*Total Price:* ${totalPrice} PKR`;
 
             let whatsappURL = `https://wa.me/${siteSettings.whatsapp}?text=${message}`;
             window.open(whatsappURL, '_blank');
