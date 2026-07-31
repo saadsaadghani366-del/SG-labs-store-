@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Saad Gadgets Lab</title>
+    
+    <!-- Firebase SDK Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --primary-color: #1b263b;
@@ -22,7 +27,6 @@
             padding: 0; 
         }
 
-        /* Professional Header Design */
         header { 
             background: #000814; 
             color: white; 
@@ -80,11 +84,6 @@
             border: none;
             font-size: 14px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
-        }
-
-        .cart-icon:hover, .admin-btn:hover {
-            transform: translateY(-2px);
         }
 
         .admin-btn {
@@ -92,7 +91,6 @@
             color: white;
         }
 
-        /* Navigation Menu Bar */
         .navbar {
             background: #1b263b;
             display: flex;
@@ -112,7 +110,6 @@
             cursor: pointer;
             border-radius: 4px;
             font-weight: bold;
-            transition: background 0.2s, color 0.2s;
         }
 
         .navbar button:hover, .navbar button.active-tab {
@@ -129,6 +126,22 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.5); 
         }
 
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #415a77;
+            background: #0d1b2a;
+            color: white;
+            font-size: 15px;
+        }
+
         .page-section { display: none; }
         .page-section.active-page { display: block; }
 
@@ -141,16 +154,8 @@
             border: 1px solid #415a77;
         }
 
-        .hero-section h1 {
-            margin: 0 0 10px 0;
-            color: #00b4d8;
-        }
-
-        .hero-section p {
-            color: #e0e1dd;
-            margin: 0;
-            font-size: 16px;
-        }
+        .hero-section h1 { margin: 0 0 10px 0; color: #00b4d8; }
+        .hero-section p { color: #e0e1dd; margin: 0; font-size: 16px; }
 
         .product-grid { 
             display: grid; 
@@ -163,7 +168,19 @@
             padding: 15px; 
             border-radius: 6px; 
             background: #1b263b; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #415a77;
+            margin-bottom: 10px;
+            background: #0d1b2a;
         }
 
         .product-card h3 { margin: 0 0 10px 0; color: #00b4d8; }
@@ -181,23 +198,18 @@
             font-weight: bold;
             margin-top: 5px;
         }
-        .product-card button:hover { background: #38b000; }
 
-        .delete-btn {
-            background: #d90429 !important;
-            color: white !important;
-        }
-        .delete-btn:hover { background: #ef233c !important; }
+        .edit-btn { background: #3a86ff !important; color: white !important; }
+        .delete-btn { background: #d90429 !important; color: white !important; }
         
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #e0e1dd; }
-        .form-group input, .form-group textarea { 
+        .form-group input, .form-group textarea, .form-group select { 
             width: 100%; 
             padding: 10px; 
             box-sizing: border-box; 
             border: 1px solid #415a77; 
             border-radius: 4px; 
-            font-family: inherit;
             background: #0d1b2a;
             color: white;
         }
@@ -213,9 +225,7 @@
             width: 100%; 
             font-weight: bold;
         }
-        .confirm-btn:hover { background: #fcbf49; color: #0d1b2a; }
 
-        /* Admin Settings Modal */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -235,11 +245,9 @@
             max-width: 650px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
             border: 1px solid #415a77;
         }
 
-        .modal-content h2, .modal-content h3 { margin-top: 0; color: #00b4d8; }
         .modal-content label { display: block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; color: #e0e1dd; }
         .modal-content input, .modal-content textarea, .modal-content select {
             width: 100%;
@@ -249,40 +257,17 @@
             color: white;
             border-radius: 4px;
             box-sizing: border-box;
-            font-family: inherit;
         }
 
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
+        .modal-buttons { display: flex; gap: 10px; margin-top: 25px; }
         .save-btn { background: var(--success-color); color: #0d1b2a; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         .cancel-btn { background: #d90429; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        
-        .admin-box {
-            background: #0d1b2a;
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px solid #415a77;
-            margin-top: 20px;
-        }
-        
-        .empty-msg {
-            color: #94a3b8;
-            font-style: italic;
-            text-align: center;
-            padding: 20px;
-            background: #1b263b;
-            border-radius: 6px;
-            border: 1px dashed #415a77;
-        }
+        .admin-box { background: #0d1b2a; padding: 15px; border-radius: 6px; border: 1px solid #415a77; margin-top: 20px; }
+        .empty-msg { color: #94a3b8; font-style: italic; text-align: center; padding: 20px; }
     </style>
 </head>
 <body>
 
-    <!-- Header Section -->
     <header>
         <div class="header-top-row">
             <img src="image_6592e3.jpg" alt="SG Labs Logo" class="site-logo">
@@ -294,7 +279,6 @@
         </div>
     </header>
 
-    <!-- Navigation Menu Bar -->
     <nav class="navbar">
         <button id="nav-home" class="active-tab" onclick="switchPage('home')">Home Page</button>
         <button id="nav-kits" onclick="switchPage('kits')">Project Kits</button>
@@ -305,8 +289,11 @@
     </nav>
 
     <div class="container">
+        <!-- Global Search Bar -->
+        <div class="search-container">
+            <input type="text" id="global-search" placeholder="🔍 Search any project kit, item or tool..." onkeyup="filterProducts()">
+        </div>
 
-        <!-- PAGE 1: HOME PAGE -->
         <div id="page-home" class="page-section active-page">
             <div class="hero-section">
                 <h1 id="display-hero-title">Empowering Pakistan's Future Through Smart City Innovation</h1>
@@ -314,32 +301,25 @@
             </div>
             <h2>Featured Lab Overview</h2>
             <div id="display-home-content" style="background: #1b263b; padding: 15px; border-radius: 6px; border: 1px solid #415a77;">
-                Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.
+                Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to update settings and products live via Firebase database.
             </div>
         </div>
 
-        <!-- PAGE 2: PROJECT KITS -->
         <div id="page-kits" class="page-section">
             <h2>Project Kits Page</h2>
-            <p>Explore our latest project kits below.</p>
             <div class="product-grid" id="grid-kits"></div>
         </div>
 
-        <!-- PAGE 3: PROJECT ITEMS -->
         <div id="page-items" class="page-section">
             <h2>Project Items Page</h2>
-            <p>Explore individual hardware items and components below.</p>
             <div class="product-grid" id="grid-items"></div>
         </div>
 
-        <!-- PAGE 4: PROJECT TOOLS -->
         <div id="page-tools" class="page-section">
             <h2>Project Tools Page</h2>
-            <p>Explore essential workbench tools below.</p>
             <div class="product-grid" id="grid-tools"></div>
         </div>
 
-        <!-- PAGE 5: ABOUT US -->
         <div id="page-about" class="page-section">
             <h2>About Us</h2>
             <div id="display-about-text" style="background: #1b263b; padding: 15px; border-radius: 6px; border: 1px solid #415a77; line-height: 1.6;">
@@ -349,142 +329,174 @@
             </div>
         </div>
 
-        <!-- PAGE 6: CART & CHECKOUT -->
         <div id="page-cart" class="page-section">
             <h2>Shopping Cart & Checkout</h2>
             <div id="cart-items-list" style="background: #0d1b2a; padding: 15px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #415a77;">
                 Your cart is currently empty.
             </div>
             <h4>Total Price: <span id="total-price">0</span> PKR</h4>
-
             <hr style="margin: 25px 0; border:0; border-top:1px solid #415a77;">
-
             <h3>Customer Information</h3>
-            <div class="form-group">
-                <label>Full Name:</label>
-                <input type="text" id="cust-name" placeholder="Enter your full name">
-            </div>
-            <div class="form-group">
-                <label>Phone Number:</label>
-                <input type="text" id="cust-phone" placeholder="03XXXXXXXXX">
-            </div>
-            <div class="form-group">
-                <label>Location / Address:</label>
-                <input type="text" id="cust-address" placeholder="Enter your city and complete address">
-            </div>
-            <div class="form-group">
-                <label>Email:</label>
-                <input type="email" id="cust-email" placeholder="example@email.com">
-            </div>
-
+            <div class="form-group"><label>Full Name:</label><input type="text" id="cust-name" placeholder="Enter your full name"></div>
+            <div class="form-group"><label>Phone Number:</label><input type="text" id="cust-phone" placeholder="03XXXXXXXXX"></div>
+            <div class="form-group"><label>Location / Address:</label><input type="text" id="cust-address" placeholder="Enter your city and complete address"></div>
+            <div class="form-group"><label>Email:</label><input type="email" id="cust-email" placeholder="example@email.com"></div>
             <button class="confirm-btn" onclick="sendToWhatsApp()">Confirm Order (Send via WhatsApp)</button>
         </div>
-
     </div>
 
-    <!-- Admin Modal Control Center -->
+    <!-- Admin Panel Modal -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content">
             <h2>⚙️ Complete Website Control Center</h2>
-            
             <div class="admin-box">
-                <h3>1. General Website Settings (Front Page & Header)</h3>
-                <label>Store Name:</label>
-                <input type="text" id="input-store-name" value="Saad Gadgets Lab">
-
-                <label>WhatsApp Order Number (e.g. 923043337555):</label>
-                <input type="text" id="input-whatsapp" value="923043337555">
-
-                <label>Hero Title (Main Banner):</label>
-                <input type="text" id="input-hero-title" value="Empowering Pakistan's Future Through Smart City Innovation">
-
-                <label>Hero Description:</label>
-                <textarea id="input-hero-desc" rows="2">Welcome to Saad Gadgets Lab — pioneering hands-on robotics, microcontroller systems, and advanced smart city prototyping right here in Lahore to transform Pakistan's technological landscape.</textarea>
-                
-                <label>Home Page Welcome Box Text:</label>
-                <textarea id="input-home-content" rows="2">Welcome! Click on "⚙️ Admin Panel" at the top right, enter your secure PIN to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.</textarea>
-
-                <label>About Us Page Content Text:</label>
-                <textarea id="input-about-text" rows="3">Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan</textarea>
+                <h3>1. General Website Settings</h3>
+                <label>Store Name:</label><input type="text" id="input-store-name">
+                <label>WhatsApp Order Number:</label><input type="text" id="input-whatsapp">
+                <label>Hero Title:</label><input type="text" id="input-hero-title">
+                <label>Hero Description:</label><textarea id="input-hero-desc" rows="2"></textarea>
+                <label>Home Welcome Box:</label><textarea id="input-home-content" rows="2"></textarea>
+                <label>About Us Text:</label><textarea id="input-about-text" rows="3"></textarea>
             </div>
-
-            <!-- Add New Product Form -->
             <div class="admin-box">
-                <h3>2. Add New Product / Item</h3>
-                <label>Select Page Category:</label>
+                <h3>2. Add New Product / Item with Image</h3>
+                <label>Category:</label>
                 <select id="new-item-category">
                     <option value="kits">Project Kits</option>
                     <option value="items">Project Items</option>
                     <option value="tools">Project Tools</option>
                 </select>
-
-                <label>Product Name:</label>
-                <input type="text" id="new-item-name" placeholder="e.g. Smart City Automation Hub Kit">
-
-                <label>Price (PKR):</label>
-                <input type="number" id="new-item-price" placeholder="e.g. 4500">
-
-                <label>Product Description:</label>
-                <textarea id="new-item-desc" rows="2" placeholder="Short description..."></textarea>
-
-                <button class="save-btn" style="width:100%; margin-top:15px;" onclick="addNewProduct()">Add Item to Catalog</button>
+                <label>Product Name:</label><input type="text" id="new-item-name" placeholder="Name">
+                <label>Price (PKR):</label><input type="number" id="new-item-price" placeholder="Price">
+                <label>Description:</label><textarea id="new-item-desc" rows="2" placeholder="Description"></textarea>
+                <label>Product Image:</label><input type="file" id="new-item-image" accept="image/*">
+                <button class="save-btn" style="width:100%; margin-top:15px;" onclick="addNewProduct()">Add Item with Image</button>
             </div>
-
             <div class="modal-buttons">
-                <button class="save-btn" onclick="saveAdminSettings()">Save All Website Changes</button>
+                <button class="save-btn" onclick="saveAdminSettings()">Save All Changes Live</button>
                 <button class="cancel-btn" onclick="closeAdminModal()">Close Panel</button>
             </div>
         </div>
     </div>
 
+    <!-- Edit Product Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content">
+            <h2>✏️ Edit Product Details & Image</h2>
+            <input type="hidden" id="edit-product-id">
+            <input type="hidden" id="edit-product-old-image">
+            <div class="form-group">
+                <label>Category:</label>
+                <select id="edit-product-category">
+                    <option value="kits">Project Kits</option>
+                    <option value="items">Project Items</option>
+                    <option value="tools">Project Tools</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Product Name:</label>
+                <input type="text" id="edit-product-name">
+            </div>
+            <div class="form-group">
+                <label>Price (PKR):</label>
+                <input type="number" id="edit-product-price">
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                <textarea id="edit-product-desc" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Change Product Image (Optional):</label>
+                <input type="file" id="edit-product-image" accept="image/*">
+            </div>
+            <div class="modal-buttons">
+                <button class="save-btn" onclick="updateProductLive()">Update Product Live</button>
+                <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // --- FIREBASE CONFIGURATION ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBvm6sWky8M6lYU0N8fFHLFnV_viJhRBZE",
+            authDomain: "sg-labs-store.firebaseapp.com",
+            databaseURL: "https://sg-labs-store-default-rtdb.firebaseio.com",
+            projectId: "sg-labs-store",
+            storageBucket: "sg-labs-store.firebasestorage.app",
+            messagingSenderId: "84680698655",
+            appId: "1:84680698655:web:17b5f7595b2f317cf55e2a",
+            measurementId: "G-RC7E0RMX4P"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         let siteSettings = {
             storeName: "Saad Gadgets Lab",
             whatsapp: "923043337555",
             heroTitle: "Empowering Pakistan's Future Through Smart City Innovation",
             heroDesc: "Welcome to Saad Gadgets Lab — pioneering hands-on robotics, microcontroller systems, and advanced smart city prototyping right here in Lahore to transform Pakistan's technological landscape.",
-            homeContent: 'Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to fully edit your store name, welcome banners, about info, WhatsApp number, and add/remove products instantly.',
+            homeContent: 'Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to update settings and products live via Firebase database.',
             aboutText: "Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan"
         };
 
-        // Pre-loaded professional products based on your choices
-        let products = [
-            { id: 1, category: 'kits', name: 'Smart City Automation Hub Kit', price: 4500, desc: 'A comprehensive smart city prototyping kit featuring microcontroller integration, automated barriers, traffic light simulation, and environmental sensors for advanced makers.' },
-            { id: 2, category: 'kits', name: 'Arduino Beginner Starter Pack', price: 2800, desc: 'Perfect for absolute beginners. Includes a compatible microcontroller board, breadboard, jumper wires, LEDs, and essential sensors to start learning programming and electronics.' },
-            { id: 3, category: 'items', name: 'IoT & Wireless Control Module', price: 1500, desc: 'Advanced wireless connectivity module enabling Bluetooth and Wi-Fi control for robotics, smart home automation, and remote-controlled IoT projects.' },
-            { id: 4, category: 'tools', name: 'Prototyping & Lab Toolkit', price: 3500, desc: 'Essential workbench kit for makers and engineers, including testing wires, precision components, and fundamental electronics tools for seamless building.' }
-        ];
+        let products = [];
 
-        let isAdminLoggedIn = false;
+        // Real-time synchronization from Firebase Database
+        db.ref('settings').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                siteSettings = data;
+                document.getElementById('display-store-name').innerText = siteSettings.storeName;
+                document.getElementById('page-title').innerText = siteSettings.storeName;
+                document.getElementById('display-hero-title').innerText = siteSettings.heroTitle;
+                document.getElementById('display-hero-desc').innerText = siteSettings.heroDesc;
+                document.getElementById('display-home-content').innerHTML = siteSettings.homeContent;
+                document.getElementById('display-about-text').innerHTML = siteSettings.aboutText;
+            }
+        });
+
+        db.ref('products').on('value', (snapshot) => {
+            const data = snapshot.val();
+            products = [];
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    products.push({ firebaseId: key, ...data[key] });
+                });
+            }
+            renderProducts(products);
+        });
 
         function verifyAdminAccess() {
-            if (isAdminLoggedIn) {
-                openAdminModal();
-                return;
-            }
-
             let enteredPin = prompt("Enter Admin PIN Code:");
             if (enteredPin === "1947") {
-                isAdminLoggedIn = true;
                 openAdminModal();
             } else if (enteredPin !== null) {
                 alert("Incorrect PIN Code! Access Denied.");
             }
         }
 
-        function renderProducts() {
+        function renderProducts(productsToRender) {
             let kitHTML = '', itemHTML = '', toolHTML = '';
             let kitCount = 0, itemCount = 0, toolCount = 0;
 
-            products.forEach((p, index) => {
+            productsToRender.forEach((p) => {
+                let imgSrc = p.image ? p.image : 'https://via.placeholder.com/250x160?text=Saad+Gadgets+Lab';
                 let card = `
                     <div class="product-card">
-                        <h3>${p.name}</h3>
-                        <p>${p.desc}</p>
-                        <p><strong>Price: ${p.price} PKR</strong></p>
-                        <label>Quantity: <input type="number" id="prod-${index}-qty" value="1" min="1"></label>
-                        <button onclick="addToCart('${p.name}', ${p.price}, 'prod-${index}-qty')">Add to Cart</button>
-                        <button class="delete-btn" onclick="checkDeletePin(${p.id})">❌ Delete Item</button>
+                        <div>
+                            <img src="${imgSrc}" alt="${p.name}" class="product-img">
+                            <h3>${p.name}</h3>
+                            <p>${p.desc}</p>
+                            <p><strong>Price: ${p.price} PKR</strong></p>
+                        </div>
+                        <div>
+                            <label>Quantity: <input type="number" id="prod-${p.firebaseId}-qty" value="1" min="1"></label>
+                            <button onclick="addToCart('${p.name}', ${p.price}, 'prod-${p.firebaseId}-qty')">Add to Cart</button>
+                            <button class="edit-btn" onclick="checkEditPin('${p.firebaseId}')">✏️ Edit Item</button>
+                            <button class="delete-btn" onclick="checkDeletePin('${p.firebaseId}')">❌ Delete Item</button>
+                        </div>
                     </div>
                 `;
 
@@ -493,9 +505,19 @@
                 else if (p.category === 'tools') { toolHTML += card; toolCount++; }
             });
 
-            document.getElementById('grid-kits').innerHTML = kitCount > 0 ? kitHTML : '<div class="empty-msg">No project kits added yet. Use Admin Panel to add items.</div>';
-            document.getElementById('grid-items').innerHTML = itemCount > 0 ? itemHTML : '<div class="empty-msg">No project items added yet. Use Admin Panel to add items.</div>';
-            document.getElementById('grid-tools').innerHTML = toolCount > 0 ? toolHTML : '<div class="empty-msg">No project tools added yet. Use Admin Panel to add items.</div>';
+            document.getElementById('grid-kits').innerHTML = kitCount > 0 ? kitHTML : '<div class="empty-msg">No project kits found.</div>';
+            document.getElementById('grid-items').innerHTML = itemCount > 0 ? itemHTML : '<div class="empty-msg">No project items found.</div>';
+            document.getElementById('grid-tools').innerHTML = toolCount > 0 ? toolHTML : '<div class="empty-msg">No project tools found.</div>';
+        }
+
+        // --- SEARCH FUNCTIONALITY ---
+        function filterProducts() {
+            let query = document.getElementById('global-search').value.toLowerCase();
+            let filtered = products.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.desc.toLowerCase().includes(query)
+            );
+            renderProducts(filtered);
         }
 
         function addNewProduct() {
@@ -503,27 +525,100 @@
             let name = document.getElementById('new-item-name').value;
             let price = parseInt(document.getElementById('new-item-price').value);
             let desc = document.getElementById('new-item-desc').value;
+            let imageFile = document.getElementById('new-item-image').files[0];
 
             if (!name || isNaN(price) || !desc) {
                 alert("Please fill in all product details correctly!");
                 return;
             }
 
-            products.push({ id: Date.now(), category, name, price, desc });
-            renderProducts();
+            if (imageFile) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let base64Image = e.target.result;
+                    db.ref('products').push({ category, name, price, desc, image: base64Image });
+                    resetAddForm();
+                    alert("New item added with image successfully!");
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                db.ref('products').push({ category, name, price, desc, image: "" });
+                resetAddForm();
+                alert("New item added successfully!");
+            }
+        }
 
+        function resetAddForm() {
             document.getElementById('new-item-name').value = '';
             document.getElementById('new-item-price').value = '';
             document.getElementById('new-item-desc').value = '';
-            alert("New item successfully added to catalog!");
+            document.getElementById('new-item-image').value = '';
         }
 
-        function checkDeletePin(id) {
+        // --- EDIT PRODUCT FUNCTIONS ---
+        function checkEditPin(firebaseId) {
+            let enteredPin = prompt("Enter Admin PIN Code to Edit:");
+            if (enteredPin === "1947") {
+                openEditModal(firebaseId);
+            } else if (enteredPin !== null) {
+                alert("Incorrect PIN! Action Denied.");
+            }
+        }
+
+        function openEditModal(firebaseId) {
+            let product = products.find(p => p.firebaseId === firebaseId);
+            if (!product) return;
+
+            document.getElementById('edit-product-id').value = product.firebaseId;
+            document.getElementById('edit-product-old-image').value = product.image || "";
+            document.getElementById('edit-product-category').value = product.category;
+            document.getElementById('edit-product-name').value = product.name;
+            document.getElementById('edit-product-price').value = product.price;
+            document.getElementById('edit-product-desc').value = product.desc;
+            document.getElementById('edit-product-image').value = "";
+
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function updateProductLive() {
+            let firebaseId = document.getElementById('edit-product-id').value;
+            let oldImage = document.getElementById('edit-product-old-image').value;
+            let category = document.getElementById('edit-product-category').value;
+            let name = document.getElementById('edit-product-name').value;
+            let price = parseInt(document.getElementById('edit-product-price').value);
+            let desc = document.getElementById('edit-product-desc').value;
+            let imageFile = document.getElementById('edit-product-image').files[0];
+
+            if (!name || isNaN(price) || !desc) {
+                alert("Please fill all fields properly!");
+                return;
+            }
+
+            if (imageFile) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let base64Image = e.target.result;
+                    db.ref('products/' + firebaseId).set({ category, name, price, desc, image: base64Image });
+                    closeEditModal();
+                    alert("Product and image updated successfully!");
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                db.ref('products/' + firebaseId).set({ category, name, price, desc, image: oldImage });
+                closeEditModal();
+                alert("Product updated successfully!");
+            }
+        }
+
+        function checkDeletePin(firebaseId) {
             let enteredPin = prompt("Enter Admin PIN Code to Delete:");
             if (enteredPin === "1947") {
                 if (confirm("Are you sure you want to delete this item?")) {
-                    products = products.filter(p => p.id !== id);
-                    renderProducts();
+                    db.ref('products/' + firebaseId).remove();
                 }
             } else if (enteredPin !== null) {
                 alert("Incorrect PIN! Action Denied.");
@@ -537,7 +632,6 @@
             document.getElementById('input-hero-desc').value = siteSettings.heroDesc;
             document.getElementById('input-home-content').value = siteSettings.homeContent;
             document.getElementById('input-about-text').value = siteSettings.aboutText;
-            
             document.getElementById('adminModal').style.display = 'flex';
         }
 
@@ -546,49 +640,38 @@
         }
 
         function saveAdminSettings() {
-            siteSettings.storeName = document.getElementById('input-store-name').value;
-            siteSettings.whatsapp = document.getElementById('input-whatsapp').value;
-            siteSettings.heroTitle = document.getElementById('input-hero-title').value;
-            siteSettings.heroDesc = document.getElementById('input-hero-desc').value;
-            siteSettings.homeContent = document.getElementById('input-home-content').value;
-            siteSettings.aboutText = document.getElementById('input-about-text').value;
+            let updatedSettings = {
+                storeName: document.getElementById('input-store-name').value,
+                whatsapp: document.getElementById('input-whatsapp').value,
+                heroTitle: document.getElementById('input-hero-title').value,
+                heroDesc: document.getElementById('input-hero-desc').value,
+                homeContent: document.getElementById('input-home-content').value,
+                aboutText: document.getElementById('input-about-text').value
+            };
 
-            document.getElementById('display-store-name').innerText = siteSettings.storeName;
-            document.getElementById('page-title').innerText = siteSettings.storeName;
-            document.getElementById('display-hero-title').innerText = siteSettings.heroTitle;
-            document.getElementById('display-hero-desc').innerText = siteSettings.heroDesc;
-            document.getElementById('display-home-content').innerHTML = siteSettings.homeContent;
-            document.getElementById('display-about-text').innerHTML = siteSettings.aboutText;
-
+            db.ref('settings').set(updatedSettings);
             closeAdminModal();
-            alert("All website settings updated successfully!");
+            alert("All settings updated live on Firebase database!");
         }
 
         function switchPage(pageName) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-page'));
             document.querySelectorAll('.navbar button').forEach(btn => btn.classList.remove('active-tab'));
-
             let targetPage = document.getElementById('page-' + pageName);
             let targetNav = document.getElementById('nav-' + pageName);
-
             if (targetPage) targetPage.classList.add('active-page');
             if (targetNav) targetNav.classList.add('active-tab');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         let cart = [];
-
         function addToCart(name, price, qtyId) {
             let qty = parseInt(document.getElementById(qtyId).value);
             let existingItem = cart.find(item => item.name === name);
-            
-            if (existingItem) {
-                existingItem.qty += qty;
-            } else {
-                cart.push({ name: name, price: price, qty: qty });
-            }
+            if (existingItem) { existingItem.qty += qty; } 
+            else { cart.push({ name: name, price: price, qty: qty }); }
             updateCartUI();
-            alert(name + " added to cart successfully!");
+            alert(name + " added to cart!");
         }
 
         function updateCartUI() {
@@ -605,14 +688,12 @@
 
             let html = "<ul style='margin:0; padding-left: 20px;'>";
             let totalCount = 0, totalPrice = 0;
-
             cart.forEach(item => {
                 let itemTotal = item.price * item.qty;
                 html += `<li>${item.name} - Price: ${item.price} PKR × Qty: ${item.qty} = <strong>${itemTotal} PKR</strong></li>`;
                 totalCount += item.qty;
                 totalPrice += itemTotal;
             });
-
             html += "</ul>";
             cartList.innerHTML = html;
             cartCount.innerText = totalCount;
@@ -625,21 +706,14 @@
             let address = document.getElementById('cust-address').value;
             let email = document.getElementById('cust-email').value;
 
-            if (cart.length === 0) {
-                alert("Please add items to your cart first!");
-                return;
-            }
-            if (!name || !phone || !address) {
-                alert("Please fill in your name, phone number, and location!");
-                return;
-            }
+            if (cart.length === 0) { alert("Please add items to your cart first!"); return; }
+            if (!name || !phone || !address) { alert("Please fill your name, phone, and address!"); return; }
 
             let message = `*New Order Received - ${siteSettings.storeName}*%0A%0A`;
             message += `*Customer Name:* ${name}%0A`;
-            message += `*Phone Number:* ${phone}%0A`;
-            message += `*Address / Location:* ${address}%0A`;
-            message += `*Email:* ${email}%0A%0A`;
-            message += `*Order Details:*%0A`;
+            message += `*Phone:* ${phone}%0A`;
+            message += `*Address:* ${address}%0A`;
+            message += `*Email:* ${email}%0A%0A*Order Details:*%0A`;
 
             let totalPrice = 0;
             cart.forEach(item => {
@@ -647,16 +721,11 @@
                 message += `- ${item.name} (${item.qty} pcs) = ${itemTotal} PKR%0A`;
                 totalPrice += itemTotal;
             });
-
             message += `%0A*Total Price:* ${totalPrice} PKR`;
 
             let whatsappURL = `https://wa.me/${siteSettings.whatsapp}?text=${message}`;
             window.open(whatsappURL, '_blank');
         }
-
-        window.onload = function() {
-            renderProducts();
-        };
     </script>
 </body>
 </html>
