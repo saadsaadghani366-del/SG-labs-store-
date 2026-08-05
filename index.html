@@ -11,12 +11,13 @@
 
     <style>
         :root {
-            --primary-color: #1b263b;
-            --accent-color: #00b4d8;
-            --success-color: #2ec4b6;
-            --bg-color: #0d1b2a;
-            --card-bg: #1b263b;
-            --text-color: #ffffff;
+            --primary-color: #0056b3;
+            --accent-color: #007bff;
+            --success-color: #28a745;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #ced4da;
         }
 
         body { 
@@ -28,15 +29,15 @@
         }
 
         header { 
-            background: #000814; 
-            color: white; 
+            background: #ffffff; 
+            color: #0056b3; 
             padding: 15px 30px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             gap: 12px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
-            border-bottom: 2px solid #415a77;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-bottom: 3px solid var(--primary-color);
         }
 
         .header-top-row {
@@ -52,14 +53,14 @@
             width: 75px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--accent-color);
-            box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 0 10px rgba(0, 86, 179, 0.2);
         }
 
         #display-store-name {
             font-size: 28px;
             font-weight: bold;
-            color: #ffffff;
+            color: #0056b3;
             margin: 0;
             letter-spacing: 0.5px;
         }
@@ -71,59 +72,61 @@
             justify-content: center;
             width: 100%;
             padding-top: 5px;
-            border-top: 1px solid rgba(65, 90, 119, 0.4);
+            border-top: 1px solid #e9ecef;
         }
 
         .cart-icon, .admin-btn { 
             cursor: pointer; 
-            background: var(--accent-color); 
-            color: #0d1b2a;
+            background: var(--primary-color); 
+            color: white;
             padding: 8px 18px; 
             border-radius: 6px; 
             font-weight: bold; 
             border: none;
             font-size: 14px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .admin-btn {
-            background: #415a77;
+            background: #6c757d;
             color: white;
         }
 
         .navbar {
-            background: #1b263b;
+            background: #ffffff;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             padding: 12px;
-            border-bottom: 2px solid #415a77;
+            border-bottom: 2px solid #dee2e6;
             flex-wrap: wrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .navbar button {
             background: transparent;
-            color: #e0e1dd;
+            color: #495057;
             border: none;
-            padding: 8px 16px;
-            font-size: 15px;
+            padding: 8px 14px;
+            font-size: 14px;
             cursor: pointer;
             border-radius: 4px;
             font-weight: bold;
         }
 
         .navbar button:hover, .navbar button.active-tab {
-            background: #00b4d8;
-            color: #0d1b2a;
+            background: var(--primary-color);
+            color: white;
         }
 
         .container { 
             max-width: 1000px; 
             margin: 20px auto; 
             padding: 20px; 
-            background: #22334b; 
+            background: #ffffff; 
             border-radius: 8px; 
-            box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+            box-shadow: 0 0 15px rgba(0,0,0,0.08); 
+            border: 1px solid #e2e8f0;
         }
 
         .search-container {
@@ -136,9 +139,9 @@
             flex: 1;
             padding: 12px;
             border-radius: 6px;
-            border: 1px solid #415a77;
-            background: #0d1b2a;
-            color: white;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            color: #333333;
             font-size: 15px;
         }
 
@@ -148,14 +151,14 @@
         .hero-section {
             text-align: center;
             padding: 40px 20px;
-            background: #1b263b;
+            background: #eef2f7;
             border-radius: 6px;
             margin-bottom: 20px;
-            border: 1px solid #415a77;
+            border: 1px solid #d1d9e0;
         }
 
-        .hero-section h1 { margin: 0 0 10px 0; color: #00b4d8; }
-        .hero-section p { color: #e0e1dd; margin: 0; font-size: 16px; }
+        .hero-section h1 { margin: 0 0 10px 0; color: #0056b3; }
+        .hero-section p { color: #495057; margin: 0; font-size: 16px; }
 
         .product-grid { 
             display: grid; 
@@ -164,13 +167,14 @@
         }
 
         .product-card { 
-            border: 1px solid #415a77; 
+            border: 1px solid #ced4da; 
             padding: 15px; 
             border-radius: 6px; 
-            background: #1b263b; 
+            background: #ffffff; 
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
         }
 
         .product-img {
@@ -178,18 +182,18 @@
             height: 160px;
             object-fit: cover;
             border-radius: 4px;
-            border: 1px solid #415a77;
+            border: 1px solid #ced4da;
             margin-bottom: 10px;
-            background: #0d1b2a;
+            background: #f8f9fa;
         }
 
-        .product-card h3 { margin: 0 0 10px 0; color: #00b4d8; }
-        .product-card p { color: #e0e1dd; font-size: 14px; line-height: 1.4; }
-        .product-card input { width: 60px; padding: 5px; margin-bottom: 10px; border: 1px solid #415a77; border-radius: 4px; background: #0d1b2a; color: white; }
+        .product-card h3 { margin: 0 0 10px 0; color: #0056b3; }
+        .product-card p { color: #495057; font-size: 14px; line-height: 1.4; }
+        .product-card input { width: 60px; padding: 5px; margin-bottom: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: #ffffff; color: #333333; }
         
         .product-card button { 
             background: var(--success-color); 
-            color: #0d1b2a; 
+            color: white; 
             border: none; 
             padding: 8px 12px; 
             border-radius: 4px; 
@@ -199,24 +203,24 @@
             margin-top: 5px;
         }
 
-        .edit-btn { background: #3a86ff !important; color: white !important; }
-        .delete-btn { background: #d90429 !important; color: white !important; }
+        .edit-btn { background: #17a2b8 !important; color: white !important; }
+        .delete-btn { background: #dc3545 !important; color: white !important; }
         
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #e0e1dd; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #333333; }
         .form-group input, .form-group textarea, .form-group select { 
             width: 100%; 
             padding: 10px; 
             box-sizing: border-box; 
-            border: 1px solid #415a77; 
+            border: 1px solid var(--border-color); 
             border-radius: 4px; 
-            background: #0d1b2a;
-            color: white;
+            background: #ffffff;
+            color: #333333;
         }
 
         .confirm-btn { 
-            background: #f77f00; 
-            color: white; 
+            background: #ffc107; 
+            color: #212529; 
             padding: 12px 20px; 
             border: none; 
             border-radius: 5px; 
@@ -224,46 +228,68 @@
             cursor: pointer; 
             width: 100%; 
             font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .social-link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8f9fa;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            text-decoration: none;
+            color: #0056b3;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+        .social-link-card:hover {
+            background: #e9ecef;
+            border-color: var(--primary-color);
         }
 
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.5);
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
 
         .modal-content {
-            background: #1b263b;
-            color: white;
+            background: #ffffff;
+            color: #333333;
             padding: 30px;
             border-radius: 8px;
             width: 90%;
             max-width: 650px;
             max-height: 90vh;
             overflow-y: auto;
-            border: 1px solid #415a77;
+            border: 1px solid #ced4da;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .modal-content label { display: block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; color: #e0e1dd; }
+        .modal-content label { display: block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; color: #333333; }
         .modal-content input, .modal-content textarea, .modal-content select {
             width: 100%;
             padding: 10px;
-            background: #0d1b2a;
-            border: 1px solid #415a77;
-            color: white;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: #333333;
             border-radius: 4px;
             box-sizing: border-box;
         }
 
         .modal-buttons { display: flex; gap: 10px; margin-top: 25px; }
-        .save-btn { background: var(--success-color); color: #0d1b2a; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .cancel-btn { background: #d90429; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .admin-box { background: #0d1b2a; padding: 15px; border-radius: 6px; border: 1px solid #415a77; margin-top: 20px; }
-        .empty-msg { color: #94a3b8; font-style: italic; text-align: center; padding: 20px; }
+        .save-btn { background: var(--success-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .cancel-btn { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .admin-box { background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da; margin-top: 20px; }
+        .empty-msg { color: #6c757d; font-style: italic; text-align: center; padding: 20px; }
     </style>
 </head>
 <body>
@@ -284,6 +310,7 @@
         <button id="nav-kits" onclick="switchPage('kits')">Project Kits</button>
         <button id="nav-items" onclick="switchPage('items')">Project Items</button>
         <button id="nav-tools" onclick="switchPage('tools')">Project Tools</button>
+        <button id="nav-social" onclick="switchPage('social')">🌐 Social Links</button>
         <button id="nav-about" onclick="switchPage('about')">About Us</button>
         <button id="nav-cart" onclick="switchPage('cart')">Cart & Checkout</button>
     </nav>
@@ -300,7 +327,7 @@
                 <p id="display-hero-desc">Welcome to Saad Gadgets Lab — pioneering hands-on robotics, microcontroller systems, and advanced smart city prototyping right here in Lahore to transform Pakistan's technological landscape.</p>
             </div>
             <h2>Featured Lab Overview</h2>
-            <div id="display-home-content" style="background: #1b263b; padding: 15px; border-radius: 6px; border: 1px solid #415a77;">
+            <div id="display-home-content" style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da;">
                 Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to update settings and products live via Firebase database.
             </div>
         </div>
@@ -320,9 +347,18 @@
             <div class="product-grid" id="grid-tools"></div>
         </div>
 
+        <!-- Social Links Page -->
+        <div id="page-social" class="page-section">
+            <h2>Connect With Us on Social Media</h2>
+            <p style="color: #6c757d; margin-bottom: 20px;">Visit our official channels and pages below:</p>
+            <div id="social-links-container">
+                <!-- Dynamically populated from Firebase settings -->
+            </div>
+        </div>
+
         <div id="page-about" class="page-section">
             <h2>About Us</h2>
-            <div id="display-about-text" style="background: #1b263b; padding: 15px; border-radius: 6px; border: 1px solid #415a77; line-height: 1.6;">
+            <div id="display-about-text" style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da; line-height: 1.6;">
                 Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br>
                 <strong>Founder:</strong> Mohammad Saad Ghani<br>
                 <strong>Location:</strong> Lahore, Pakistan
@@ -331,11 +367,11 @@
 
         <div id="page-cart" class="page-section">
             <h2>Shopping Cart & Checkout</h2>
-            <div id="cart-items-list" style="background: #0d1b2a; padding: 15px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #415a77;">
+            <div id="cart-items-list" style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #ced4da;">
                 Your cart is currently empty.
             </div>
             <h4>Total Price: <span id="total-price">0</span> PKR</h4>
-            <hr style="margin: 25px 0; border:0; border-top:1px solid #415a77;">
+            <hr style="margin: 25px 0; border:0; border-top:1px solid #ced4da;">
             <h3>Customer Information</h3>
             <div class="form-group"><label>Full Name:</label><input type="text" id="cust-name" placeholder="Enter your full name"></div>
             <div class="form-group"><label>Phone Number:</label><input type="text" id="cust-phone" placeholder="03XXXXXXXXX"></div>
@@ -359,7 +395,15 @@
                 <label>About Us Text:</label><textarea id="input-about-text" rows="3"></textarea>
             </div>
             <div class="admin-box">
-                <h3>2. Add New Product / Item with Image</h3>
+                <h3>2. Social Media Links Setup</h3>
+                <label>Facebook URL:</label><input type="text" id="input-facebook" placeholder="https://facebook.com/...">
+                <label>Instagram URL:</label><input type="text" id="input-instagram" placeholder="https://instagram.com/...">
+                <label>YouTube URL:</label><input type="text" id="input-youtube" placeholder="https://youtube.com/...">
+                <label>TikTok URL:</label><input type="text" id="input-tiktok" placeholder="https://tiktok.com/...">
+                <label>Other / Custom Social URL:</label><input type="text" id="input-custom-social" placeholder="https://...">
+            </div>
+            <div class="admin-box">
+                <h3>3. Add New Product / Item with Image</h3>
                 <label>Category:</label>
                 <select id="new-item-category">
                     <option value="kits">Project Kits</option>
@@ -438,7 +482,12 @@
             heroTitle: "Empowering Pakistan's Future Through Smart City Innovation",
             heroDesc: "Welcome to Saad Gadgets Lab — pioneering hands-on robotics, microcontroller systems, and advanced smart city prototyping right here in Lahore to transform Pakistan's technological landscape.",
             homeContent: 'Welcome! Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to update settings and products live via Firebase database.',
-            aboutText: "Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan"
+            aboutText: "Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan",
+            facebook: "",
+            instagram: "",
+            youtube: "",
+            tiktok: "",
+            customSocial: ""
         };
 
         let products = [];
@@ -447,13 +496,14 @@
         db.ref('settings').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                siteSettings = data;
+                siteSettings = { ...siteSettings, ...data };
                 document.getElementById('display-store-name').innerText = siteSettings.storeName;
                 document.getElementById('page-title').innerText = siteSettings.storeName;
                 document.getElementById('display-hero-title').innerText = siteSettings.heroTitle;
                 document.getElementById('display-hero-desc').innerText = siteSettings.heroDesc;
                 document.getElementById('display-home-content').innerHTML = siteSettings.homeContent;
                 document.getElementById('display-about-text').innerHTML = siteSettings.aboutText;
+                renderSocialLinks();
             }
         });
 
@@ -467,6 +517,32 @@
             }
             renderProducts(products);
         });
+
+        function renderSocialLinks() {
+            let container = document.getElementById('social-links-container');
+            let html = '';
+
+            if (siteSettings.facebook) {
+                html += `<a href="${siteSettings.facebook}" target="_blank" class="social-link-card"><span>📘 Facebook Official Page</span> ➔</a>`;
+            }
+            if (siteSettings.instagram) {
+                html += `<a href="${siteSettings.instagram}" target="_blank" class="social-link-card"><span>📸 Instagram Profile</span> ➔</a>`;
+            }
+            if (siteSettings.youtube) {
+                html += `<a href="${siteSettings.youtube}" target="_blank" class="social-link-card"><span>▶️ YouTube Channel</span> ➔</a>`;
+            }
+            if (siteSettings.tiktok) {
+                html += `<a href="${siteSettings.tiktok}" target="_blank" class="social-link-card"><span>🎵 TikTok Account</span> ➔</a>`;
+            }
+            if (siteSettings.customSocial) {
+                html += `<a href="${siteSettings.customSocial}" target="_blank" class="social-link-card"><span>🌐 Other Social Link</span> ➔</a>`;
+            }
+
+            if (html === '') {
+                html = '<div class="empty-msg">No social links added yet. Admin can add them via the Admin Panel.</div>';
+            }
+            container.innerHTML = html;
+        }
 
         function verifyAdminAccess() {
             let enteredPin = prompt("Enter Admin PIN Code:");
@@ -632,6 +708,11 @@
             document.getElementById('input-hero-desc').value = siteSettings.heroDesc;
             document.getElementById('input-home-content').value = siteSettings.homeContent;
             document.getElementById('input-about-text').value = siteSettings.aboutText;
+            document.getElementById('input-facebook').value = siteSettings.facebook || '';
+            document.getElementById('input-instagram').value = siteSettings.instagram || '';
+            document.getElementById('input-youtube').value = siteSettings.youtube || '';
+            document.getElementById('input-tiktok').value = siteSettings.tiktok || '';
+            document.getElementById('input-custom-social').value = siteSettings.customSocial || '';
             document.getElementById('adminModal').style.display = 'flex';
         }
 
@@ -646,12 +727,17 @@
                 heroTitle: document.getElementById('input-hero-title').value,
                 heroDesc: document.getElementById('input-hero-desc').value,
                 homeContent: document.getElementById('input-home-content').value,
-                aboutText: document.getElementById('input-about-text').value
+                aboutText: document.getElementById('input-about-text').value,
+                facebook: document.getElementById('input-facebook').value,
+                instagram: document.getElementById('input-instagram').value,
+                youtube: document.getElementById('input-youtube').value,
+                tiktok: document.getElementById('input-tiktok').value,
+                customSocial: document.getElementById('input-custom-social').value
             };
 
             db.ref('settings').set(updatedSettings);
             closeAdminModal();
-            alert("All settings updated live on Firebase database!");
+            alert("All settings and social links updated live on Firebase database!");
         }
 
         function switchPage(pageName) {
