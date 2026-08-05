@@ -151,7 +151,6 @@
         .page-section { display: none; }
         .page-section.active-page { display: block; }
 
-        /* Pure Banner Image Hero Section */
         .hero-banner-container {
             width: 100%;
             margin-bottom: 25px;
@@ -337,15 +336,15 @@
         </div>
     </header>
 
-    <!-- Navbar -->
+    <!-- Navigation Bar (Updated sequence) -->
     <nav class="navbar">
         <button id="nav-home" class="active-tab" onclick="switchPage('home')">Home Page</button>
         <button id="nav-kits" onclick="switchPage('kits')">Project Kits</button>
         <button id="nav-items" onclick="switchPage('items')">Project Items</button>
         <button id="nav-tools" onclick="switchPage('tools')">Project Tools</button>
+        <button id="nav-cart" onclick="switchPage('cart')">Cart & Checkout</button>
         <button id="nav-help" onclick="switchPage('help')">🤝 Community Support</button>
         <button id="nav-about" onclick="switchPage('about')">About Us</button>
-        <button id="nav-cart" onclick="switchPage('cart')">Cart & Checkout</button>
         <button id="nav-social" onclick="switchPage('social')">🌐 Social Links</button>
     </nav>
 
@@ -385,62 +384,7 @@
             <div class="product-grid" id="grid-tools"></div>
         </div>
 
-        <!-- Community Support Page (Updated as requested with 4 specific fields & WhatsApp/Firebase sync) -->
-        <div id="page-help" class="page-section">
-            <h2><i class="fa-solid fa-hands-holding-child" style="color: var(--primary-color);"></i> Community Support Program</h2>
-            <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #ced4da; margin-bottom: 25px; line-height: 1.6;">
-                <h3 style="color: #0056b3; margin-top: 0;">Our Step Towards Your Support</h3>
-                <p>जरूरतमंद افراد کی مدد کے لیے یہ فارಮ್ پُر کریں۔ آپ کی فراہم کردہ معلومات کو محفوظ طریقے سے ریکارڈ کیا جائے گا اور فوری رابطہ کیا جائے گا۔</p>
-            </div>
-
-            <div style="background: #ffffff; padding: 20px; border-radius: 6px; border: 1px solid #ced4da; margin-bottom: 30px;">
-                <h3 style="margin-top: 0; color: #0056b3;">Submit Support Request</h3>
-                
-                <div class="form-group">
-                    <label for="help-name">Name of a Person (نام):</label>
-                    <input type="text" id="help-name" placeholder="فرد کا پورا نام درج کریں">
-                </div>
-
-                <div class="form-group">
-                    <label for="help-phone">Contact Number (رابطہ نمبر):</label>
-                    <input type="tel" id="help-phone" placeholder="موبাইল / فون نمبر درج کریں">
-                </div>
-
-                <div class="form-group">
-                    <label for="help-address">Address (پتہ):</label>
-                    <textarea id="help-address" rows="3" placeholder="مکمل پتہ یا علاقہ درج کریں"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="help-item">Required Item / Thing Needed (درکار چیز):</label>
-                    <input type="text" id="help-item" placeholder="کس چیز یا مدد کی ضرورت ہے؟ (مثلاً: کٹس، کمپوننٹس وغیرہ)">
-                </div>
-
-                <button class="confirm-btn" onclick="submitHelpRequestToWhatsApp()">
-                    <i class="fa-brands fa-whatsapp fa-xl"></i> Submit & Send Request to WhatsApp
-                </button>
-            </div>
-
-            <h3>Submitted Community Support Requests (Live)</h3>
-            <div id="help-requests-list">
-                <div class="empty-msg">No requests submitted yet.</div>
-            </div>
-        </div>
-
-        <!-- About Us Page -->
-        <div id="page-about" class="page-section">
-            <h2>About Us</h2>
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da; line-height: 1.6;">
-                <img id="display-about-img" src="" alt="About Us Image" style="display:none; width: 100%; max-height: 280px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; border: 1px solid #ced4da;">
-                <div id="display-about-text">
-                    Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br>
-                    <strong>Founder:</strong> Mohammad Saad Ghani<br>
-                    <strong>Location:</strong> Lahore, Pakistan
-                </div>
-            </div>
-        </div>
-
-        <!-- Cart Page -->
+        <!-- Cart & Checkout Page -->
         <div id="page-cart" class="page-section">
             <h2>Shopping Cart & Checkout</h2>
             <div id="cart-items-list" style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #ced4da;">
@@ -454,6 +398,61 @@
             <div class="form-group"><label>Location / Address:</label><input type="text" id="cust-address" placeholder="Enter your city and complete address"></div>
             <div class="form-group"><label>Email:</label><input type="email" id="cust-email" placeholder="example@email.com"></div>
             <button class="confirm-btn" onclick="sendToWhatsApp()"><i class="fa-brands fa-whatsapp fa-xl"></i> Confirm Order (Send via WhatsApp)</button>
+        </div>
+
+        <!-- Community Support Page -->
+        <div id="page-help" class="page-section">
+            <h2><i class="fa-solid fa-hands-holding-child" style="color: var(--primary-color);"></i> Community Support Program</h2>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #ced4da; margin-bottom: 25px; line-height: 1.6;">
+                <h3 style="color: #0056b3; margin-top: 0;">Our Step Towards Your Support</h3>
+                <p>Fill out this form to request support for individuals in need. The information you provide will be securely recorded and followed up promptly.</p>
+            </div>
+
+            <div style="background: #ffffff; padding: 20px; border-radius: 6px; border: 1px solid #ced4da; margin-bottom: 30px;">
+                <h3 style="margin-top: 0; color: #0056b3;">Submit Support Request</h3>
+                
+                <div class="form-group">
+                    <label for="help-name">Full Name:</label>
+                    <input type="text" id="help-name" placeholder="Enter the full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="help-phone">Contact Number:</label>
+                    <input type="tel" id="help-phone" placeholder="Enter mobile / phone number">
+                </div>
+
+                <div class="form-group">
+                    <label for="help-address">Address:</label>
+                    <textarea id="help-address" rows="3" placeholder="Enter complete address or area"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="help-item">Required Item / Thing Needed:</label>
+                    <input type="text" id="help-item" placeholder="What item or assistance is needed? (e.g., Kits, Components)">
+                </div>
+
+                <button class="confirm-btn" onclick="submitHelpRequestToWhatsApp()">
+                    <i class="fa-brands fa-whatsapp fa-xl"></i> Submit & Send Request to WhatsApp
+                </button>
+            </div>
+
+            <h3>Submitted Community Support Requests (Live)</h3>
+            <div id="help-requests-list">
+                <div class="empty-msg">No requests submitted yet.</div>
+            </div>
+        </div>
+
+        <!-- About Us Page (With Image Upload Support) -->
+        <div id="page-about" class="page-section">
+            <h2>About Us</h2>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da; line-height: 1.6;">
+                <img id="display-about-img" src="" alt="About Us Image" style="display:none; width: 100%; max-height: 280px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; border: 1px solid #ced4da;">
+                <div id="display-about-text">
+                    Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br>
+                    <strong>Founder:</strong> Mohammad Saad Ghani<br>
+                    <strong>Location:</strong> Lahore, Pakistan
+                </div>
+            </div>
         </div>
 
         <!-- Social Links Page -->
@@ -477,8 +476,11 @@
                 <label>Hero Banner Image (Upload Picture):</label>
                 <input type="file" id="input-hero-image-file" accept="image/*">
                 <input type="hidden" id="input-hero-image-base64">
+                
                 <label style="margin-top:15px;">About Us Text:</label><textarea id="input-about-text" rows="3"></textarea>
-                <label>About Us Image (Upload Picture):</label>
+                
+                <!-- About Us Image Upload Option -->
+                <label style="margin-top:15px;">About Us Image (Upload Picture):</label>
                 <input type="file" id="input-about-image-file" accept="image/*">
                 <input type="hidden" id="input-about-image-base64">
             </div>
@@ -671,7 +673,6 @@
                 return;
             }
 
-            // Save to Firebase Database live
             let newHelpRef = db.ref('helpRequests').push({
                 name: name,
                 phone: phone,
@@ -680,9 +681,6 @@
                 timestamp: Date.now()
             });
 
-            let helpId = newHelpRef.key;
-
-            // Format WhatsApp Message
             let message = `*--- SD Labs Community Support ---*%0A%0A`;
             message += `👤 *Name:* ${name}%0A`;
             message += `📞 *Contact:* ${phone}%0A`;
@@ -694,13 +692,11 @@
 
             let whatsappURL = `https://wa.me/${waNumber}?text=${message}`;
 
-            // Clear inputs
             document.getElementById('help-name').value = '';
             document.getElementById('help-phone').value = '';
             document.getElementById('help-address').value = '';
             document.getElementById('help-item').value = '';
 
-            // Open WhatsApp
             let link = document.createElement('a');
             link.href = whatsappURL;
             link.target = '_blank';
