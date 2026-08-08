@@ -151,34 +151,21 @@
         .page-section { display: none; }
         .page-section.active-page { display: block; }
 
-        /* --- ہوم پیج فل سکرین اپڈیٹ --- */
-        #page-home.active-page {
-            display: flex;
-            flex-direction: column;
-            padding: 0;
-            margin: -20px; /*کنٹینر کی پیڈنگ ختم کرنے کے لیے تاکہ پوری سکرین کور ہو*/
-            border-radius: 0;
-            border: none;
-            box-shadow: none;
-        }
-
         .hero-banner-container {
             width: 100%;
-            height: 100vh; /* فل سکرین ہائٹ */
-            margin-bottom: 0;
-            border-radius: 0;
+            margin-bottom: 25px;
+            border-radius: 8px;
             overflow: hidden;
-            background: #000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #ced4da;
+            background: #f8f9fa;
             text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .hero-banner-img {
             width: 100%;
-            height: 100%;
-            object-fit: cover; /* تصویر کٹے گی نہیں اور پوری سکرین پر فٹ ہوگی */
+            max-height: 420px;
+            object-fit: cover;
             display: block;
         }
 
@@ -311,14 +298,14 @@
             padding: 30px;
             border-radius: 8px;
             width: 90%;
-            max-width: 700px;
+            max-width: 650px;
             max-height: 90vh;
             overflow-y: auto;
             border: 1px solid #ced4da;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .modal-content label { display: block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; color: #333333; font-weight: bold; }
+        .modal-content label { display: block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; color: #333333; }
         .modal-content input, .modal-content textarea, .modal-content select {
             width: 100%;
             padding: 10px;
@@ -330,8 +317,8 @@
         }
 
         .modal-buttons { display: flex; gap: 10px; margin-top: 25px; }
-        .save-btn { background: var(--success-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
-        .cancel-btn { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
+        .save-btn { background: var(--success-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .cancel-btn { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         .admin-box { background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da; margin-top: 20px; }
         .empty-msg { color: #6c757d; font-style: italic; text-align: center; padding: 20px; }
     </style>
@@ -349,7 +336,7 @@
         </div>
     </header>
 
-    <!-- Navigation Bar -->
+    <!-- Navigation Bar (Updated sequence) -->
     <nav class="navbar">
         <button id="nav-home" class="active-tab" onclick="switchPage('home')">Home Page</button>
         <button id="nav-kits" onclick="switchPage('kits')">Project Kits</button>
@@ -362,16 +349,20 @@
     </nav>
 
     <div class="container">
-        <!-- Global Search Bar (Home پیج پر چھپانے کے لیے CSS یا لاجک بھی لگائی جا سکتی ہے، باقی پیجز پر شو رہے گا) -->
-        <div class="search-container" id="global-search-box">
+        <!-- Global Search Bar -->
+        <div class="search-container">
             <input type="text" id="global-search" placeholder="🔍 Search any project kit, item or tool..." onkeyup="filterProducts()">
         </div>
 
-        <!-- Home Page (صرف فل سکرین بیک گراؤنڈ امیج، کوئی ڈسکریپشن یا ٹیکسٹ نہیں) -->
+        <!-- Home Page -->
         <div id="page-home" class="page-section active-page">
             <div class="hero-banner-container">
                 <img id="display-hero-banner" src="" alt="Home Banner" class="hero-banner-img" style="display: none;">
-                <div id="hero-banner-placeholder" class="empty-msg" style="color: #fff; display: none;">No banner image uploaded yet. Go to Admin Panel to upload one.</div>
+                <div id="hero-banner-placeholder" class="empty-msg">No banner image uploaded yet. Go to Admin Panel to upload a stunning hero banner image.</div>
+            </div>
+            <h2>Welcome to Saad Gadgets Lab</h2>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da; line-height: 1.6;">
+                Explore our advanced project kits, electronic components, and smart city prototyping tools. Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to update banner images, settings and products live via Firebase database.
             </div>
         </div>
 
@@ -411,9 +402,6 @@
 
         <!-- Community Support Page -->
         <div id="page-help" class="page-section">
-            <div class="hero-banner-container" style="height: auto; max-height: 420px; margin-bottom: 20px;">
-                <img id="display-charity-banner" src="" alt="Charity Banner" class="hero-banner-img" style="display: none; height: auto;">
-            </div>
             <h2><i class="fa-solid fa-hands-holding-child" style="color: var(--primary-color);"></i> Community Support Program</h2>
             <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #ced4da; margin-bottom: 25px; line-height: 1.6;">
                 <h3 style="color: #0056b3; margin-top: 0;">Our Step Towards Your Support</h3>
@@ -454,7 +442,7 @@
             </div>
         </div>
 
-        <!-- About Us Page -->
+        <!-- About Us Page (With Image Upload Support) -->
         <div id="page-about" class="page-section">
             <h2>About Us</h2>
             <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da; line-height: 1.6;">
@@ -481,32 +469,21 @@
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content">
             <h2>⚙️ Complete Website Control Center</h2>
-            
-            <!-- SECTION 4: DEDICATED IMAGE UPLOADS MANAGER -->
-            <div class="admin-box" style="border: 2px dashed var(--primary-color); background: #f0f7ff;">
-                <h3 style="color: var(--primary-color); margin-top: 0;">🖼️ 4. Dedicated Image Uploads Manager</h3>
-                <p style="font-size: 13px; color: #555;">Upload or update high-impact pictures for specific pages to attract and engage users:</p>
-                
-                <label>1. Home Page Hero Banner Image:</label>
-                <input type="file" id="input-hero-image-file" accept="image/*">
-                <input type="hidden" id="input-hero-image-base64">
-
-                <label>2. About Us Page Image:</label>
-                <input type="file" id="input-about-image-file" accept="image/*">
-                <input type="hidden" id="input-about-image-base64">
-
-                <label>3. Charity / Community Support Banner Image:</label>
-                <input type="file" id="input-charity-image-file" accept="image/*">
-                <input type="hidden" id="input-charity-image-base64">
-            </div>
-
             <div class="admin-box">
-                <h3>1. General Website Settings</h3>
+                <h3>1. General Website & Hero Banner Settings</h3>
                 <label>Store Name:</label><input type="text" id="input-store-name">
                 <label>WhatsApp Order / Help Number:</label><input type="text" id="input-whatsapp">
+                <label>Hero Banner Image (Upload Picture):</label>
+                <input type="file" id="input-hero-image-file" accept="image/*">
+                <input type="hidden" id="input-hero-image-base64">
+                
                 <label style="margin-top:15px;">About Us Text:</label><textarea id="input-about-text" rows="3"></textarea>
+                
+                <!-- About Us Image Upload Option -->
+                <label style="margin-top:15px;">About Us Image (Upload Picture):</label>
+                <input type="file" id="input-about-image-file" accept="image/*">
+                <input type="hidden" id="input-about-image-base64">
             </div>
-
             <div class="admin-box">
                 <h3>2. Social Media Links Setup</h3>
                 <label>Facebook URL:</label><input type="text" id="input-facebook" placeholder="https://facebook.com/...">
@@ -515,7 +492,6 @@
                 <label>TikTok URL:</label><input type="text" id="input-tiktok" placeholder="https://tiktok.com/...">
                 <label>Other / Custom Social URL:</label><input type="text" id="input-custom-social" placeholder="https://...">
             </div>
-
             <div class="admin-box">
                 <h3>3. Add New Product / Item</h3>
                 <label>Category:</label>
@@ -528,12 +504,11 @@
                 <label>Price (PKR):</label><input type="number" id="new-item-price" placeholder="Price">
                 <label>Description:</label><textarea id="new-item-desc" rows="2" placeholder="Description"></textarea>
                 <label>Product Image:</label><input type="file" id="new-item-image" accept="image/*">
-                <button class="save-btn" style="margin-top:15px;" onclick="addNewProduct()">Add Item with Image</button>
+                <button class="save-btn" style="width:100%; margin-top:15px;" onclick="addNewProduct()">Add Item with Image</button>
             </div>
-
-            <div class="modal-buttons" style="flex-direction: column; gap: 10px;">
-                <button class="save-btn" onclick="saveAdminSettings()">💾 Save All Changes Live</button>
-                <button class="cancel-btn" onclick="closeAdminModal()">❌ Close Panel</button>
+            <div class="modal-buttons">
+                <button class="save-btn" onclick="saveAdminSettings()">Save All Changes Live</button>
+                <button class="cancel-btn" onclick="closeAdminModal()">Close Panel</button>
             </div>
         </div>
     </div>
@@ -597,7 +572,6 @@
             heroBanner: "",
             aboutText: "Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan",
             aboutImage: "",
-            charityBanner: "",
             facebook: "",
             instagram: "",
             youtube: "",
@@ -617,7 +591,6 @@
                 document.getElementById('page-title').innerText = siteSettings.storeName;
                 document.getElementById('display-about-text').innerHTML = siteSettings.aboutText;
                 
-                // Hero Banner
                 let heroBannerElem = document.getElementById('display-hero-banner');
                 let heroPlaceholder = document.getElementById('hero-banner-placeholder');
                 if (siteSettings.heroBanner) {
@@ -629,22 +602,12 @@
                     heroPlaceholder.style.display = 'block';
                 }
 
-                // About Us Image
                 let aboutImgElem = document.getElementById('display-about-img');
                 if (siteSettings.aboutImage) {
                     aboutImgElem.src = siteSettings.aboutImage;
                     aboutImgElem.style.display = 'block';
                 } else {
                     aboutImgElem.style.display = 'none';
-                }
-
-                // Charity Banner
-                let charityBannerElem = document.getElementById('display-charity-banner');
-                if (siteSettings.charityBanner) {
-                    charityBannerElem.src = siteSettings.charityBanner;
-                    charityBannerElem.style.display = 'block';
-                } else {
-                    charityBannerElem.style.display = 'none';
                 }
 
                 renderSocialLinks();
@@ -928,8 +891,6 @@
             document.getElementById('input-about-text').value = siteSettings.aboutText;
             document.getElementById('input-about-image-base64').value = siteSettings.aboutImage || '';
             document.getElementById('input-about-image-file').value = '';
-            document.getElementById('input-charity-image-base64').value = siteSettings.charityBanner || '';
-            document.getElementById('input-charity-image-file').value = '';
             document.getElementById('input-facebook').value = siteSettings.facebook || '';
             document.getElementById('input-instagram').value = siteSettings.instagram || '';
             document.getElementById('input-youtube').value = siteSettings.youtube || '';
@@ -945,16 +906,14 @@
         function saveAdminSettings() {
             let heroFile = document.getElementById('input-hero-image-file');
             let aboutFile = document.getElementById('input-about-image-file');
-            let charityFile = document.getElementById('input-charity-image-file');
             
-            let persistSettings = function(heroBase64, aboutBase64, charityBase64) {
+            let persistSettings = function(heroBase64, aboutBase64) {
                 let updatedSettings = {
                     storeName: document.getElementById('input-store-name').value,
                     whatsapp: document.getElementById('input-whatsapp').value,
                     heroBanner: heroBase64,
                     aboutText: document.getElementById('input-about-text').value,
                     aboutImage: aboutBase64,
-                    charityBanner: charityBase64,
                     facebook: document.getElementById('input-facebook').value,
                     instagram: document.getElementById('input-instagram').value,
                     youtube: document.getElementById('input-youtube').value,
@@ -964,7 +923,7 @@
 
                 db.ref('settings').set(updatedSettings);
                 closeAdminModal();
-                alert("All settings, dedicated page images, and updates saved live on Firebase database!");
+                alert("All settings, banners, and images updated live on Firebase database!");
             };
 
             let getHeroImage = new Promise((resolve) => {
@@ -987,18 +946,8 @@
                 }
             });
 
-            let getCharityImage = new Promise((resolve) => {
-                if (charityFile.files && charityFile.files[0]) {
-                    let reader = new FileReader();
-                    reader.onload = (e) => resolve(e.target.result);
-                    reader.readAsDataURL(charityFile.files[0]);
-                } else {
-                    resolve(document.getElementById('input-charity-image-base64').value);
-                }
-            });
-
-            Promise.all([getHeroImage, getAboutImage, getCharityImage]).then(([heroImg, aboutImg, charityImg]) => {
-                persistSettings(heroImg, aboutImg, charityImg);
+            Promise.all([getHeroImage, getAboutImage]).then(([heroImg, aboutImg]) => {
+                persistSettings(heroImg, aboutImg);
             });
         }
 
@@ -1009,15 +958,6 @@
             let targetNav = document.getElementById('nav-' + pageName);
             if (targetPage) targetPage.classList.add('active-page');
             if (targetNav) targetNav.classList.add('active-tab');
-
-            // ہوم پیج پر سرچ بار چھپانے اور دوسرے پیجز پر دکھانے کے لیے
-            let searchBox = document.getElementById('global-search-box');
-            if (pageName === 'home') {
-                searchBox.style.display = 'none';
-            } else {
-                searchBox.style.display = 'flex';
-            }
-
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
