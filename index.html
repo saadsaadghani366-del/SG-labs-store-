@@ -151,21 +151,34 @@
         .page-section { display: none; }
         .page-section.active-page { display: block; }
 
+        /* --- ہوم پیج فل سکرین اپڈیٹ --- */
+        #page-home.active-page {
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            margin: -20px; /*کنٹینر کی پیڈنگ ختم کرنے کے لیے تاکہ پوری سکرین کور ہو*/
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+        }
+
         .hero-banner-container {
             width: 100%;
-            margin-bottom: 25px;
-            border-radius: 8px;
+            height: 100vh; /* فل سکرین ہائٹ */
+            margin-bottom: 0;
+            border-radius: 0;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border: 1px solid #ced4da;
-            background: #f8f9fa;
+            background: #000;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .hero-banner-img {
             width: 100%;
-            max-height: 420px;
-            object-fit: cover;
+            height: 100%;
+            object-fit: cover; /* تصویر کٹے گی نہیں اور پوری سکرین پر فٹ ہوگی */
             display: block;
         }
 
@@ -349,20 +362,16 @@
     </nav>
 
     <div class="container">
-        <!-- Global Search Bar -->
-        <div class="search-container">
+        <!-- Global Search Bar (Home پیج پر چھپانے کے لیے CSS یا لاجک بھی لگائی جا سکتی ہے، باقی پیجز پر شو رہے گا) -->
+        <div class="search-container" id="global-search-box">
             <input type="text" id="global-search" placeholder="🔍 Search any project kit, item or tool..." onkeyup="filterProducts()">
         </div>
 
-        <!-- Home Page -->
+        <!-- Home Page (صرف فل سکرین بیک گراؤنڈ امیج، کوئی ڈسکریپشن یا ٹیکسٹ نہیں) -->
         <div id="page-home" class="page-section active-page">
             <div class="hero-banner-container">
                 <img id="display-hero-banner" src="" alt="Home Banner" class="hero-banner-img" style="display: none;">
-                <div id="hero-banner-placeholder" class="empty-msg">No banner image uploaded yet. Go to Admin Panel under "1. Home Page Banner" to upload one.</div>
-            </div>
-            <h2>Welcome to Saad Gadgets Lab</h2>
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da; line-height: 1.6;">
-                Explore our advanced project kits, electronic components, and smart city prototyping tools. Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to update banner images, settings and products live via Firebase database.
+                <div id="hero-banner-placeholder" class="empty-msg" style="color: #fff; display: none;">No banner image uploaded yet. Go to Admin Panel to upload one.</div>
             </div>
         </div>
 
@@ -402,8 +411,8 @@
 
         <!-- Community Support Page -->
         <div id="page-help" class="page-section">
-            <div class="hero-banner-container" style="margin-bottom: 20px;">
-                <img id="display-charity-banner" src="" alt="Charity Banner" class="hero-banner-img" style="display: none;">
+            <div class="hero-banner-container" style="height: auto; max-height: 420px; margin-bottom: 20px;">
+                <img id="display-charity-banner" src="" alt="Charity Banner" class="hero-banner-img" style="display: none; height: auto;">
             </div>
             <h2><i class="fa-solid fa-hands-holding-child" style="color: var(--primary-color);"></i> Community Support Program</h2>
             <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #ced4da; margin-bottom: 25px; line-height: 1.6;">
@@ -1000,6 +1009,15 @@
             let targetNav = document.getElementById('nav-' + pageName);
             if (targetPage) targetPage.classList.add('active-page');
             if (targetNav) targetNav.classList.add('active-tab');
+
+            // ہوم پیج پر سرچ بار چھپانے اور دوسرے پیجز پر دکھانے کے لیے
+            let searchBox = document.getElementById('global-search-box');
+            if (pageName === 'home') {
+                searchBox.style.display = 'none';
+            } else {
+                searchBox.style.display = 'flex';
+            }
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
