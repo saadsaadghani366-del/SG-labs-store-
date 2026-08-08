@@ -151,34 +151,21 @@
         .page-section { display: none; }
         .page-section.active-page { display: block; }
 
-        /* --- ہوم پیج فل سکرین اپڈیٹ --- */
-        #page-home.active-page {
-            display: flex;
-            flex-direction: column;
-            padding: 0;
-            margin: -20px; /*کنٹینر کی پیڈنگ ختم کرنے کے لیے تاکہ پوری سکرین کور ہو*/
-            border-radius: 0;
-            border: none;
-            box-shadow: none;
-        }
-
         .hero-banner-container {
             width: 100%;
-            height: 100vh; /* فل سکرین ہائٹ */
-            margin-bottom: 0;
-            border-radius: 0;
+            margin-bottom: 25px;
+            border-radius: 8px;
             overflow: hidden;
-            background: #000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #ced4da;
+            background: #f8f9fa;
             text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .hero-banner-img {
             width: 100%;
-            height: 100%;
-            object-fit: cover; /* تصویر کٹے گی نہیں اور پوری سکرین پر فٹ ہوگی */
+            max-height: 420px;
+            object-fit: cover;
             display: block;
         }
 
@@ -278,23 +265,6 @@
             border-color: var(--primary-color);
         }
 
-        .help-request-card {
-            background: #f8f9fa;
-            border: 1px solid #ced4da;
-            padding: 15px 20px;
-            border-radius: 6px;
-            margin-bottom: 12px;
-        }
-        .help-request-card h4 {
-            margin: 0 0 8px 0;
-            color: #0056b3;
-        }
-        .help-request-card p {
-            margin: 4px 0;
-            color: #495057;
-            font-size: 14px;
-        }
-
         .modal-overlay {
             display: none;
             position: fixed;
@@ -362,16 +332,20 @@
     </nav>
 
     <div class="container">
-        <!-- Global Search Bar (Home پیج پر چھپانے کے لیے CSS یا لاجک بھی لگائی جا سکتی ہے، باقی پیجز پر شو رہے گا) -->
-        <div class="search-container" id="global-search-box">
+        <!-- Global Search Bar -->
+        <div class="search-container">
             <input type="text" id="global-search" placeholder="🔍 Search any project kit, item or tool..." onkeyup="filterProducts()">
         </div>
 
-        <!-- Home Page (صرف فل سکرین بیک گراؤنڈ امیج، کوئی ڈسکریپشن یا ٹیکسٹ نہیں) -->
+        <!-- Home Page -->
         <div id="page-home" class="page-section active-page">
             <div class="hero-banner-container">
                 <img id="display-hero-banner" src="" alt="Home Banner" class="hero-banner-img" style="display: none;">
-                <div id="hero-banner-placeholder" class="empty-msg" style="color: #fff; display: none;">No banner image uploaded yet. Go to Admin Panel to upload one.</div>
+                <div id="hero-banner-placeholder" class="empty-msg">No banner image uploaded yet. Go to Admin Panel to upload one.</div>
+            </div>
+            <h2>Welcome to Saad Gadgets Lab</h2>
+            <div id="display-home-desc" style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da; line-height: 1.6;">
+                Explore our advanced project kits, electronic components, and smart city prototyping tools. Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to update banner images, settings and products live via Firebase database.
             </div>
         </div>
 
@@ -409,15 +383,15 @@
             <button class="confirm-btn" onclick="sendToWhatsApp()"><i class="fa-brands fa-whatsapp fa-xl"></i> Confirm Order (Send via WhatsApp)</button>
         </div>
 
-        <!-- Community Support Page -->
+        <!-- Community Support Page (Privacy Protected - Direct to WhatsApp) -->
         <div id="page-help" class="page-section">
-            <div class="hero-banner-container" style="height: auto; max-height: 420px; margin-bottom: 20px;">
-                <img id="display-charity-banner" src="" alt="Charity Banner" class="hero-banner-img" style="display: none; height: auto;">
+            <div class="hero-banner-container" style="margin-bottom: 20px;">
+                <img id="display-charity-banner" src="" alt="Charity Banner" class="hero-banner-img" style="display: none;">
             </div>
             <h2><i class="fa-solid fa-hands-holding-child" style="color: var(--primary-color);"></i> Community Support Program</h2>
             <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #ced4da; margin-bottom: 25px; line-height: 1.6;">
                 <h3 style="color: #0056b3; margin-top: 0;">Our Step Towards Your Support</h3>
-                <p>Fill out this form to request support for individuals in need. The information you provide will be securely recorded and followed up promptly.</p>
+                <p>Fill out this form to request support or charity items. Your information is completely private and will be sent directly to our WhatsApp channel under the topic <b>Charity and Support</b>.</p>
             </div>
 
             <div style="background: #ffffff; padding: 20px; border-radius: 6px; border: 1px solid #ced4da; margin-bottom: 30px;">
@@ -444,13 +418,11 @@
                 </div>
 
                 <button class="confirm-btn" onclick="submitHelpRequestToWhatsApp()">
-                    <i class="fa-brands fa-whatsapp fa-xl"></i> Submit & Send Request to WhatsApp
+                    <i class="fa-brands fa-whatsapp fa-xl"></i> Submit & Send Request via WhatsApp
                 </button>
-            </div>
-
-            <h3>Submitted Community Support Requests (Live)</h3>
-            <div id="help-requests-list">
-                <div class="empty-msg">No requests submitted yet.</div>
+                <div style="margin-top: 10px; font-size: 12px; color: #e74c3c; text-align: center;">
+                    🔒 Privacy Note: No request details or names will ever be shown publicly on the website.
+                </div>
             </div>
         </div>
 
@@ -471,9 +443,7 @@
         <div id="page-social" class="page-section">
             <h2>Connect With Us on Social Media</h2>
             <p style="color: #6c757d; margin-bottom: 20px;">Visit our official channels and pages below:</p>
-            <div id="social-links-container">
-                <!-- Dynamically populated from Firebase settings -->
-            </div>
+            <div id="social-links-container"></div>
         </div>
     </div>
 
@@ -485,7 +455,7 @@
             <!-- SECTION 4: DEDICATED IMAGE UPLOADS MANAGER -->
             <div class="admin-box" style="border: 2px dashed var(--primary-color); background: #f0f7ff;">
                 <h3 style="color: var(--primary-color); margin-top: 0;">🖼️ 4. Dedicated Image Uploads Manager</h3>
-                <p style="font-size: 13px; color: #555;">Upload or update high-impact pictures for specific pages to attract and engage users:</p>
+                <p style="font-size: 13px; color: #555;">Upload or update high-impact pictures for specific pages:</p>
                 
                 <label>1. Home Page Hero Banner Image:</label>
                 <input type="file" id="input-hero-image-file" accept="image/*">
@@ -504,6 +474,10 @@
                 <h3>1. General Website Settings</h3>
                 <label>Store Name:</label><input type="text" id="input-store-name">
                 <label>WhatsApp Order / Help Number:</label><input type="text" id="input-whatsapp">
+                
+                <label style="margin-top:15px; color: var(--primary-color); font-weight: bold;">⭐ Home Page Description (Admin Exclusive):</label>
+                <textarea id="input-home-desc" rows="4" placeholder="Enter your custom home page description here..."></textarea>
+                
                 <label style="margin-top:15px;">About Us Text:</label><textarea id="input-about-text" rows="3"></textarea>
             </div>
 
@@ -595,6 +569,7 @@
             storeName: "Saad Gadgets Lab",
             whatsapp: "923043337555",
             heroBanner: "",
+            homeDesc: "Explore our advanced project kits, electronic components, and smart city prototyping tools. Click on <b>\"⚙️ Admin Panel\"</b> at the top right, enter your secure PIN to update banner images, settings and products live via Firebase database.",
             aboutText: "Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan",
             aboutImage: "",
             charityBanner: "",
@@ -606,7 +581,6 @@
         };
 
         let products = [];
-        let helpRequests = [];
 
         // Real-time synchronization from Firebase Database
         db.ref('settings').on('value', (snapshot) => {
@@ -615,6 +589,12 @@
                 siteSettings = { ...siteSettings, ...data };
                 document.getElementById('display-store-name').innerText = siteSettings.storeName;
                 document.getElementById('page-title').innerText = siteSettings.storeName;
+                
+                // Home Description (Admin Exclusive)
+                if (siteSettings.homeDesc) {
+                    document.getElementById('display-home-desc').innerHTML = siteSettings.homeDesc;
+                }
+
                 document.getElementById('display-about-text').innerHTML = siteSettings.aboutText;
                 
                 // Hero Banner
@@ -662,17 +642,6 @@
             renderProducts(products);
         });
 
-        db.ref('helpRequests').on('value', (snapshot) => {
-            const data = snapshot.val();
-            helpRequests = [];
-            if (data) {
-                Object.keys(data).forEach(key => {
-                    helpRequests.push({ firebaseId: key, ...data[key] });
-                });
-            }
-            renderHelpRequests();
-        });
-
         function renderSocialLinks() {
             let container = document.getElementById('social-links-container');
             let html = '';
@@ -699,6 +668,7 @@
             container.innerHTML = html;
         }
 
+        // Privacy-Protected Charity & Support Request Sent Directly to WhatsApp
         function submitHelpRequestToWhatsApp() {
             let name = document.getElementById('help-name').value.trim();
             let phone = document.getElementById('help-phone').value.trim();
@@ -710,19 +680,11 @@
                 return;
             }
 
-            let newHelpRef = db.ref('helpRequests').push({
-                name: name,
-                phone: phone,
-                address: address,
-                requiredItem: requiredItem,
-                timestamp: Date.now()
-            });
-
-            let message = `*--- SD Labs Community Support ---*%0A%0A`;
-            message += `👤 *Name:* ${name}%0A`;
-            message += `📞 *Contact:* ${phone}%0A`;
-            message += `📍 *Address:* ${address}%0A`;
-            message += `🎁 *Required Item:* ${requiredItem}%0A`;
+            let message = `*Topic: Charity and Support*%0A%0A`;
+            message += `👤 *Name:* ${encodeURIComponent(name)}%0A`;
+            message += `📞 *Contact:* ${encodeURIComponent(phone)}%0A`;
+            message += `📍 *Address:* ${encodeURIComponent(address)}%0A`;
+            message += `🎁 *Required Item:* ${encodeURIComponent(requiredItem)}%0A`;
 
             let waNumber = (siteSettings && siteSettings.whatsapp) ? siteSettings.whatsapp : "923043337555";
             waNumber = waNumber.replace(/\D/g, '');
@@ -740,28 +702,6 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        }
-
-        function renderHelpRequests() {
-            let container = document.getElementById('help-requests-list');
-            if (helpRequests.length === 0) {
-                container.innerHTML = '<div class="empty-msg">No community support requests submitted yet.</div>';
-                return;
-            }
-
-            let html = '';
-            helpRequests.forEach(req => {
-                html += `
-                    <div class="help-request-card">
-                        <p style="font-size: 11px; color: #6c757d; margin: 0 0 4px 0;">ID: ${req.firebaseId}</p>
-                        <h4>👤 Name: ${req.name}</h4>
-                        <p><strong>Contact Number:</strong> ${req.phone}</p>
-                        <p><strong>Address:</strong> ${req.address}</p>
-                        <p><strong>Required Item:</strong> ${req.requiredItem}</p>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
         }
 
         function verifyAdminAccess() {
@@ -923,6 +863,7 @@
         function openAdminModal() {
             document.getElementById('input-store-name').value = siteSettings.storeName;
             document.getElementById('input-whatsapp').value = siteSettings.whatsapp;
+            document.getElementById('input-home-desc').value = siteSettings.homeDesc || '';
             document.getElementById('input-hero-image-base64').value = siteSettings.heroBanner || '';
             document.getElementById('input-hero-image-file').value = '';
             document.getElementById('input-about-text').value = siteSettings.aboutText;
@@ -951,6 +892,7 @@
                 let updatedSettings = {
                     storeName: document.getElementById('input-store-name').value,
                     whatsapp: document.getElementById('input-whatsapp').value,
+                    homeDesc: document.getElementById('input-home-desc').value,
                     heroBanner: heroBase64,
                     aboutText: document.getElementById('input-about-text').value,
                     aboutImage: aboutBase64,
@@ -964,7 +906,7 @@
 
                 db.ref('settings').set(updatedSettings);
                 closeAdminModal();
-                alert("All settings, dedicated page images, and updates saved live on Firebase database!");
+                alert("All settings, description, and images saved live on Firebase database!");
             };
 
             let getHeroImage = new Promise((resolve) => {
@@ -1009,15 +951,6 @@
             let targetNav = document.getElementById('nav-' + pageName);
             if (targetPage) targetPage.classList.add('active-page');
             if (targetNav) targetNav.classList.add('active-tab');
-
-            // ہوم پیج پر سرچ بار چھپانے اور دوسرے پیجز پر دکھانے کے لیے
-            let searchBox = document.getElementById('global-search-box');
-            if (pageName === 'home') {
-                searchBox.style.display = 'none';
-            } else {
-                searchBox.style.display = 'flex';
-            }
-
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
