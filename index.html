@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Saad Gadgets Lab</title>
+    <title id="page-title">LTH Lightning Tech Hub</title>
     
     <!-- Firebase SDK Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -13,14 +13,14 @@
 
     <style>
         :root {
-            --primary-color: #0056b3;
-            --accent-color: #007bff;
+            --primary-color: #006600; /* Pakistan Green Theme */
+            --accent-color: #008000;
             --success-color: #28a745;
             --whatsapp-color: #25D366;
-            --bg-color: #f4f7f6;
+            --bg-color: #f4fcf4;
             --card-bg: #ffffff;
             --text-color: #333333;
-            --border-color: #ced4da;
+            --border-color: #006600;
         }
 
         body { 
@@ -31,9 +31,76 @@
             padding: 0; 
         }
 
+        /* Professional Maintenance & Lock Screen Styles */
+        #lock-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #004d00 0%, #002600 100%);
+            color: white;
+            z-index: 99999;
+            display: none; /* Controlled dynamically via Firebase */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 25px;
+            box-sizing: border-box;
+        }
+
+        .lock-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .lock-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid #28a745;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.5);
+        }
+
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .countdown-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #28a745;
+            padding: 12px 15px;
+            border-radius: 8px;
+            min-width: 70px;
+        }
+
+        .countdown-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #28a745;
+            display: block;
+        }
+
+        .countdown-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #cccccc;
+        }
+
         header { 
             background: #ffffff; 
-            color: #0056b3; 
+            color: var(--primary-color); 
             padding: 15px 30px; 
             display: flex; 
             flex-direction: column; 
@@ -57,13 +124,13 @@
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--primary-color);
-            box-shadow: 0 0 10px rgba(0, 86, 179, 0.2);
+            box-shadow: 0 0 10px rgba(0, 102, 0, 0.2);
         }
 
         #display-store-name {
             font-size: 28px;
             font-weight: bold;
-            color: #0056b3;
+            color: var(--primary-color);
             margin: 0;
             letter-spacing: 0.5px;
         }
@@ -91,7 +158,7 @@
         }
 
         .admin-btn {
-            background: #6c757d;
+            background: #495057;
             color: white;
         }
 
@@ -129,7 +196,7 @@
             background: #ffffff; 
             border-radius: 8px; 
             box-shadow: 0 0 15px rgba(0,0,0,0.08); 
-            border: 1px solid #e2e8f0;
+            border: 1px solid #c3e6cb;
         }
 
         .search-container {
@@ -157,7 +224,7 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border: 1px solid #ced4da;
+            border: 1px solid #c3e6cb;
             background: #f8f9fa;
             text-align: center;
         }
@@ -176,7 +243,7 @@
         }
 
         .product-card { 
-            border: 1px solid #ced4da; 
+            border: 1px solid #c3e6cb; 
             padding: 15px; 
             border-radius: 6px; 
             background: #ffffff; 
@@ -191,12 +258,12 @@
             height: 160px;
             object-fit: cover;
             border-radius: 4px;
-            border: 1px solid #ced4da;
+            border: 1px solid #c3e6cb;
             margin-bottom: 10px;
             background: #f8f9fa;
         }
 
-        .product-card h3 { margin: 0 0 10px 0; color: #0056b3; }
+        .product-card h3 { margin: 0 0 10px 0; color: var(--primary-color); }
         .product-card p { color: #495057; font-size: 14px; line-height: 1.4; }
         .product-card input { width: 60px; padding: 5px; margin-bottom: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: #ffffff; color: #333333; }
         
@@ -253,9 +320,9 @@
             padding: 15px 20px;
             margin-bottom: 12px;
             border-radius: 6px;
-            border: 1px solid #ced4da;
+            border: 1px solid #c3e6cb;
             text-decoration: none;
-            color: #0056b3;
+            color: var(--primary-color);
             font-weight: bold;
             font-size: 16px;
             transition: 0.2s;
@@ -284,7 +351,7 @@
             max-width: 700px;
             max-height: 90vh;
             overflow-y: auto;
-            border: 1px solid #ced4da;
+            border: 1px solid #c3e6cb;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
@@ -302,16 +369,41 @@
         .modal-buttons { display: flex; gap: 10px; margin-top: 25px; }
         .save-btn { background: var(--success-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
         .cancel-btn { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
-        .admin-box { background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da; margin-top: 20px; }
+        .admin-box { background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #c3e6cb; margin-top: 20px; }
         .empty-msg { color: #6c757d; font-style: italic; text-align: center; padding: 20px; }
     </style>
 </head>
 <body>
 
+    <!-- Dynamic Admin-Controlled Lock & Countdown Screen -->
+    <div id="lock-screen">
+        <div class="lock-card">
+            <img src="image_6592e3.jpg" alt="Logo" class="lock-logo">
+            <h1 id="lock-screen-title" style="margin: 0 0 10px 0; font-size: 28px;">LTH Lightning Tech Hub</h1>
+            <p id="lock-screen-msg" style="font-size: 15px; margin: 0 0 20px 0; color: #d4edda; line-height: 1.5;">Website is currently locked. It will automatically unlock when the timer ends:</p>
+            
+            <div class="countdown-grid">
+                <div class="countdown-box">
+                    <span id="cd-hours" class="countdown-number">00</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="cd-mins" class="countdown-number">00</span>
+                    <span class="countdown-label">Mins</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="cd-secs" class="countdown-number">00</span>
+                    <span class="countdown-label">Secs</span>
+                </div>
+            </div>
+            <p style="margin-top: 20px; font-size: 12px; color: #adb5bd;">🔒 Security Lock Managed via Admin Control Center</p>
+        </div>
+    </div>
+
     <header>
         <div class="header-top-row">
-            <img src="image_6592e3.jpg" alt="SG Labs Logo" class="site-logo">
-            <h1 id="display-store-name">Saad Gadgets Lab</h1>
+            <img src="image_6592e3.jpg" alt="LTH Logo" class="site-logo">
+            <h1 id="display-store-name">LTH Lightning Tech Hub</h1>
         </div>
         <div class="header-actions">
             <div class="cart-icon" onclick="switchPage('cart')">🛒 Cart (<span id="cart-count">0</span>)</div>
@@ -319,7 +411,7 @@
         </div>
     </header>
 
-    <!-- Navigation Bar -->
+    <!-- Navigation Bar (8 Pages) -->
     <nav class="navbar">
         <button id="nav-home" class="active-tab" onclick="switchPage('home')">Home Page</button>
         <button id="nav-kits" onclick="switchPage('kits')">Project Kits</button>
@@ -337,44 +429,48 @@
             <input type="text" id="global-search" placeholder="🔍 Search any project kit, item or tool..." onkeyup="filterProducts()">
         </div>
 
-        <!-- Home Page -->
+        <!-- 1. Home Page -->
         <div id="page-home" class="page-section active-page">
             <div class="hero-banner-container">
                 <img id="display-hero-banner" src="" alt="Home Banner" class="hero-banner-img" style="display: none;">
                 <div id="hero-banner-placeholder" class="empty-msg">No banner image uploaded yet. Go to Admin Panel to upload one.</div>
             </div>
-            <h2>Welcome to Saad Gadgets Lab</h2>
-            <div id="display-home-desc" style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da; line-height: 1.6;">
-                Explore our advanced project kits, electronic components, and smart city prototyping tools. Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to update banner images, settings and products live via Firebase database.
+            <h2>Welcome to LTH Lightning Tech Hub</h2>
+            <div id="display-home-desc" style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #c3e6cb; line-height: 1.6;">
+                Explore our advanced project kits, electronic components, and smart city prototyping tools. Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to update banner images, settings, discounts and products live via Firebase database.
             </div>
         </div>
 
-        <!-- Product Section 1: Project Kits -->
+        <!-- 2. Project Kits Page -->
         <div id="page-kits" class="page-section">
             <h2>Project Kits Page</h2>
             <div class="product-grid" id="grid-kits"></div>
         </div>
 
-        <!-- Product Section 2: Project Items -->
+        <!-- 3. Project Items Page -->
         <div id="page-items" class="page-section">
             <h2>Project Items Page</h2>
             <div class="product-grid" id="grid-items"></div>
         </div>
 
-        <!-- Product Section 3: Project Tools -->
+        <!-- 4. Project Tools Page -->
         <div id="page-tools" class="page-section">
             <h2>Project Tools Page</h2>
             <div class="product-grid" id="grid-tools"></div>
         </div>
 
-        <!-- Cart & Checkout Page -->
+        <!-- 5. Cart & Checkout Page -->
         <div id="page-cart" class="page-section">
             <h2>Shopping Cart & Checkout</h2>
-            <div id="cart-items-list" style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #ced4da;">
+            <div id="cart-items-list" style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #c3e6cb;">
                 Your cart is currently empty.
             </div>
-            <h4>Total Price: <span id="total-price">0</span> PKR</h4>
-            <hr style="margin: 25px 0; border:0; border-top:1px solid #ced4da;">
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #c3e6cb; margin-bottom: 15px;">
+                <p style="margin: 5px 0;">Subtotal: <span id="sub-total">0</span> PKR</p>
+                <p style="margin: 5px 0; color: var(--primary-color);">Discount Applied (<span id="display-discount-pct">0</span>%): -<span id="discount-val">0</span> PKR</p>
+                <h4 style="margin: 5px 0;">Final Total Price: <span id="total-price">0</span> PKR</h4>
+            </div>
+            <hr style="margin: 25px 0; border:0; border-top:1px solid #c3e6cb;">
             <h3>Customer Information</h3>
             <div class="form-group"><label>Full Name:</label><input type="text" id="cust-name" placeholder="Enter your full name"></div>
             <div class="form-group"><label>Phone Number:</label><input type="text" id="cust-phone" placeholder="03XXXXXXXXX"></div>
@@ -383,19 +479,19 @@
             <button class="confirm-btn" onclick="sendToWhatsApp()"><i class="fa-brands fa-whatsapp fa-xl"></i> Confirm Order (Send via WhatsApp)</button>
         </div>
 
-        <!-- Community Support Page (Privacy Protected - Direct to WhatsApp) -->
+        <!-- 6. Community Support Page -->
         <div id="page-help" class="page-section">
             <div class="hero-banner-container" style="margin-bottom: 20px;">
                 <img id="display-charity-banner" src="" alt="Charity Banner" class="hero-banner-img" style="display: none;">
             </div>
             <h2><i class="fa-solid fa-hands-holding-child" style="color: var(--primary-color);"></i> Community Support Program</h2>
-            <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #ced4da; margin-bottom: 25px; line-height: 1.6;">
-                <h3 style="color: #0056b3; margin-top: 0;">Our Step Towards Your Support</h3>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #c3e6cb; margin-bottom: 25px; line-height: 1.6;">
+                <h3 style="color: var(--primary-color); margin-top: 0;">Our Step Towards Your Support</h3>
                 <p>Fill out this form to request support or charity items. Your information is completely private and will be sent directly to our WhatsApp channel under the topic <b>Charity and Support</b>.</p>
             </div>
 
-            <div style="background: #ffffff; padding: 20px; border-radius: 6px; border: 1px solid #ced4da; margin-bottom: 30px;">
-                <h3 style="margin-top: 0; color: #0056b3;">Submit Support Request</h3>
+            <div style="background: #ffffff; padding: 20px; border-radius: 6px; border: 1px solid #c3e6cb; margin-bottom: 30px;">
+                <h3 style="margin-top: 0; color: var(--primary-color);">Submit Support Request</h3>
                 
                 <div class="form-group">
                     <label for="help-name">Full Name:</label>
@@ -426,20 +522,20 @@
             </div>
         </div>
 
-        <!-- About Us Page -->
+        <!-- 7. About Us Page -->
         <div id="page-about" class="page-section">
             <h2>About Us</h2>
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ced4da; line-height: 1.6;">
-                <img id="display-about-img" src="" alt="About Us Image" style="display:none; width: 100%; max-height: 280px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; border: 1px solid #ced4da;">
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #c3e6cb; line-height: 1.6;">
+                <img id="display-about-img" src="" alt="About Us Image" style="display:none; width: 100%; max-height: 280px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; border: 1px solid #c3e6cb;">
                 <div id="display-about-text">
-                    Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br>
+                    LTH Lightning Tech Hub is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br>
                     <strong>Founder:</strong> Mohammad Saad Ghani<br>
                     <strong>Location:</strong> Lahore, Pakistan
                 </div>
             </div>
         </div>
 
-        <!-- Social Links Page -->
+        <!-- 8. Social Links Page -->
         <div id="page-social" class="page-section">
             <h2>Connect With Us on Social Media</h2>
             <p style="color: #6c757d; margin-bottom: 20px;">Visit our official channels and pages below:</p>
@@ -452,9 +548,27 @@
         <div class="modal-content">
             <h2>⚙️ Complete Website Control Center</h2>
             
+            <!-- NEW SECTION: SITE LOCK & COUNTDOWN CONTROLLER -->
+            <div class="admin-box" style="border: 2px dashed #ffc107; background: #fffdf4;">
+                <h3 style="color: #856404; margin-top: 0;">⏳ Site Lock & Countdown Manager</h3>
+                <p style="font-size: 13px; color: #555;">Control when the website should lock and show a timer:</p>
+                
+                <label>Lock Status:</label>
+                <select id="input-lock-enabled">
+                    <option value="false">Unlocked (Normal Website Active)</option>
+                    <option value="true">Locked (Show Countdown Screen)</option>
+                </select>
+
+                <label>Target Unlock Date & Time:</label>
+                <input type="datetime-local" id="input-lock-target-time">
+
+                <label>Lock Screen Custom Message:</label>
+                <input type="text" id="input-lock-msg" placeholder="e.g. Website is under maintenance, unlocking soon!">
+            </div>
+
             <!-- SECTION 4: DEDICATED IMAGE UPLOADS MANAGER -->
-            <div class="admin-box" style="border: 2px dashed var(--primary-color); background: #f0f7ff;">
-                <h3 style="color: var(--primary-color); margin-top: 0;">🖼️ 4. Dedicated Image Uploads Manager</h3>
+            <div class="admin-box" style="border: 2px dashed var(--primary-color); background: #f0f7f0;">
+                <h3 style="color: var(--primary-color); margin-top: 0;">🖼️ Dedicated Image Uploads Manager</h3>
                 <p style="font-size: 13px; color: #555;">Upload or update high-impact pictures for specific pages:</p>
                 
                 <label>1. Home Page Hero Banner Image:</label>
@@ -471,10 +585,13 @@
             </div>
 
             <div class="admin-box">
-                <h3>1. General Website Settings</h3>
+                <h3>1. General Website Settings & Discounts</h3>
                 <label>Store Name:</label><input type="text" id="input-store-name">
                 <label>WhatsApp Order / Help Number:</label><input type="text" id="input-whatsapp">
                 
+                <label style="margin-top:15px; color: var(--primary-color); font-weight: bold;">🏷️ Global Discount Percentage (%):</label>
+                <input type="number" id="input-discount" value="0" min="0" max="100" placeholder="e.g. 10 for 10% discount">
+
                 <label style="margin-top:15px; color: var(--primary-color); font-weight: bold;">⭐ Home Page Description (Admin Exclusive):</label>
                 <textarea id="input-home-desc" rows="4" placeholder="Enter your custom home page description here..."></textarea>
                 
@@ -550,6 +667,66 @@
     </div>
 
     <script>
+        // --- DYNAMIC ADMIN-CONTROLLED LOCK & COUNTDOWN LOGIC ---
+        let siteSettings = {
+            storeName: "LTH Lightning Tech Hub",
+            whatsapp: "923043337555",
+            discount: 0,
+            heroBanner: "",
+            homeDesc: "",
+            aboutText: "",
+            aboutImage: "",
+            charityBanner: "",
+            facebook: "",
+            instagram: "",
+            youtube: "",
+            tiktok: "",
+            customSocial: "",
+            isLocked: false,
+            lockTargetTime: "",
+            lockMsg: "Website is currently locked. It will automatically unlock when the timer ends:"
+        };
+
+        function runLockEngine() {
+            if (!siteSettings.isLocked || siteSettings.isLocked === "false" || siteSettings.isLocked === false) {
+                document.getElementById('lock-screen').style.display = 'none';
+                return;
+            }
+
+            if (!siteSettings.lockTargetTime) {
+                // If locked but no time specified, just show the lock screen indefinitely
+                document.getElementById('lock-screen').style.display = 'flex';
+                document.getElementById('cd-hours').innerText = "00";
+                document.getElementById('cd-mins').innerText = "00";
+                document.getElementById('cd-secs').innerText = "00";
+                return;
+            }
+
+            const now = new Date().getTime();
+            const targetTime = new Date(siteSettings.lockTargetTime).getTime();
+            const diff = targetTime - now;
+
+            if (diff > 0) {
+                document.getElementById('lock-screen').style.display = 'flex';
+                
+                const h = Math.floor(diff / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('cd-hours').innerText = h.toString().padStart(2, '0');
+                document.getElementById('cd-mins').innerText = m.toString().padStart(2, '0');
+                document.getElementById('cd-secs').innerText = s.toString().padStart(2, '0');
+                
+                if (siteSettings.lockMsg) {
+                    document.getElementById('lock-screen-msg').innerText = siteSettings.lockMsg;
+                }
+            } else {
+                // Time has passed, automatically unlock
+                document.getElementById('lock-screen').style.display = 'none';
+            }
+        }
+        setInterval(runLockEngine, 1000);
+
         // --- FIREBASE CONFIGURATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyBvm6sWky8M6lYU0N8fFHLFnV_viJhRBZE",
@@ -565,22 +742,8 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let siteSettings = {
-            storeName: "Saad Gadgets Lab",
-            whatsapp: "923043337555",
-            heroBanner: "",
-            homeDesc: "Explore our advanced project kits, electronic components, and smart city prototyping tools. Click on <b>\"⚙️ Admin Panel\"</b> at the top right, enter your secure PIN to update banner images, settings and products live via Firebase database.",
-            aboutText: "Saad Gadgets Lab is dedicated to bringing hands-on engineering, smart city prototyping, and accessible microcontroller tools to young makers and innovators.<br><strong>Founder:</strong> Mohammad Saad Ghani<br><strong>Location:</strong> Lahore, Pakistan",
-            aboutImage: "",
-            charityBanner: "",
-            facebook: "",
-            instagram: "",
-            youtube: "",
-            tiktok: "",
-            customSocial: ""
-        };
-
         let products = [];
+        let cart = [];
 
         // Real-time synchronization from Firebase Database
         db.ref('settings').on('value', (snapshot) => {
@@ -589,8 +752,8 @@
                 siteSettings = { ...siteSettings, ...data };
                 document.getElementById('display-store-name').innerText = siteSettings.storeName;
                 document.getElementById('page-title').innerText = siteSettings.storeName;
+                document.getElementById('lock-screen-title').innerText = siteSettings.storeName;
                 
-                // Home Description (Admin Exclusive)
                 if (siteSettings.homeDesc) {
                     document.getElementById('display-home-desc').innerHTML = siteSettings.homeDesc;
                 }
@@ -627,7 +790,9 @@
                     charityBannerElem.style.display = 'none';
                 }
 
+                runLockEngine();
                 renderSocialLinks();
+                updateCartUI();
             }
         });
 
@@ -668,7 +833,6 @@
             container.innerHTML = html;
         }
 
-        // Privacy-Protected Charity & Support Request Sent Directly to WhatsApp
         function submitHelpRequestToWhatsApp() {
             let name = document.getElementById('help-name').value.trim();
             let phone = document.getElementById('help-phone').value.trim();
@@ -718,7 +882,7 @@
             let kitCount = 0, itemCount = 0, toolCount = 0;
 
             productsToRender.forEach((p) => {
-                let imgSrc = p.image ? p.image : 'https://via.placeholder.com/250x160?text=Saad+Gadgets+Lab';
+                let imgSrc = p.image ? p.image : 'https://via.placeholder.com/250x160?text=LTH+Lightning+Tech+Hub';
                 let card = `
                     <div class="product-card">
                         <div>
@@ -863,6 +1027,7 @@
         function openAdminModal() {
             document.getElementById('input-store-name').value = siteSettings.storeName;
             document.getElementById('input-whatsapp').value = siteSettings.whatsapp;
+            document.getElementById('input-discount').value = siteSettings.discount || 0;
             document.getElementById('input-home-desc').value = siteSettings.homeDesc || '';
             document.getElementById('input-hero-image-base64').value = siteSettings.heroBanner || '';
             document.getElementById('input-hero-image-file').value = '';
@@ -876,6 +1041,12 @@
             document.getElementById('input-youtube').value = siteSettings.youtube || '';
             document.getElementById('input-tiktok').value = siteSettings.tiktok || '';
             document.getElementById('input-custom-social').value = siteSettings.customSocial || '';
+            
+            // Lock Settings fields
+            document.getElementById('input-lock-enabled').value = siteSettings.isLocked ? "true" : "false";
+            document.getElementById('input-lock-target-time').value = siteSettings.lockTargetTime || '';
+            document.getElementById('input-lock-msg').value = siteSettings.lockMsg || '';
+
             document.getElementById('adminModal').style.display = 'flex';
         }
 
@@ -892,6 +1063,7 @@
                 let updatedSettings = {
                     storeName: document.getElementById('input-store-name').value,
                     whatsapp: document.getElementById('input-whatsapp').value,
+                    discount: parseFloat(document.getElementById('input-discount').value) || 0,
                     homeDesc: document.getElementById('input-home-desc').value,
                     heroBanner: heroBase64,
                     aboutText: document.getElementById('input-about-text').value,
@@ -901,12 +1073,15 @@
                     instagram: document.getElementById('input-instagram').value,
                     youtube: document.getElementById('input-youtube').value,
                     tiktok: document.getElementById('input-tiktok').value,
-                    customSocial: document.getElementById('input-custom-social').value
+                    customSocial: document.getElementById('input-custom-social').value,
+                    isLocked: document.getElementById('input-lock-enabled').value === "true",
+                    lockTargetTime: document.getElementById('input-lock-target-time').value,
+                    lockMsg: document.getElementById('input-lock-msg').value
                 };
 
                 db.ref('settings').set(updatedSettings);
                 closeAdminModal();
-                alert("All settings, description, and images saved live on Firebase database!");
+                alert("All settings, lock control, and images saved live on Firebase database!");
             };
 
             let getHeroImage = new Promise((resolve) => {
@@ -954,7 +1129,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        let cart = [];
         function addToCart(name, price, qtyId) {
             let qty = parseInt(document.getElementById(qtyId).value);
             let existingItem = cart.find(item => item.name === name);
@@ -967,27 +1141,41 @@
         function updateCartUI() {
             let cartList = document.getElementById('cart-items-list');
             let cartCount = document.getElementById('cart-count');
+            let subTotalElem = document.getElementById('sub-total');
+            let discountValElem = document.getElementById('discount-val');
+            let displayDiscountPct = document.getElementById('display-discount-pct');
             let totalPriceElem = document.getElementById('total-price');
+
+            let discPct = siteSettings.discount || 0;
+            displayDiscountPct.innerText = discPct;
 
             if (cart.length === 0) {
                 cartList.innerHTML = "Your cart is currently empty.";
                 cartCount.innerText = 0;
+                subTotalElem.innerText = 0;
+                discountValElem.innerText = 0;
                 totalPriceElem.innerText = 0;
                 return;
             }
 
             let html = "<ul style='margin:0; padding-left: 20px;'>";
-            let totalCount = 0, totalPrice = 0;
+            let totalCount = 0, subTotal = 0;
             cart.forEach(item => {
                 let itemTotal = item.price * item.qty;
                 html += `<li>${item.name} - Price: ${item.price} PKR × Qty: ${item.qty} = <strong>${itemTotal} PKR</strong></li>`;
                 totalCount += item.qty;
-                totalPrice += itemTotal;
+                subTotal += itemTotal;
             });
             html += "</ul>";
+            
+            let discountAmount = (subTotal * discPct) / 100;
+            let finalTotal = subTotal - discountAmount;
+
             cartList.innerHTML = html;
             cartCount.innerText = totalCount;
-            totalPriceElem.innerText = totalPrice;
+            subTotalElem.innerText = subTotal;
+            discountValElem.innerText = discountAmount.toFixed(0);
+            totalPriceElem.innerText = finalTotal.toFixed(0);
         }
 
         function sendToWhatsApp() {
@@ -999,19 +1187,28 @@
             if (cart.length === 0) { alert("Please add items to your cart first!"); return; }
             if (!name || !phone || !address) { alert("Please fill your name, phone, and address!"); return; }
 
+            let subTotal = 0;
+            cart.forEach(item => { subTotal += (item.price * item.qty); });
+            let discPct = siteSettings.discount || 0;
+            let discountAmount = (subTotal * discPct) / 100;
+            let finalTotal = subTotal - discountAmount;
+
             let message = `*New Order Received - ${siteSettings.storeName}*%0A%0A`;
             message += `*Customer Name:* ${name}%0A`;
             message += `*Phone:* ${phone}%0A`;
             message += `*Address:* ${address}%0A`;
             message += `*Email:* ${email}%0A%0A*Order Details:*%0A`;
 
-            let totalPrice = 0;
             cart.forEach(item => {
                 let itemTotal = item.price * item.qty;
                 message += `- ${item.name} (${item.qty} pcs) = ${itemTotal} PKR%0A`;
-                totalPrice += itemTotal;
             });
-            message += `%0A*Total Price:* ${totalPrice} PKR`;
+            
+            message += `%0A*Subtotal:* ${subTotal} PKR`;
+            if (discPct > 0) {
+                message += `%0A*Discount (${discPct}%):* -${discountAmount.toFixed(0)} PKR`;
+            }
+            message += `%0A*Final Total Price:* ${finalTotal.toFixed(0)} PKR`;
 
             let waNumber = (siteSettings && siteSettings.whatsapp) ? siteSettings.whatsapp : "923043337555";
             waNumber = waNumber.replace(/\D/g, '');
@@ -1028,3 +1225,4 @@
     </script>
 </body>
 </html>
+
