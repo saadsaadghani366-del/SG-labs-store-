@@ -13,20 +13,20 @@
 
     <style>
         :root {
-            --primary-color: #0b5ed7; /* LTH Blue */
-            --accent-color: #2f86ff;
+            --primary-color: #126bff; /* Electric Blue */
+            --accent-color: #55c7ff;
             --success-color: #0b5ed7;
             --whatsapp-color: #25D366;
-            --bg-color: #f4f8ff; /* Soft Blue tint */
+            --bg-color: #f5f9ff; /* Soft Blue tint */
             --card-bg: #ffffff;
             --text-color: #333333;
-            --border-color: #0b5ed7;
+            --border-color: #126bff;
         }
 
         body { 
             font-family: 'Tahoma', sans-serif; 
             /* 14th August Theme Background */
-            background: linear-gradient(135deg, #ffffff 0%, #eef6ff 50%, #ffffff 100%);
+            background: radial-gradient(circle at 15% 10%, #eaf5ff 0%, #ffffff 42%, #f2f7ff 100%);
             color: var(--text-color);
             margin: 0; 
             padding: 0; 
@@ -372,6 +372,142 @@
         .cancel-btn { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
         .admin-box { background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #cfe2ff; margin-top: 20px; }
         .empty-msg { color: #6c757d; font-style: italic; text-align: center; padding: 20px; }
+
+        /* LTH Lightning Challenge Game */
+        .game-shell {
+            margin-top: 24px;
+            padding: 24px;
+            border-radius: 18px;
+            background:
+                radial-gradient(circle at 85% 15%, rgba(85,199,255,0.22), transparent 30%),
+                radial-gradient(circle at 15% 85%, rgba(18,107,255,0.18), transparent 32%),
+                linear-gradient(145deg, #07152f 0%, #0b2c67 52%, #07152f 100%);
+            color: white;
+            border: 1px solid rgba(85,199,255,0.35);
+            box-shadow: 0 18px 45px rgba(7, 21, 47, 0.22);
+            overflow: hidden;
+        }
+        .game-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .game-title {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 0.4px;
+        }
+        .game-subtitle {
+            margin: 4px 0 0 0;
+            color: #cfe4ff;
+            font-size: 13px;
+        }
+        .game-stats {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+        }
+        .game-stat {
+            min-width: 84px;
+            text-align: center;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+        }
+        .game-stat b {
+            display: block;
+            font-size: 18px;
+            color: #55c7ff;
+        }
+        .game-stat span {
+            font-size: 10px;
+            color: #d8e8ff;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+        .game-arena {
+            position: relative;
+            height: 330px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px),
+                radial-gradient(circle at center, rgba(38,140,255,0.16), transparent 60%),
+                #061227;
+            background-size: 34px 34px, 34px 34px, auto, auto;
+            overflow: hidden;
+        }
+        .game-arena::after {
+            content: "LTH • BUILD • INNOVATE • INSPIRE";
+            position: absolute;
+            left: 50%;
+            bottom: 12px;
+            transform: translateX(-50%);
+            color: rgba(210,230,255,0.26);
+            font-size: 10px;
+            letter-spacing: 2px;
+            pointer-events: none;
+        }
+        .game-bolt {
+            position: absolute;
+            width: 54px;
+            height: 54px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            border-radius: 16px;
+            cursor: pointer;
+            user-select: none;
+            background: radial-gradient(circle at 35% 30%, #ffffff 0%, #8bdcff 34%, #2787ff 68%, #0c44a7 100%);
+            color: #07152f;
+            box-shadow: 0 0 16px rgba(85,199,255,0.75), 0 0 34px rgba(18,107,255,0.4);
+            transition: transform 0.08s ease;
+            z-index: 3;
+        }
+        .game-bolt:active { transform: scale(0.88); }
+        .game-message {
+            margin: 13px 0 0 0;
+            text-align: center;
+            color: #dcecff;
+            font-size: 13px;
+            min-height: 20px;
+        }
+        .game-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .game-btn {
+            flex: 1;
+            background: #126bff;
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 11px 14px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 6px 16px rgba(18,107,255,0.28);
+        }
+        .game-btn:hover { background: #0b5cdf; }
+        .game-btn.secondary {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow: none;
+        }
+        .game-btn.secondary:hover { background: rgba(255,255,255,0.14); }
+        .game-note {
+            margin: 10px 0 0 0;
+            text-align: center;
+            color: rgba(220,236,255,0.72);
+            font-size: 11px;
+        }
+
     </style>
 </head>
 <body>
@@ -527,7 +663,33 @@
         </div>
 
         <div id="page-social" class="page-section">
-            <h2>Connect With Us on Social Media</h2>
+            <h2>🌐 LTH Community Zone</h2>
+            <p style="color: #6c757d; margin-bottom: 20px;">Play the LTH Lightning Challenge and visit our official channels below.</p>
+
+            <div class="game-shell">
+                <div class="game-head">
+                    <div>
+                        <h3 class="game-title">⚡ LTH Lightning Challenge</h3>
+                        <p class="game-subtitle">Catch the lightning before time runs out.</p>
+                    </div>
+                    <div class="game-stats">
+                        <div class="game-stat"><b id="game-score">0</b><span>Score</span></div>
+                        <div class="game-stat"><b id="game-time">20</b><span>Seconds</span></div>
+                        <div class="game-stat"><b id="game-best">0</b><span>Best</span></div>
+                    </div>
+                </div>
+                <div class="game-arena" id="game-arena">
+                    <div class="game-bolt" id="game-bolt" onclick="catchLightning()">⚡</div>
+                </div>
+                <p class="game-message" id="game-message">Press Start Game and catch as many ⚡ as you can!</p>
+                <div class="game-controls">
+                    <button class="game-btn" onclick="startLightningGame()">▶ Start Game</button>
+                    <button class="game-btn secondary" onclick="resetLightningGame()">↺ Reset</button>
+                </div>
+                <p class="game-note">A small LTH mini-game • Fast reflexes, sharp thinking, big innovation.</p>
+            </div>
+
+            <h3 style="margin-top: 28px; color: var(--primary-color);">Connect With Us</h3>
             <p style="color: #6c757d; margin-bottom: 20px;">Visit our official channels and pages below:</p>
             <div id="social-links-container"></div>
         </div>
@@ -810,6 +972,81 @@
             }
             container.innerHTML = html;
         }
+
+
+        /* LTH Lightning Challenge */
+        let lightningTimer = null;
+        let lightningRunning = false;
+        let lightningScore = 0;
+        let lightningTime = 20;
+        let lightningBest = parseInt(localStorage.getItem('lthLightningBest') || '0', 10);
+
+        function updateLightningStats() {
+            document.getElementById('game-score').innerText = lightningScore;
+            document.getElementById('game-time').innerText = lightningTime;
+            document.getElementById('game-best').innerText = lightningBest;
+        }
+
+        function moveLightningBolt() {
+            const arena = document.getElementById('game-arena');
+            const bolt = document.getElementById('game-bolt');
+            const padding = 14;
+            const maxX = Math.max(padding, arena.clientWidth - bolt.offsetWidth - padding);
+            const maxY = Math.max(padding, arena.clientHeight - bolt.offsetHeight - padding - 12);
+            bolt.style.left = (padding + Math.random() * Math.max(0, maxX - padding)) + 'px';
+            bolt.style.top = (padding + Math.random() * Math.max(0, maxY - padding)) + 'px';
+            bolt.style.display = 'flex';
+        }
+
+        function startLightningGame() {
+            clearInterval(lightningTimer);
+            lightningRunning = true;
+            lightningScore = 0;
+            lightningTime = 20;
+            document.getElementById('game-message').innerText = '⚡ Go! Catch the lightning!';
+            updateLightningStats();
+            moveLightningBolt();
+
+            lightningTimer = setInterval(() => {
+                lightningTime--;
+                updateLightningStats();
+                if (lightningTime <= 0) {
+                    endLightningGame();
+                }
+            }, 1000);
+        }
+
+        function catchLightning() {
+            if (!lightningRunning) return;
+            lightningScore++;
+            if (lightningScore > lightningBest) {
+                lightningBest = lightningScore;
+                localStorage.setItem('lthLightningBest', lightningBest);
+            }
+            updateLightningStats();
+            moveLightningBolt();
+        }
+
+        function endLightningGame() {
+            clearInterval(lightningTimer);
+            lightningRunning = false;
+            document.getElementById('game-bolt').style.display = 'none';
+            document.getElementById('game-message').innerText =
+                `⏱️ Time up! You caught ${lightningScore} lightning bolts. Best: ${lightningBest}.`;
+            updateLightningStats();
+        }
+
+        function resetLightningGame() {
+            clearInterval(lightningTimer);
+            lightningRunning = false;
+            lightningScore = 0;
+            lightningTime = 20;
+            document.getElementById('game-bolt').style.display = 'none';
+            document.getElementById('game-message').innerText = 'Press Start Game and catch as many ⚡ as you can!';
+            updateLightningStats();
+        }
+
+        document.addEventListener('DOMContentLoaded', updateLightningStats);
 
         function submitHelpRequestToWhatsApp() {
             let name = document.getElementById('help-name').value.trim();
