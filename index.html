@@ -3,18 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">LTH Lightning Tech Hub | Build • Innovate • Inspire</title>
-    <meta name="description" content="LTH Lightning Tech Hub — build, innovate and inspire with technology products, projects, learning resources and interactive experiences.">
-    <meta name="keywords" content="LTH Lightning Tech Hub, Lightning Tech Hub, technology, gadgets, electronics, STEM, innovation, tech projects">
-    <meta name="author" content="Lightning Tech Hub">
-    <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#0f2e5b">
-    <meta name="application-name" content="LTH Lightning Tech Hub">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="LTH Lightning Tech Hub">
-    <meta property="og:description" content="Build • Innovate • Inspire — Lightning Tech Hub.">
-    <meta property="og:site_name" content="LTH Lightning Tech Hub">
-    <meta name="twitter:card" content="summary">
+    <title id="page-title">LTH Lightning Tech Hub</title>
     
     <!-- Firebase SDK Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -1292,15 +1281,6 @@
         }
 
 </style>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "LTH Lightning Tech Hub",
-      "description": "Lightning Tech Hub — build, innovate and inspire.",
-      "url": "./"
-    }
-    </script>
 </head>
 <body>
 
@@ -1813,39 +1793,36 @@
             if (status) status.innerText = '';
         }
 
-        /* LTH Firebase account system
-           Accounts are stored in Firebase Authentication. User profile
-           information is stored in Realtime Database. */
-        function normalizeLTHEmail(email) {
-            return email.trim().toLowerCase();
+        /* LTH account system
+           Uses browser storage instead of Firebase Authentication.
+           This avoids the Firebase auth/configuration-not-found error while
+           keeping the rest of the website unchanged. Passwords are stored
+           as SHA-256 hashes, not as plain text. */
+        const LTH_ACCOUNTS_KEY = 'lth_accounts_v2';
+        const LTH_SESSION_KEY = 'lth_logged_in_user_v2';
+
+        function getLTHAccounts() {
+            try {
+                return JSON.parse(localStorage.getItem(LTH_ACCOUNTS_KEY) || '{}');
+            } catch (e) {
+                return {};
+            }
         }
 
-        function getFirebaseAuthErrorMessage(error, action) {
-            const code = error && error.code ? error.code : '';
-            if (code === 'auth/email-already-in-use') {
-                return 'This Gmail account already exists. Please login instead.';
-            }
-            if (code === 'auth/invalid-email') {
-                return 'Please enter a valid Gmail address.';
-            }
-            if (code === 'auth/weak-password') {
-                return 'Password should be at least 6 characters.';
-            }
-            if (code === 'auth/user-not-found' || code === 'auth/wrong-password' || code === 'auth/invalid-credential') {
-                return 'Incorrect Gmail or password.';
-            }
-            if (code === 'auth/operation-not-allowed') {
-                return 'Email/Password login is not enabled in Firebase. Enable it in Firebase Authentication.';
-            }
-            if (code === 'auth/network-request-failed') {
-                return 'Network error. Please check your internet connection and try again.';
-            }
-            if (code === 'auth/configuration-not-found') {
-                return 'Firebase Authentication is not configured for this project yet.';
-            }
-            return (action === 'create')
-                ? 'Account could not be created. Please try again.'
-                : 'Login failed. Please check your Gmail and password.';
+        function saveLTHAccounts(accounts) {
+            localStorage.setItem(LTH_ACCOUNTS_KEY, JSON.stringify(accounts));
+        }
+
+        async function hashLTHPassword(password) {
+            const data = new TextEncoder().encode(password);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+
+        function normalizeLTHEmail(email) {
+            return email.trim().toLowerCase();
         }
 
         async function loginUser() {
@@ -1863,14 +1840,35 @@
             status.innerText = 'Signing in...';
 
             try {
-                const cred = await firebase.auth().signInWithEmailAndPassword(email, password);
-                currentLTHUser = cred.user;
+                const accounts = getLTHAccounts();
+                const account = accounts[email];
+
+                if (!account) {
+                    status.style.color = '#dc3545';
+                    status.innerText = 'Account not found. Please create an account first.';
+                    return;
+                }
+
+                const passwordHash = await hashLTHPassword(password);
+                if (account.passwordHash !== passwordHash) {
+                    status.style.color = '#dc3545';
+                    status.innerText = 'Incorrect Gmail or password.';
+                    return;
+                }
+
+                currentLTHUser = {
+                    uid: account.uid,
+                    email: account.email,
+                    displayName: account.name
+                };
+
+                localStorage.setItem(LTH_SESSION_KEY, JSON.stringify(currentLTHUser));
                 status.innerText = '';
                 closeLoginGate();
                 showLoggedInState();
             } catch (error) {
                 status.style.color = '#dc3545';
-                status.innerText = getFirebaseAuthErrorMessage(error, 'login');
+                status.innerText = 'Login failed. Please try again.';
             }
         }
 
@@ -1903,26 +1901,37 @@
             status.innerText = 'Creating account...';
 
             try {
-                const cred = await firebase.auth().createUserWithEmailAndPassword(email, password);
-                const fullName = `${firstName} ${lastName}`.trim();
+                const accounts = getLTHAccounts();
 
-                await cred.user.updateProfile({ displayName: fullName });
-
-                // Save profile details; if database rules block this optional
-                // profile write, the Firebase Auth account remains valid.
-                try {
-                    await db.ref('users/' + cred.user.uid).set({
-                        firstName: firstName,
-                        lastName: lastName,
-                        name: fullName,
-                        email: email,
-                        createdAt: firebase.database.ServerValue.TIMESTAMP
-                    });
-                } catch (profileError) {
-                    console.warn('LTH profile save skipped:', profileError);
+                if (accounts[email]) {
+                    status.style.color = '#dc3545';
+                    status.innerText = 'This Gmail account already exists. Please login instead.';
+                    return;
                 }
 
-                currentLTHUser = cred.user;
+                const fullName = `${firstName} ${lastName}`.trim();
+                const passwordHash = await hashLTHPassword(password);
+                const uid = 'lth_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+
+                accounts[email] = {
+                    uid: uid,
+                    firstName: firstName,
+                    lastName: lastName,
+                    name: fullName,
+                    email: email,
+                    passwordHash: passwordHash,
+                    createdAt: new Date().toISOString()
+                };
+
+                saveLTHAccounts(accounts);
+
+                currentLTHUser = {
+                    uid: uid,
+                    email: email,
+                    displayName: fullName
+                };
+                localStorage.setItem(LTH_SESSION_KEY, JSON.stringify(currentLTHUser));
+
                 status.innerText = '';
                 document.getElementById('login-email').value = '';
                 document.getElementById('login-password').value = '';
@@ -1931,23 +1940,20 @@
                 showLoggedInState();
             } catch (error) {
                 status.style.color = '#dc3545';
-                status.innerText = getFirebaseAuthErrorMessage(error, 'create');
+                status.innerText = 'Account could not be created. Please try again.';
             }
         }
 
         function logoutUser() {
-            firebase.auth().signOut().then(() => {
-                currentLTHUser = null;
-                const label = document.getElementById('top-user-label');
-                label.classList.remove('open');
-                label.style.display = 'none';
-                document.getElementById('login-email').value = '';
-                document.getElementById('login-password').value = '';
-                document.getElementById('top-login-btn').style.display = 'block';
-                openLoginGate();
-            }).catch(() => {
-                // Keep the user logged in if Firebase cannot complete sign-out.
-            });
+            currentLTHUser = null;
+            localStorage.removeItem(LTH_SESSION_KEY);
+            const label = document.getElementById('top-user-label');
+            label.classList.remove('open');
+            label.style.display = 'none';
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('top-login-btn').style.display = 'block';
+            openLoginGate();
         }
 
         function toggleUserMenu() {
@@ -1966,21 +1972,12 @@
         }
 
         function initLTHAuth() {
-            firebase.auth().onAuthStateChanged(user => {
-                currentLTHUser = user || null;
-                if (user) {
-                    closeCreateAccount();
-                    closeLoginGate();
-                    showLoggedInState();
-                } else {
-                    currentLTHUser = null;
-                    document.getElementById('top-user-label').classList.remove('open');
-                    document.getElementById('top-user-label').style.display = 'none';
-                    document.getElementById('top-login-btn').style.display = 'block';
-                    openLoginGate();
-                }
-            });
-        }
+            try {
+                const savedSession = localStorage.getItem(LTH_SESSION_KEY);
+                currentLTHUser = savedSession ? JSON.parse(savedSession) : null;
+            } catch (e) {
+                currentLTHUser = null;
+            }
 
             if (currentLTHUser && currentLTHUser.email) {
                 closeCreateAccount();
