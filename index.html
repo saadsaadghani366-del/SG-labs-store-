@@ -15,7 +15,7 @@
         :root {
             --primary-color: #006600; /* Pakistan Green */
             --accent-color: #008000;
-            --success-color: #28a745;
+            --success-color: #9dccff;
             --whatsapp-color: #25D366;
             --bg-color: #f0f7f0; /* Soft Green tint */
             --card-bg: #ffffff;
@@ -37,7 +37,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: linear-gradient(135deg, #004d00 0%, #002600 100%);
+            background: linear-gradient(135deg, #0b5ed7 0%, #062b63 100%);
             color: white;
             z-index: 99999;
             display: none;
@@ -64,10 +64,10 @@
             width: 90px;
             height: 90px;
             border-radius: 50%;
-            border: 3px solid #28a745;
+            border: 3px solid #7db7ff;
             object-fit: cover;
             margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(40, 167, 69, 0.5);
+            box-shadow: 0 0 20px rgba(125, 183, 255, 0.5);
         }
 
         .countdown-grid {
@@ -79,7 +79,7 @@
 
         .countdown-box {
             background: rgba(0, 0, 0, 0.3);
-            border: 1px solid #28a745;
+            border: 1px solid #7db7ff;
             padding: 12px 15px;
             border-radius: 8px;
             min-width: 70px;
@@ -88,7 +88,7 @@
         .countdown-number {
             font-size: 28px;
             font-weight: bold;
-            color: #28a745;
+            color: #9dccff;
             display: block;
         }
 
@@ -340,7 +340,7 @@
             background: rgba(0,0,0,0.5);
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 100000;
         }
 
         .modal-content {
@@ -378,7 +378,7 @@
 
     <div id="lock-screen">
         <div class="lock-card">
-            <img src="image_6592e3.jpg" alt="Logo" class="lock-logo">
+            <div class="lock-logo" style="display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:bold;color:white;">LTH</div>
             <h1 id="lock-screen-title" style="margin: 0 0 10px 0; font-size: 28px;">LTH Lightning Tech Hub</h1>
             <p id="lock-screen-msg" style="font-size: 15px; margin: 0 0 20px 0; color: #d4edda; line-height: 1.5;">Website is currently locked. It will automatically unlock when the timer ends:</p>
             
@@ -402,7 +402,7 @@
 
     <header>
         <div class="header-top-row">
-            <img src="image_6592e3.jpg" alt="LTH Logo" class="site-logo">
+            <div class="site-logo" style="display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;color:var(--primary-color);">LTH</div>
             <h1 id="display-store-name">LTH Lightning Tech Hub</h1>
         </div>
         <div class="header-actions">
@@ -705,7 +705,7 @@
                     document.getElementById('lock-screen-msg').innerText = siteSettings.lockMsg;
                 }
             } else {
-                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('lock-screen').style.display = 'none'; siteSettings.isLocked = false; siteSettings.lockTargetTime = ""; db.ref('settings').update({ isLocked: false, lockTargetTime: "" }); switchPage('home');
             }
         }
         setInterval(runLockEngine, 1000);
@@ -1202,4 +1202,3 @@
     </script>
 </body>
 </html>
-
