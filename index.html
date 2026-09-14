@@ -1327,6 +1327,49 @@
             .bulk-action-buttons { flex-direction:column; }
         }
 
+
+/* FIX: Public content text visibility + structured description formatting */
+#page-home #display-home-desc,
+#page-about > div,
+#page-help > div,
+#page-help .support-content,
+#page-social > div {
+    color: #1f2937 !important;
+}
+#page-home #display-home-desc *,
+#page-about > div *,
+#page-help > div *,
+#page-help .support-content *,
+#page-social > div * {
+    color: #1f2937 !important;
+}
+#page-home #display-home-desc {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+    text-align: left;
+}
+#page-home #display-home-desc .content-heading,
+#page-about #display-about-text .content-heading,
+#page-help .content-heading {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0b5ed7 !important;
+    margin: 18px 0 7px;
+}
+#page-home #display-home-desc .content-heading:first-child,
+#page-about #display-about-text .content-heading:first-child { margin-top: 0; }
+#page-home #display-home-desc .content-paragraph,
+#page-about #display-about-text .content-paragraph,
+#page-help .content-paragraph {
+    display: block;
+    color: #1f2937 !important;
+    line-height: 1.75;
+    margin: 0 0 12px;
+}
+#page-about #display-about-text { color: #1f2937 !important; }
+#page-about #display-about-text strong { color: #0b5ed7 !important; }
+#page-help .content-paragraph { color: #1f2937 !important; }
 </style>
 </head>
 <body>
@@ -1475,8 +1518,7 @@
             <div class="form-group"><label>Phone Number:</label><input type="text" id="cust-phone" placeholder="03XXXXXXXXX"></div>
             <div class="form-group"><label>Location / Address:</label><input type="text" id="cust-address" placeholder="Enter your city and complete address"></div>
             <div class="form-group"><label>Email:</label><input type="email" id="cust-email" placeholder="example@email.com" required></div>
-            <button type="button" id="place-order-btn" class="confirm-btn" onclick="placeOrder()">Place Order</button>
-            <div id="order-status-message" style="display:none; margin-top:12px; padding:12px; border-radius:8px; font-weight:600;"></div>
+            <button id="place-order-btn" class="confirm-btn" onclick="placeOrder()">Place Order</button>
         </div>
 
         <div id="page-help" class="page-section">
@@ -2219,10 +2261,10 @@
                 document.getElementById('lock-screen-title').innerText = siteSettings.storeName;
                 
                 if (siteSettings.homeDesc) {
-                    document.getElementById('display-home-desc').innerHTML = siteSettings.homeDesc;
+                    document.getElementById('display-home-desc').innerHTML = formatPublicDescription(siteSettings.homeDesc);
                 }
 
-                document.getElementById('display-about-text').innerHTML = siteSettings.aboutText;
+                document.getElementById('display-about-text').innerHTML = formatPublicDescription(siteSettings.aboutText);
                 
                 let heroBannerElem = document.getElementById('display-hero-banner');
                 let heroPlaceholder = document.getElementById('hero-banner-placeholder');
@@ -3076,6 +3118,36 @@
             });
         }
 
+
+        function formatPublicDescription(rawText) {
+            const text = String(rawText || '').trim();
+            if (!text) return '';
+            const lines = text.replace(/\r/g, '').split('\n');
+            const parts = [];
+            let paragraph = [];
+            const headingPattern = /^(?:#{1,3}\s+|(?:introduction|about us|territory(?:\s*(?:&|and)\s*support)?|community support|our step towards your support|what we offer|our mission|our vision|why choose us|services|contact us|features|welcome|lth lightning tech hub)\s*:?)$/i;
+            const flushParagraph = () => {
+                const joined = paragraph.join(' ').replace(/\s+/g, ' ').trim();
+                if (joined) parts.push('<div class="content-paragraph">' + escapeLeaderboardText(joined) + '</div>');
+                paragraph = [];
+            };
+            lines.forEach(line => {
+                const clean = line.trim();
+                if (!clean) { flushParagraph(); return; }
+                const headingMatch = clean.match(/^#{1,3}\s+(.+)$/);
+                const simpleHeading = !/[.!?]$/.test(clean) && clean.length <= 70 && headingPattern.test(clean);
+                if (headingMatch || simpleHeading) {
+                    flushParagraph();
+                    const title = headingMatch ? headingMatch[1].trim() : clean.replace(/:$/, '');
+                    parts.push('<div class="content-heading">' + escapeLeaderboardText(title) + '</div>');
+                } else {
+                    paragraph.push(clean);
+                }
+            });
+            flushParagraph();
+            return parts.join('');
+        }
+
         function switchPage(pageName) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-page'));
             document.querySelectorAll('.navbar button').forEach(btn => btn.classList.remove('active-tab'));
@@ -3172,188 +3244,41 @@
             }
         }
 
-        function generateOrderId() {
-            const now = new Date();
-            const stamp = now.getFullYear().toString()
-                + String(now.getMonth() + 1).padStart(2, '0')
-                + String(now.getDate()).padStart(2, '0')
-                + String(now.getHours()).padStart(2, '0')
-                + String(now.getMinutes()).padStart(2, '0')
-                + String(now.getSeconds()).padStart(2, '0');
-            const random = Math.random().toString(36).slice(2, 7).toUpperCase();
-            return `LTH-${stamp}-${random}`;
-        }
-
-        function showOrderStatus(message, type) {
-            const box = document.getElementById('order-status-message');
-            if (!box) return;
-            box.style.display = 'block';
-            if (type === 'success') {
-                box.style.background = '#d1e7dd';
-                box.style.color = '#0f5132';
-                box.style.border = '1px solid #badbcc';
-            } else if (type === 'error') {
-                box.style.background = '#f8d7da';
-                box.style.color = '#842029';
-                box.style.border = '1px solid #f5c2c7';
-            } else {
-                box.style.background = '#cff4fc';
-                box.style.color = '#055160';
-                box.style.border = '1px solid #b6effb';
-            }
-            box.innerHTML = message;
-        }
-
-        function savePreviousOrderLocally(uid, order) {
-            if (!uid) return;
-            try {
-                const key = 'lth_previous_orders_' + uid;
-                const old = JSON.parse(localStorage.getItem(key) || '[]');
-                const orders = Array.isArray(old) ? old.filter(x => x && x.orderId !== order.orderId) : [];
-                orders.unshift(order);
-                localStorage.setItem(key, JSON.stringify(orders.slice(0, 100)));
-            } catch (e) {
-                console.error('Local previous-order save failed:', e);
-            }
-        }
-
-        function renderPreviousOrders() {
-            const list = document.getElementById('previous-orders-list');
-            if (!list) return;
-            if (!currentLTHUser || !currentLTHUser.uid) {
-                list.innerHTML = '<div class="previous-empty">Please login to view your previous reports.</div>';
-                return;
-            }
-
-            let localOrders = [];
-            try {
-                localOrders = JSON.parse(localStorage.getItem('lth_previous_orders_' + currentLTHUser.uid) || '[]');
-                if (!Array.isArray(localOrders)) localOrders = [];
-            } catch (e) { localOrders = []; }
-
-            const render = (orders) => {
-                orders.sort((a,b) => String(b.date || '').localeCompare(String(a.date || '')));
-                if (!orders.length) {
-                    list.innerHTML = '<div class="previous-empty">No previous orders found for this account yet.</div>';
-                    return;
-                }
-                list.innerHTML = orders.map(order => {
-                    const safeItems = escapeLeaderboardText(order.orderDetails || 'Order details unavailable');
-                    const safeId = escapeLeaderboardText(order.orderId || '');
-                    const safeDate = escapeLeaderboardText(order.date || '');
-                    const safeStatus = escapeLeaderboardText(order.status || 'Pending');
-                    const total = Number(order.finalTotal || 0);
-                    return `<div class="previous-order-card"><div class="previous-order-head"><span class="previous-order-id">Order ID: ${safeId}</span><span>${safeDate}</span><span class="previous-order-status">${safeStatus}</span></div><div class="previous-order-items">${safeItems}</div><div class="previous-order-total">Total: Rs. ${Number.isFinite(total) ? total.toLocaleString('en-PK') : '0'}</div></div>`;
-                }).join('');
-            };
-
-            render(localOrders);
-
-            // Firebase history is optional. If database rules reject it, local history still works.
-            if (typeof db !== 'undefined') {
-                db.ref(LTH_USER_ORDERS_PATH + '/' + currentLTHUser.uid).once('value').then(snapshot => {
-                    const firebaseOrders = [];
-                    snapshot.forEach(child => firebaseOrders.push({ id: child.key, ...child.val() }));
-                    const merged = [...localOrders];
-                    firebaseOrders.forEach(order => {
-                        if (!merged.some(x => x.orderId === order.orderId)) merged.push(order);
-                    });
-                    render(merged);
-                }).catch(error => console.warn('Firebase previous reports unavailable:', error));
-            }
-        }
-
         async function placeOrder() {
-            const status = document.getElementById('order-status-message');
-            const orderButton = document.getElementById('place-order-btn');
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
+
+            if (!currentLTHUser || !currentLTHUser.uid) { alert('Please login to your account before placing an order.'); openLoginGate(); return; }
+            if (cart.length === 0) { alert('Please add items to your cart first!'); return; }
+            if (!name || !phone || !address || !email) { alert('Please complete all customer information: Name, Phone, Address, and Email.'); return; }
+
+            let subTotal=0; cart.forEach(item=>{subTotal+=(Number(item.price)*Number(item.qty));});
+            const discPct=Number(siteSettings.discount||0), discountAmount=(subTotal*discPct)/100, finalTotal=subTotal-discountAmount;
+            const orderId=generateOrderId(), orderDate=new Date().toISOString();
+
+            const grouped={};
+            cart.forEach(item=>{ const key=String(item.name||'').trim(); if(!grouped[key])grouped[key]={name:key,qty:0,amount:0}; grouped[key].qty+=Number(item.qty)||0; grouped[key].amount+=(Number(item.price)||0)*(Number(item.qty)||0); });
+            const orderDetails=Object.values(grouped).map(item=>`${item.name} × ${item.qty} = Rs. ${item.amount.toFixed(0)}`).join('\n');
+
+            const orderButton=document.getElementById('place-order-btn');
+            if(orderButton){orderButton.disabled=true;orderButton.innerHTML='Placing Order...';}
             try {
-                const name = (document.getElementById('cust-name')?.value || '').trim();
-                const phone = (document.getElementById('cust-phone')?.value || '').trim();
-                const address = (document.getElementById('cust-address')?.value || '').trim();
-                const email = (document.getElementById('cust-email')?.value || '').trim();
+                // One request = one complete order row in Google Sheets.
+                const sheetSaved=await saveOrderToGoogleSheet({orderId,date:orderDate,customerName:name,phone,product:orderDetails,quantity:'',price:'',total:finalTotal.toFixed(0),address,status:'Pending'});
+                if(!sheetSaved)throw new Error('Google Sheets submission failed.');
 
-                if (!currentLTHUser || !currentLTHUser.uid) {
-                    showOrderStatus('⚠️ Please login to your account before placing an order.', 'error');
-                    openLoginGate();
-                    return;
-                }
-                if (!Array.isArray(cart) || cart.length === 0) {
-                    showOrderStatus('⚠️ Your cart is empty. Please add a product first.', 'error');
-                    return;
-                }
-                if (!name || !phone || !address || !email) {
-                    showOrderStatus('⚠️ Please complete Name, Phone, Address and Email.', 'error');
-                    return;
-                }
+                await db.ref(LTH_USER_ORDERS_PATH+'/'+currentLTHUser.uid+'/'+orderId).set({orderId,date:orderDate,customerName:name,phone,email,address,orderDetails,finalTotal,discount:discountAmount,status:'Pending',createdAt:firebase.database.ServerValue.TIMESTAMP});
+                await saveUserProfileToFirebase();
 
-                let subTotal = 0;
-                const grouped = {};
-                cart.forEach(item => {
-                    const itemName = String(item.name || '').trim();
-                    const qty = Number(item.qty) || 0;
-                    const price = Number(item.price) || 0;
-                    subTotal += price * qty;
-                    if (!grouped[itemName]) grouped[itemName] = { name: itemName, qty: 0, amount: 0 };
-                    grouped[itemName].qty += qty;
-                    grouped[itemName].amount += price * qty;
-                });
-
-                const discPct = Number(siteSettings.discount || 0);
-                const discountAmount = (subTotal * discPct) / 100;
-                const finalTotal = subTotal - discountAmount;
-                const orderId = generateOrderId();
-                const orderDate = new Date().toLocaleString('en-PK');
-                const orderDetails = Object.values(grouped)
-                    .map(item => `${item.name} × ${item.qty} = Rs. ${item.amount.toFixed(0)}`)
-                    .join('\n');
-
-                if (orderButton) {
-                    orderButton.disabled = true;
-                    orderButton.innerHTML = 'Placing Order...';
-                }
-                showOrderStatus('⏳ Placing your order...', 'info');
-
-                const order = {
-                    orderId, date: orderDate, customerName: name, phone, email, address,
-                    orderDetails, finalTotal, discount: discountAmount, status: 'Pending'
-                };
-
-                // Save Previous Reports immediately on this account. This does not depend on Firebase rules.
-                savePreviousOrderLocally(currentLTHUser.uid, order);
-
-                // Send exactly ONE request for the complete order to Google Sheets.
-                await saveOrderToGoogleSheet({
-                    orderId, date: orderDate, customerName: name, phone,
-                    product: orderDetails, quantity: '', price: '',
-                    total: finalTotal.toFixed(0), address, status: 'Pending'
-                });
-
-                // Firebase copy is additional; it must never prevent the order confirmation.
-                if (typeof db !== 'undefined') {
-                    db.ref(LTH_USER_ORDERS_PATH + '/' + currentLTHUser.uid + '/' + orderId)
-                        .set({ ...order, createdAt: firebase.database.ServerValue.TIMESTAMP })
-                        .catch(error => console.warn('Firebase order-history save skipped:', error));
-                }
-
-                showOrderStatus(`✅ <b>Order placed successfully!</b><br>Order ID: <b>${escapeLeaderboardText(orderId)}</b><br>Your order has been sent to Google Sheets and added to Previous Reports.`, 'success');
-
-                cart = [];
-                saveCurrentUserCart();
-                updateCartUI();
-                renderPreviousOrders();
-                ['cust-name','cust-phone','cust-address','cust-email'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.value = '';
-                });
-            } catch (error) {
-                console.error('Order submission error:', error);
-                showOrderStatus('❌ Order could not be placed. Please try again. The error has been logged in the browser console.', 'error');
-            } finally {
-                if (orderButton) {
-                    orderButton.disabled = false;
-                    orderButton.innerHTML = 'Place Order';
-                }
-            }
+                alert(`Thank you for shopping!\n\nYour order is confirmed.\nOrder ID: ${orderId}`);
+                cart=[]; saveCurrentUserCart(); updateCartUI(); renderPreviousOrders();
+                document.getElementById('cust-name').value=''; document.getElementById('cust-phone').value=''; document.getElementById('cust-address').value=''; document.getElementById('cust-email').value='';
+            } catch(error) {
+                console.error('Order submission error:',error);
+                alert('We could not submit your order right now. Your order was NOT confirmed. Please try again.');
+            } finally { if(orderButton){orderButton.disabled=false;orderButton.innerHTML='Place Order';} }
         }
     </script>
 </body>
