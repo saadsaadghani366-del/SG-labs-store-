@@ -1474,7 +1474,7 @@
             <div class="form-group"><label>Phone Number:</label><input type="text" id="cust-phone" placeholder="03XXXXXXXXX"></div>
             <div class="form-group"><label>Location / Address:</label><input type="text" id="cust-address" placeholder="Enter your city and complete address"></div>
             <div class="form-group"><label>Email:</label><input type="email" id="cust-email" placeholder="example@email.com"></div>
-            <button class="confirm-btn" onclick="sendToWhatsApp()"><i class="fa-brands fa-whatsapp fa-xl"></i> Confirm Order (Send via WhatsApp)</button>
+            <button class="confirm-btn" onclick="placeOrder()"><i class="fa-brands fa-whatsapp fa-xl"></i> Place Order</button>
         </div>
 
         <div id="page-help" class="page-section">
@@ -3148,73 +3148,70 @@
             }
         }
 
-        function sendToWhatsApp() {
-            let name = document.getElementById('cust-name').value;
-            let phone = document.getElementById('cust-phone').value;
-            let address = document.getElementById('cust-address').value;
-            let email = document.getElementById('cust-email').value;
+        async function placeOrder() {
+        const name = document.getElementById('cust-name').value.trim();
+        const phone = document.getElementById('cust-phone').value.trim();
+        const address = document.getElementById('cust-address').value.trim();
+        const email = document.getElementById('cust-email').value.trim();
 
-            if (cart.length === 0) { alert("Please add items to your cart first!"); return; }
-            if (!name || !phone || !address) { alert("Please fill your name, phone, and address!"); return; }
-
-            let subTotal = 0;
-            cart.forEach(item => { subTotal += (item.price * item.qty); });
-            let discPct = siteSettings.discount || 0;
-            let discountAmount = (subTotal * discPct) / 100;
-            let finalTotal = subTotal - discountAmount;
-
-            // Save every cart item as a separate row in the Google Sheet.
-            // This keeps multi-product orders easy to filter and manage.
-            const orderId = generateOrderId();
-            const orderDate = new Date().toLocaleString('en-PK', {
-                year: 'numeric', month: '2-digit', day: '2-digit',
-                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
-            });
-
-            cart.forEach(item => {
-                saveOrderToGoogleSheet({
-                    orderId: orderId,
-                    date: orderDate,
-                    customerName: name,
-                    phone: phone,
-                    product: item.name,
-                    quantity: item.qty,
-                    price: item.price,
-                    total: item.price * item.qty,
-                    address: address,
-                    status: 'Pending'
-                });
-            });
-
-            let message = `*New Order Received - ${siteSettings.storeName}*%0A%0A`;
-            message += `*Customer Name:* ${name}%0A`;
-            message += `*Phone:* ${phone}%0A`;
-            message += `*Address:* ${address}%0A`;
-            message += `*Email:* ${email}%0A%0A*Order Details:*%0A`;
-
-            cart.forEach(item => {
-                let itemTotal = item.price * item.qty;
-                message += `- ${item.name} (${item.qty} pcs) = ${itemTotal} PKR%0A`;
-            });
-            
-            message += `%0A*Subtotal:* ${subTotal} PKR`;
-            if (discPct > 0) {
-                message += `%0A*Discount (${discPct}%):* -${discountAmount.toFixed(0)} PKR`;
-            }
-            message += `%0A*Final Total Price:* ${finalTotal.toFixed(0)} PKR`;
-
-            let waNumber = (siteSettings && siteSettings.whatsapp) ? siteSettings.whatsapp : "923043337555";
-            waNumber = waNumber.replace(/\D/g, '');
-
-            let whatsappURL = `https://wa.me/${waNumber}?text=${message}`;
-
-            let link = document.createElement('a');
-            link.href = whatsappURL;
-            link.target = '_blank';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        if (cart.length === 0) {
+            alert("Please add items to your cart first!");
+            return;
         }
+        if (!name || !phone || !address) {
+            alert("Please fill your name, phone, and address!");
+            return;
+        }
+
+        let subTotal = 0;
+        cart.forEach(item => { subTotal += (item.price * item.qty); });
+        const discPct = siteSettings.discount || 0;
+        const discountAmount = (subTotal * discPct) / 100;
+        const finalTotal = subTotal - discountAmount;
+        const orderId = "LTH-" + Date.now().toString().slice(-8);
+        const orderDate = new Date().toISOString();
+
+        const orderButton = document.querySelector('.confirm-btn');
+        if (orderButton) {
+            orderButton.disabled = true;
+            orderButton.innerHTML = 'Placing Order...';
+        }
+
+        try {
+            // Send every cart item to Google Sheets before showing confirmation.
+            const requests = cart.map(item => saveOrderToGoogleSheet({
+                orderId: orderId,
+                date: orderDate,
+                customerName: name,
+                phone: phone,
+                product: item.name,
+                quantity: item.qty,
+                price: item.price,
+                total: (item.price * item.qty).toFixed(0),
+                address: address,
+                status: 'Pending'
+            }));
+
+            await Promise.all(requests);
+
+            alert(`Thank you for shopping!\n\nYour order is confirmed.\nOrder ID: ${orderId}`);
+
+            cart = [];
+            updateCartUI();
+            document.getElementById('cust-name').value = '';
+            document.getElementById('cust-phone').value = '';
+            document.getElementById('cust-address').value = '';
+            document.getElementById('cust-email').value = '';
+        } catch (error) {
+            console.error('Order submission error:', error);
+            alert('We could not submit your order right now. Please try again.');
+        } finally {
+            if (orderButton) {
+                orderButton.disabled = false;
+                orderButton.innerHTML = 'Place Order';
+            }
+        }
+    }
     </script>
 </body>
 </html>
