@@ -1799,23 +1799,90 @@
         function saveCurrentUserCart() { const key=getUserCartKey(); if(!key)return; try{localStorage.setItem(key,JSON.stringify(cart));}catch(e){} }
         function loadCurrentUserCart() { const key=getUserCartKey(); if(!key)return; try{const saved=JSON.parse(localStorage.getItem(key)||'[]'); if(Array.isArray(saved)) cart=saved;}catch(e){cart=[];} }
 
+        function getLocalOrderHistoryKey() {
+            return currentLTHUser && currentLTHUser.uid ? 'lth_orders_' + currentLTHUser.uid : null;
+        }
+
+        function getLocalOrderHistory() {
+            const key = getLocalOrderHistoryKey();
+            if (!key) return [];
+            try {
+                const saved = JSON.parse(localStorage.getItem(key) || '[]');
+                return Array.isArray(saved) ? saved : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveLocalOrderHistory(order) {
+            const key = getLocalOrderHistoryKey();
+            if (!key) return;
+            try {
+                const orders = getLocalOrderHistory();
+                const index = orders.findIndex(item => String(item.orderId) === String(order.orderId));
+                if (index >= 0) orders[index] = order;
+                else orders.push(order);
+                localStorage.setItem(key, JSON.stringify(orders));
+            } catch (e) {}
+        }
+
         function renderPreviousOrders() {
-            const list=document.getElementById('previous-orders-list'); if(!list)return;
-            if(!currentLTHUser || !currentLTHUser.uid){ list.innerHTML='<div class="previous-empty">Please login to view your previous reports.</div>'; return; }
-            list.innerHTML='Loading your previous orders...';
-            db.ref(LTH_USER_ORDERS_PATH+'/'+currentLTHUser.uid).once('value').then(snapshot=>{
-                const orders=[]; snapshot.forEach(child=>orders.push({id:child.key,...child.val()}));
-                orders.sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
-                if(!orders.length){list.innerHTML='<div class="previous-empty">No previous orders found for this account yet.</div>';return;}
-                list.innerHTML=orders.map(order=>{
-                    const safeItems=escapeLeaderboardText(order.orderDetails||order.product||'Order details unavailable');
-                    const safeId=escapeLeaderboardText(order.orderId||order.id);
-                    const safeDate=escapeLeaderboardText(order.date||'');
-                    const safeStatus=escapeLeaderboardText(order.status||'Pending');
-                    const total=Number(order.finalTotal??order.total??0);
-                    return `<div class="previous-order-card"><div class="previous-order-head"><span class="previous-order-id">Order ID: ${safeId}</span><span>${safeDate}</span><span class="previous-order-status">${safeStatus}</span></div><div class="previous-order-items">${safeItems}</div><div class="previous-order-total">Total: Rs. ${Number.isFinite(total)?total.toLocaleString('en-PK'):'0'}</div></div>`;
+            const list = document.getElementById('previous-orders-list');
+            if (!list) return;
+            if (!currentLTHUser || !currentLTHUser.uid) {
+                list.innerHTML = '<div class="previous-empty">Please login to view your previous reports.</div>';
+                return;
+            }
+
+            list.innerHTML = 'Loading your previous orders...';
+            const localOrders = getLocalOrderHistory();
+
+            db.ref(LTH_USER_ORDERS_PATH + '/' + currentLTHUser.uid).once('value').then(snapshot => {
+                const firebaseOrders = [];
+                snapshot.forEach(child => firebaseOrders.push({id: child.key, ...child.val()}));
+
+                // Merge Firebase + local history and keep only one record per Order ID.
+                const merged = new Map();
+                [...localOrders, ...firebaseOrders].forEach(order => {
+                    const key = String(order.orderId || order.id || '');
+                    if (key) merged.set(key, { ...merged.get(key), ...order });
+                });
+
+                const orders = Array.from(merged.values()).sort((a, b) =>
+                    String(b.date || '').localeCompare(String(a.date || ''))
+                );
+
+                if (!orders.length) {
+                    list.innerHTML = '<div class="previous-empty">No previous orders found for this account yet.</div>';
+                    return;
+                }
+
+                list.innerHTML = orders.map(order => {
+                    const safeItems = escapeLeaderboardText(order.orderDetails || order.product || 'Order details unavailable');
+                    const safeId = escapeLeaderboardText(order.orderId || order.id);
+                    const safeDate = escapeLeaderboardText(order.date || '');
+                    const safeStatus = escapeLeaderboardText(order.status || 'Pending');
+                    const total = Number(order.finalTotal ?? order.total ?? 0);
+                    return `<div class="previous-order-card"><div class="previous-order-head"><span class="previous-order-id">Order ID: ${safeId}</span><span>${safeDate}</span><span class="previous-order-status">${safeStatus}</span></div><div class="previous-order-items">${safeItems}</div><div class="previous-order-total">Total: Rs. ${Number.isFinite(total) ? total.toLocaleString('en-PK') : '0'}</div></div>`;
                 }).join('');
-            }).catch(error=>{console.error('Previous orders load failed:',error);list.innerHTML='<div class="previous-empty">Could not load your previous reports. Please try again.</div>';});
+            }).catch(error => {
+                console.error('Previous orders Firebase load failed:', error);
+                const orders = getLocalOrderHistory().sort((a, b) =>
+                    String(b.date || '').localeCompare(String(a.date || ''))
+                );
+                if (!orders.length) {
+                    list.innerHTML = '<div class="previous-empty">No previous orders found for this account yet.</div>';
+                    return;
+                }
+                list.innerHTML = orders.map(order => {
+                    const safeItems = escapeLeaderboardText(order.orderDetails || order.product || 'Order details unavailable');
+                    const safeId = escapeLeaderboardText(order.orderId || '');
+                    const safeDate = escapeLeaderboardText(order.date || '');
+                    const safeStatus = escapeLeaderboardText(order.status || 'Pending');
+                    const total = Number(order.finalTotal ?? order.total ?? 0);
+                    return `<div class="previous-order-card"><div class="previous-order-head"><span class="previous-order-id">Order ID: ${safeId}</span><span>${safeDate}</span><span class="previous-order-status">${safeStatus}</span></div><div class="previous-order-items">${safeItems}</div><div class="previous-order-total">Total: Rs. ${Number.isFinite(total) ? total.toLocaleString('en-PK') : '0'}</div></div>`;
+                }).join('');
+            });
         }
 
         function saveUserProfileToFirebase(){
@@ -3177,35 +3244,102 @@
             const address = document.getElementById('cust-address').value.trim();
             const email = document.getElementById('cust-email').value.trim();
 
-            if (!currentLTHUser || !currentLTHUser.uid) { alert('Please login to your account before placing an order.'); openLoginGate(); return; }
-            if (cart.length === 0) { alert('Please add items to your cart first!'); return; }
-            if (!name || !phone || !address || !email) { alert('Please complete all customer information: Name, Phone, Address, and Email.'); return; }
+            if (!currentLTHUser || !currentLTHUser.uid) {
+                alert('Please login to your account before placing an order.');
+                openLoginGate();
+                return;
+            }
+            if (cart.length === 0) {
+                alert('Please add items to your cart first!');
+                return;
+            }
+            if (!name || !phone || !address || !email) {
+                alert('Please complete all customer information: Name, Phone, Address, and Email.');
+                return;
+            }
 
-            let subTotal=0; cart.forEach(item=>{subTotal+=(Number(item.price)*Number(item.qty));});
-            const discPct=Number(siteSettings.discount||0), discountAmount=(subTotal*discPct)/100, finalTotal=subTotal-discountAmount;
-            const orderId=generateOrderId(), orderDate=new Date().toISOString();
+            let subTotal = 0;
+            cart.forEach(item => {
+                subTotal += (Number(item.price) || 0) * (Number(item.qty) || 0);
+            });
+            const discPct = Number(siteSettings.discount || 0);
+            const discountAmount = (subTotal * discPct) / 100;
+            const finalTotal = subTotal - discountAmount;
+            const orderId = generateOrderId();
+            const orderDate = new Date().toISOString();
 
-            const grouped={};
-            cart.forEach(item=>{ const key=String(item.name||'').trim(); if(!grouped[key])grouped[key]={name:key,qty:0,amount:0}; grouped[key].qty+=Number(item.qty)||0; grouped[key].amount+=(Number(item.price)||0)*(Number(item.qty)||0); });
-            const orderDetails=Object.values(grouped).map(item=>`${item.name} × ${item.qty} = Rs. ${item.amount.toFixed(0)}`).join('\n');
+            const grouped = {};
+            cart.forEach(item => {
+                const key = String(item.name || '').trim();
+                if (!grouped[key]) grouped[key] = { name: key, qty: 0, amount: 0 };
+                grouped[key].qty += Number(item.qty) || 0;
+                grouped[key].amount += (Number(item.price) || 0) * (Number(item.qty) || 0);
+            });
 
-            const orderButton=document.getElementById('place-order-btn');
-            if(orderButton){orderButton.disabled=true;orderButton.innerHTML='Placing Order...';}
+            const orderDetails = Object.values(grouped)
+                .map(item => `${item.name} × ${item.qty} = Rs. ${item.amount.toFixed(0)}`)
+                .join('\n');
+
+            const orderRecord = {
+                orderId, date: orderDate, customerName: name, phone, email, address,
+                orderDetails, finalTotal, discount: discountAmount, status: 'Pending',
+                createdAt: Date.now()
+            };
+
+            const orderButton = document.getElementById('place-order-btn');
+            if (orderButton) {
+                orderButton.disabled = true;
+                orderButton.innerHTML = 'Placing Order...';
+            }
+
             try {
-                // One request = one complete order row in Google Sheets.
-                const sheetSaved=await saveOrderToGoogleSheet({orderId,date:orderDate,customerName:name,phone,product:orderDetails,quantity:'',price:'',total:finalTotal.toFixed(0),address,status:'Pending'});
-                if(!sheetSaved)throw new Error('Google Sheets submission failed.');
+                // IMPORTANT: exactly ONE Google Sheets request for the complete order.
+                const sheetPromise = saveOrderToGoogleSheet({
+                    orderId, date: orderDate, customerName: name, phone,
+                    product: orderDetails, quantity: '', price: '',
+                    total: finalTotal.toFixed(0), address, status: 'Pending'
+                });
 
-                await db.ref(LTH_USER_ORDERS_PATH+'/'+currentLTHUser.uid+'/'+orderId).set({orderId,date:orderDate,customerName:name,phone,email,address,orderDetails,finalTotal,discount:discountAmount,status:'Pending',createdAt:firebase.database.ServerValue.TIMESTAMP});
-                await saveUserProfileToFirebase();
+                // Save Previous Reports at the same time. A Firebase rules problem must
+                // never cancel an order that was already submitted to Google Sheets.
+                const firebasePromise = db.ref(LTH_USER_ORDERS_PATH + '/' + currentLTHUser.uid + '/' + orderId)
+                    .set(orderRecord);
+
+                const [sheetResult, firebaseResult] = await Promise.allSettled([sheetPromise, firebasePromise]);
+
+                if (sheetResult.status !== 'fulfilled' || sheetResult.value !== true) {
+                    throw new Error('Google Sheets submission failed.');
+                }
+
+                // Local account history guarantees the new order appears immediately
+                // in Previous Reports even if Firebase rules temporarily block the write.
+                saveLocalOrderHistory(orderRecord);
+
+                if (firebaseResult.status === 'rejected') {
+                    console.warn('Firebase Previous Reports save failed:', firebaseResult.reason);
+                }
+
+                await saveUserProfileToFirebase().catch(() => {});
 
                 alert(`Thank you for shopping!\n\nYour order is confirmed.\nOrder ID: ${orderId}`);
-                cart=[]; saveCurrentUserCart(); updateCartUI(); renderPreviousOrders();
-                document.getElementById('cust-name').value=''; document.getElementById('cust-phone').value=''; document.getElementById('cust-address').value=''; document.getElementById('cust-email').value='';
-            } catch(error) {
-                console.error('Order submission error:',error);
-                alert('We could not submit your order right now. Your order was NOT confirmed. Please try again.');
-            } finally { if(orderButton){orderButton.disabled=false;orderButton.innerHTML='Place Order';} }
+                cart = [];
+                saveCurrentUserCart();
+                updateCartUI();
+                renderPreviousOrders();
+
+                document.getElementById('cust-name').value = '';
+                document.getElementById('cust-phone').value = '';
+                document.getElementById('cust-address').value = '';
+                document.getElementById('cust-email').value = '';
+            } catch (error) {
+                console.error('Order submission error:', error);
+                alert('We could not submit your order to Google Sheets. Your order was NOT confirmed. Please try again.');
+            } finally {
+                if (orderButton) {
+                    orderButton.disabled = false;
+                    orderButton.innerHTML = 'Place Order';
+                }
+            }
         }
     </script>
 </body>
