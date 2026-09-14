@@ -1425,6 +1425,7 @@
         <button id="nav-about" onclick="switchPage('about')">About Us</button>
         <button id="nav-social" onclick="switchPage('social')">🌐 Social Links</button>
         <button id="nav-game" onclick="switchPage('game')">⚡ Lightning Challenge</button>
+        <button id="nav-reports" onclick="switchPage('reports')">📋 Previous Reports</button>
     </nav>
 
     <div class="container">
@@ -1473,8 +1474,8 @@
             <div class="form-group"><label>Full Name:</label><input type="text" id="cust-name" placeholder="Enter your full name"></div>
             <div class="form-group"><label>Phone Number:</label><input type="text" id="cust-phone" placeholder="03XXXXXXXXX"></div>
             <div class="form-group"><label>Location / Address:</label><input type="text" id="cust-address" placeholder="Enter your city and complete address"></div>
-            <div class="form-group"><label>Email:</label><input type="email" id="cust-email" placeholder="example@email.com"></div>
-            <button class="confirm-btn" onclick="placeOrder()"><i class="fa-brands fa-whatsapp fa-xl"></i> Place Order</button>
+            <div class="form-group"><label>Email:</label><input type="email" id="cust-email" placeholder="example@email.com" required></div>
+            <button id="place-order-btn" class="confirm-btn" onclick="placeOrder()">Place Order</button>
         </div>
 
         <div id="page-help" class="page-section">
@@ -1567,6 +1568,14 @@
                     <p class="leaderboard-note">Permanent scores are stored in Firebase and shown to every visitor.</p>
                     <div id="leaderboard-list">Loading leaderboard...</div>
                 </div>
+            </div>
+        </div>
+
+<div id="page-reports" class="page-section">
+            <div class="previous-report-shell">
+                <h2>📋 Previous Reports</h2>
+                <p class="previous-report-subtitle">Your previous orders and shopping history for this account.</p>
+                <div id="previous-orders-list">Loading your previous orders...</div>
             </div>
         </div>
 
@@ -1784,6 +1793,36 @@
         /* LTH Firebase Authentication */
         let currentLTHUser = null;
 
+        const LTH_USER_ORDERS_PATH = 'lthOrderHistory';
+
+        function getUserCartKey() { return currentLTHUser && currentLTHUser.uid ? 'lth_cart_' + currentLTHUser.uid : null; }
+        function saveCurrentUserCart() { const key=getUserCartKey(); if(!key)return; try{localStorage.setItem(key,JSON.stringify(cart));}catch(e){} }
+        function loadCurrentUserCart() { const key=getUserCartKey(); if(!key)return; try{const saved=JSON.parse(localStorage.getItem(key)||'[]'); if(Array.isArray(saved)) cart=saved;}catch(e){cart=[];} }
+
+        function renderPreviousOrders() {
+            const list=document.getElementById('previous-orders-list'); if(!list)return;
+            if(!currentLTHUser || !currentLTHUser.uid){ list.innerHTML='<div class="previous-empty">Please login to view your previous reports.</div>'; return; }
+            list.innerHTML='Loading your previous orders...';
+            db.ref(LTH_USER_ORDERS_PATH+'/'+currentLTHUser.uid).once('value').then(snapshot=>{
+                const orders=[]; snapshot.forEach(child=>orders.push({id:child.key,...child.val()}));
+                orders.sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+                if(!orders.length){list.innerHTML='<div class="previous-empty">No previous orders found for this account yet.</div>';return;}
+                list.innerHTML=orders.map(order=>{
+                    const safeItems=escapeLeaderboardText(order.orderDetails||order.product||'Order details unavailable');
+                    const safeId=escapeLeaderboardText(order.orderId||order.id);
+                    const safeDate=escapeLeaderboardText(order.date||'');
+                    const safeStatus=escapeLeaderboardText(order.status||'Pending');
+                    const total=Number(order.finalTotal??order.total??0);
+                    return `<div class="previous-order-card"><div class="previous-order-head"><span class="previous-order-id">Order ID: ${safeId}</span><span>${safeDate}</span><span class="previous-order-status">${safeStatus}</span></div><div class="previous-order-items">${safeItems}</div><div class="previous-order-total">Total: Rs. ${Number.isFinite(total)?total.toLocaleString('en-PK'):'0'}</div></div>`;
+                }).join('');
+            }).catch(error=>{console.error('Previous orders load failed:',error);list.innerHTML='<div class="previous-empty">Could not load your previous reports. Please try again.</div>';});
+        }
+
+        function saveUserProfileToFirebase(){
+            if(!currentLTHUser||!currentLTHUser.uid)return Promise.resolve();
+            return db.ref('lthUsers/'+currentLTHUser.uid).update({uid:currentLTHUser.uid,email:currentLTHUser.email||'',displayName:currentLTHUser.displayName||'',lastLoginAt:firebase.database.ServerValue.TIMESTAMP});
+        }
+
 
         /* LTH Firebase Lightning Leaderboard */
         let pendingGameScore = 0;
@@ -1969,6 +2008,10 @@
                 };
 
                 localStorage.setItem(LTH_SESSION_KEY, JSON.stringify(currentLTHUser));
+                saveUserProfileToFirebase().catch(() => {});
+                loadCurrentUserCart();
+                updateCartUI();
+                renderPreviousOrders();
                 status.innerText = '';
                 closeLoginGate();
                 showLoggedInState();
@@ -2037,12 +2080,20 @@
                     displayName: fullName
                 };
                 localStorage.setItem(LTH_SESSION_KEY, JSON.stringify(currentLTHUser));
+                saveUserProfileToFirebase().catch(() => {});
+                loadCurrentUserCart();
+                updateCartUI();
+                renderPreviousOrders();
 
                 status.innerText = '';
                 document.getElementById('login-email').value = '';
                 document.getElementById('login-password').value = '';
                 closeCreateAccount();
                 closeLoginGate();
+                loadCurrentUserCart();
+                updateCartUI();
+                renderPreviousOrders();
+                saveUserProfileToFirebase().catch(() => {});
                 showLoggedInState();
             } catch (error) {
                 status.style.color = '#dc3545';
@@ -2051,6 +2102,8 @@
         }
 
         function logoutUser() {
+            cart = [];
+            updateCartUI();
             currentLTHUser = null;
             localStorage.removeItem(LTH_SESSION_KEY);
             const label = document.getElementById('top-user-label');
@@ -2075,6 +2128,7 @@
             nameEl.innerText = '👤 ' + ((currentLTHUser && currentLTHUser.displayName) || 'User');
             label.classList.remove('open');
             label.style.display = 'block';
+            renderPreviousOrders();
         }
 
         function initLTHAuth() {
@@ -3036,6 +3090,7 @@
             let existingItem = cart.find(item => item.name === name);
             if (existingItem) { existingItem.qty += qty; } 
             else { cart.push({ name: name, price: price, qty: qty }); }
+            saveCurrentUserCart();
             updateCartUI();
             alert(name + " added to cart!");
         }
@@ -3080,38 +3135,6 @@
             totalPriceElem.innerText = finalTotal.toFixed(0);
         }
 
-        // Google Sheets order database Web App endpoint
-        const GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4JCK042ZsjITG9qYd9nNYIjHsmd5ilQFf7eeU1A4kRc3DQsB_hKXBJF5mHcBn97Vc/exec";
-
-        function generateOrderId() {
-            const now = new Date();
-            const stamp = now.getFullYear().toString()
-                + String(now.getMonth() + 1).padStart(2, '0')
-                + String(now.getDate()).padStart(2, '0') + '-'
-                + String(now.getHours()).padStart(2, '0')
-                + String(now.getMinutes()).padStart(2, '0')
-                + String(now.getSeconds()).padStart(2, '0');
-            const random = Math.random().toString(36).slice(2, 7).toUpperCase();
-            return `LTH-${stamp}-${random}`;
-        }
-
-        async function saveOrderToGoogleSheet(orderData) {
-            if (!GOOGLE_SHEETS_WEB_APP_URL) return;
-            try {
-                // text/plain + no-cors avoids a browser preflight request.
-                // Apps Script still receives the JSON body through e.postData.contents.
-                await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(orderData),
-                    keepalive: true
-                });
-            } catch (error) {
-                console.error('Google Sheets order save failed:', error);
-            }
-        }
-
         // ===============================
         // LTH → Google Sheets Connection
         // ===============================
@@ -3149,69 +3172,41 @@
         }
 
         async function placeOrder() {
-        const name = document.getElementById('cust-name').value.trim();
-        const phone = document.getElementById('cust-phone').value.trim();
-        const address = document.getElementById('cust-address').value.trim();
-        const email = document.getElementById('cust-email').value.trim();
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
 
-        if (cart.length === 0) {
-            alert("Please add items to your cart first!");
-            return;
+            if (!currentLTHUser || !currentLTHUser.uid) { alert('Please login to your account before placing an order.'); openLoginGate(); return; }
+            if (cart.length === 0) { alert('Please add items to your cart first!'); return; }
+            if (!name || !phone || !address || !email) { alert('Please complete all customer information: Name, Phone, Address, and Email.'); return; }
+
+            let subTotal=0; cart.forEach(item=>{subTotal+=(Number(item.price)*Number(item.qty));});
+            const discPct=Number(siteSettings.discount||0), discountAmount=(subTotal*discPct)/100, finalTotal=subTotal-discountAmount;
+            const orderId=generateOrderId(), orderDate=new Date().toISOString();
+
+            const grouped={};
+            cart.forEach(item=>{ const key=String(item.name||'').trim(); if(!grouped[key])grouped[key]={name:key,qty:0,amount:0}; grouped[key].qty+=Number(item.qty)||0; grouped[key].amount+=(Number(item.price)||0)*(Number(item.qty)||0); });
+            const orderDetails=Object.values(grouped).map(item=>`${item.name} × ${item.qty} = Rs. ${item.amount.toFixed(0)}`).join('\n');
+
+            const orderButton=document.getElementById('place-order-btn');
+            if(orderButton){orderButton.disabled=true;orderButton.innerHTML='Placing Order...';}
+            try {
+                // One request = one complete order row in Google Sheets.
+                const sheetSaved=await saveOrderToGoogleSheet({orderId,date:orderDate,customerName:name,phone,product:orderDetails,quantity:'',price:'',total:finalTotal.toFixed(0),address,status:'Pending'});
+                if(!sheetSaved)throw new Error('Google Sheets submission failed.');
+
+                await db.ref(LTH_USER_ORDERS_PATH+'/'+currentLTHUser.uid+'/'+orderId).set({orderId,date:orderDate,customerName:name,phone,email,address,orderDetails,finalTotal,discount:discountAmount,status:'Pending',createdAt:firebase.database.ServerValue.TIMESTAMP});
+                await saveUserProfileToFirebase();
+
+                alert(`Thank you for shopping!\n\nYour order is confirmed.\nOrder ID: ${orderId}`);
+                cart=[]; saveCurrentUserCart(); updateCartUI(); renderPreviousOrders();
+                document.getElementById('cust-name').value=''; document.getElementById('cust-phone').value=''; document.getElementById('cust-address').value=''; document.getElementById('cust-email').value='';
+            } catch(error) {
+                console.error('Order submission error:',error);
+                alert('We could not submit your order right now. Your order was NOT confirmed. Please try again.');
+            } finally { if(orderButton){orderButton.disabled=false;orderButton.innerHTML='Place Order';} }
         }
-        if (!name || !phone || !address) {
-            alert("Please fill your name, phone, and address!");
-            return;
-        }
-
-        let subTotal = 0;
-        cart.forEach(item => { subTotal += (item.price * item.qty); });
-        const discPct = siteSettings.discount || 0;
-        const discountAmount = (subTotal * discPct) / 100;
-        const finalTotal = subTotal - discountAmount;
-        const orderId = "LTH-" + Date.now().toString().slice(-8);
-        const orderDate = new Date().toISOString();
-
-        const orderButton = document.querySelector('.confirm-btn');
-        if (orderButton) {
-            orderButton.disabled = true;
-            orderButton.innerHTML = 'Placing Order...';
-        }
-
-        try {
-            // Send every cart item to Google Sheets before showing confirmation.
-            const requests = cart.map(item => saveOrderToGoogleSheet({
-                orderId: orderId,
-                date: orderDate,
-                customerName: name,
-                phone: phone,
-                product: item.name,
-                quantity: item.qty,
-                price: item.price,
-                total: (item.price * item.qty).toFixed(0),
-                address: address,
-                status: 'Pending'
-            }));
-
-            await Promise.all(requests);
-
-            alert(`Thank you for shopping!\n\nYour order is confirmed.\nOrder ID: ${orderId}`);
-
-            cart = [];
-            updateCartUI();
-            document.getElementById('cust-name').value = '';
-            document.getElementById('cust-phone').value = '';
-            document.getElementById('cust-address').value = '';
-            document.getElementById('cust-email').value = '';
-        } catch (error) {
-            console.error('Order submission error:', error);
-            alert('We could not submit your order right now. Please try again.');
-        } finally {
-            if (orderButton) {
-                orderButton.disabled = false;
-                orderButton.innerHTML = 'Place Order';
-            }
-        }
-    }
     </script>
 </body>
 </html>
