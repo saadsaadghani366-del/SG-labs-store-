@@ -2316,6 +2316,25 @@
             message += `📍 *Address:* ${encodeURIComponent(address)}%0A`;
             message += `🎁 *Required Item:* ${encodeURIComponent(requiredItem)}%0A`;
 
+            // Save the complete order to Google Sheets (one row per cart item).
+            const orderId = "LTH-" + Date.now().toString().slice(-8);
+            const orderDate = new Date().toISOString();
+
+            cart.forEach(item => {
+                saveOrderToGoogleSheet({
+                    orderId: orderId,
+                    date: orderDate,
+                    customerName: name,
+                    phone: phone,
+                    product: item.name,
+                    quantity: item.qty,
+                    price: item.price,
+                    total: (item.price * item.qty).toFixed(0),
+                    address: address,
+                    status: "Pending"
+                });
+            });
+
             let waNumber = (siteSettings && siteSettings.whatsapp) ? siteSettings.whatsapp : "923043337555";
             waNumber = waNumber.replace(/\D/g, '');
 
@@ -3045,6 +3064,74 @@
             totalPriceElem.innerText = finalTotal.toFixed(0);
         }
 
+        // Google Sheets order database Web App endpoint
+        const GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4JCK042ZsjITG9qYd9nNYIjHsmd5ilQFf7eeU1A4kRc3DQsB_hKXBJF5mHcBn97Vc/exec";
+
+        function generateOrderId() {
+            const now = new Date();
+            const stamp = now.getFullYear().toString()
+                + String(now.getMonth() + 1).padStart(2, '0')
+                + String(now.getDate()).padStart(2, '0') + '-'
+                + String(now.getHours()).padStart(2, '0')
+                + String(now.getMinutes()).padStart(2, '0')
+                + String(now.getSeconds()).padStart(2, '0');
+            const random = Math.random().toString(36).slice(2, 7).toUpperCase();
+            return `LTH-${stamp}-${random}`;
+        }
+
+        async function saveOrderToGoogleSheet(orderData) {
+            if (!GOOGLE_SHEETS_WEB_APP_URL) return;
+            try {
+                // text/plain + no-cors avoids a browser preflight request.
+                // Apps Script still receives the JSON body through e.postData.contents.
+                await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(orderData),
+                    keepalive: true
+                });
+            } catch (error) {
+                console.error('Google Sheets order save failed:', error);
+            }
+        }
+
+        // ===============================
+        // LTH → Google Sheets Connection
+        // ===============================
+        const GOOGLE_SHEETS_URL =
+            "https://script.google.com/macros/s/AKfycbz4JCK042ZsjITG9qYd9nNYIjHsmd5ilQFf7eeU1A4kRc3DQsB_hKXBJF5mHcBn97Vc/exec";
+
+        async function saveOrderToGoogleSheet(order) {
+            try {
+                await fetch(GOOGLE_SHEETS_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    },
+                    body: JSON.stringify({
+                        orderId: order.orderId || "",
+                        date: order.date || new Date().toISOString(),
+                        customerName: order.customerName || "",
+                        phone: order.phone || "",
+                        product: order.product || "",
+                        quantity: order.quantity || "",
+                        price: order.price || "",
+                        total: order.total || "",
+                        address: order.address || "",
+                        status: order.status || "Pending"
+                    })
+                });
+
+                console.log("Order sent to Google Sheets successfully.");
+                return true;
+            } catch (error) {
+                console.error("Google Sheets Error:", error);
+                return false;
+            }
+        }
+
         function sendToWhatsApp() {
             let name = document.getElementById('cust-name').value;
             let phone = document.getElementById('cust-phone').value;
@@ -3059,6 +3146,29 @@
             let discPct = siteSettings.discount || 0;
             let discountAmount = (subTotal * discPct) / 100;
             let finalTotal = subTotal - discountAmount;
+
+            // Save every cart item as a separate row in the Google Sheet.
+            // This keeps multi-product orders easy to filter and manage.
+            const orderId = generateOrderId();
+            const orderDate = new Date().toLocaleString('en-PK', {
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+            });
+
+            cart.forEach(item => {
+                saveOrderToGoogleSheet({
+                    orderId: orderId,
+                    date: orderDate,
+                    customerName: name,
+                    phone: phone,
+                    product: item.name,
+                    quantity: item.qty,
+                    price: item.price,
+                    total: item.price * item.qty,
+                    address: address,
+                    status: 'Pending'
+                });
+            });
 
             let message = `*New Order Received - ${siteSettings.storeName}*%0A%0A`;
             message += `*Customer Name:* ${name}%0A`;
