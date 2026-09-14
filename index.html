@@ -834,6 +834,22 @@
             color: #ffffff;
         }
 
+        /* FIX: Customer checkout fields must keep typed text visible. */
+        #page-cart input,
+        #page-cart textarea,
+        #page-cart select {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+            -webkit-text-fill-color: #1f2937 !important;
+            caret-color: #1f2937 !important;
+        }
+
+        #page-cart input::placeholder,
+        #page-cart textarea::placeholder {
+            color: #6b7280 !important;
+            opacity: 1 !important;
+        }
+
         /* Keep login/create-account cards readable while the page behind them
            uses the new navy theme. */
         .login-card,
