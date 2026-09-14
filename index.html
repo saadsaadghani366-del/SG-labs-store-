@@ -1280,6 +1280,37 @@
             max-width: 100% !important;
         }
 
+
+        /* LTH Bulk Price Manager - additive admin feature only */
+        .bulk-price-manager { background:#f8fbff; border:1px solid #cfe2ff; }
+        .bulk-price-toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:12px 0; }
+        .bulk-price-toolbar input, .bulk-price-toolbar select { flex:1 1 180px; margin:0 !important; }
+        .bulk-selection-count { font-weight:bold; color:var(--primary-color); padding:8px 12px; background:#eef6ff; border:1px solid #cfe2ff; border-radius:7px; }
+        .bulk-product-list { max-height:360px; overflow:auto; border:1px solid #dbeaff; border-radius:7px; background:#fff; }
+        .bulk-product-row { display:grid; grid-template-columns:32px 1fr 120px 130px; gap:8px; align-items:center; padding:9px 10px; border-bottom:1px solid #edf3fb; font-size:13px; }
+        .bulk-product-row:last-child { border-bottom:none; }
+        .bulk-product-row:hover { background:#f7fbff; }
+        .bulk-product-row input[type="checkbox"] { width:18px; height:18px; margin:0; }
+        .bulk-product-name { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .bulk-product-category { color:#6c757d; font-size:11px; }
+        .bulk-product-price { font-weight:bold; text-align:right; }
+        .bulk-adjust-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+        .bulk-adjust-grid input, .bulk-adjust-grid select { width:100%; box-sizing:border-box; }
+        .bulk-action-buttons { display:flex; gap:10px; margin-top:12px; }
+        .bulk-action-buttons button { flex:1; }
+        .bulk-preview { display:none; margin-top:15px; border:1px solid #cfe2ff; border-radius:8px; overflow:hidden; background:#fff; }
+        .bulk-preview h4 { margin:0; padding:11px 12px; background:#eef6ff; color:var(--primary-color); }
+        .bulk-preview-table { width:100%; border-collapse:collapse; font-size:12px; }
+        .bulk-preview-table th, .bulk-preview-table td { padding:8px; border-bottom:1px solid #edf3fb; text-align:left; }
+        .bulk-preview-table th { background:#f8fbff; color:#0b5ed7; }
+        .bulk-confirm-btn { background:#198754 !important; color:#fff; border:none; padding:10px 14px; border-radius:5px; cursor:pointer; font-weight:bold; width:100%; margin-top:10px; }
+        @media (max-width:700px) {
+            .bulk-product-row { grid-template-columns:30px 1fr 95px; }
+            .bulk-product-row .bulk-product-category { display:none; }
+            .bulk-adjust-grid { grid-template-columns:1fr; }
+            .bulk-action-buttons { flex-direction:column; }
+        }
+
 </style>
 </head>
 <body>
@@ -1609,6 +1640,60 @@
                 <label>Description:</label><textarea id="new-item-desc" rows="2" placeholder="Description"></textarea>
                 <label>Product Image:</label><input type="file" id="new-item-image" accept="image/*">
                 <button class="save-btn" style="margin-top:15px;" onclick="addNewProduct()">Add Item with Image</button>
+            </div>
+
+
+            <div class="admin-box bulk-price-manager">
+                <h3 style="color:var(--primary-color); margin-top:0;">💰 Bulk Price Manager</h3>
+                <p style="font-size:13px;color:#555;">Select multiple products and preview price changes before updating Firebase.</p>
+
+                <div class="bulk-price-toolbar">
+                    <input type="text" id="bulk-product-search" placeholder="Search product name..." oninput="renderBulkPriceProducts()">
+                    <select id="bulk-category-filter" onchange="renderBulkPriceProducts()">
+                        <option value="all">All Categories</option>
+                        <option value="kits">Project Kits</option>
+                        <option value="items">Project Items</option>
+                        <option value="tools">Project Tools</option>
+                    </select>
+                </div>
+
+                <div class="bulk-price-toolbar">
+                    <button type="button" class="save-btn" style="width:auto;" onclick="bulkSelectAll()">Select All</button>
+                    <button type="button" class="cancel-btn" style="width:auto;" onclick="bulkClearSelection()">Clear Selection</button>
+                    <span class="bulk-selection-count" id="bulk-selected-count">0 selected</span>
+                </div>
+
+                <div class="bulk-product-list" id="bulk-product-list"></div>
+
+                <div class="bulk-adjust-grid">
+                    <div>
+                        <label for="bulk-adjust-type">Adjustment Type:</label>
+                        <select id="bulk-adjust-type">
+                            <option value="fixed">Fixed Amount</option>
+                            <option value="percentage">Percentage</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="bulk-adjust-value">Adjustment Value:</label>
+                        <input type="number" id="bulk-adjust-value" min="0" step="any" placeholder="e.g. 20 or 10">
+                    </div>
+                </div>
+
+                <div class="bulk-action-buttons">
+                    <button type="button" class="save-btn" onclick="prepareBulkPricePreview('increase')">Increase Price</button>
+                    <button type="button" class="cancel-btn" onclick="prepareBulkPricePreview('decrease')">Decrease Price</button>
+                </div>
+
+                <div class="bulk-preview" id="bulk-price-preview">
+                    <h4>Preview Before Update</h4>
+                    <div style="max-height:280px;overflow:auto;">
+                        <table class="bulk-preview-table">
+                            <thead><tr><th>Product Name</th><th>Old Price</th><th>New Price</th></tr></thead>
+                            <tbody id="bulk-preview-body"></tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="bulk-confirm-btn" onclick="confirmBulkPriceUpdate()">Confirm &amp; Update Products</button>
+                </div>
             </div>
 
             <div class="modal-buttons" style="flex-direction: column; gap: 10px;">
@@ -2400,6 +2485,142 @@
             }
         }
 
+
+        /* LTH Bulk Price Manager */
+        let bulkSelectedProductIds = new Set();
+        let bulkPricePreviewData = [];
+
+        function escapeBulkText(value) {
+            return String(value ?? '').replace(/[&<>"']/g, ch => ({
+                '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;'
+            }[ch]));
+        }
+
+        function getBulkCategoryLabel(category) {
+            return category === 'kits' ? 'Project Kits' : category === 'items' ? 'Project Items' : category === 'tools' ? 'Project Tools' : (category || 'Other');
+        }
+
+        function updateBulkSelectionCount() {
+            const validIds = new Set(products.map(p => String(p.firebaseId)));
+            bulkSelectedProductIds.forEach(id => { if (!validIds.has(String(id))) bulkSelectedProductIds.delete(id); });
+            const count = document.getElementById('bulk-selected-count');
+            if (count) count.innerText = `${bulkSelectedProductIds.size} selected`;
+        }
+
+        function renderBulkPriceProducts() {
+            const list = document.getElementById('bulk-product-list');
+            if (!list) return;
+
+            const query = (document.getElementById('bulk-product-search')?.value || '').trim().toLowerCase();
+            const category = document.getElementById('bulk-category-filter')?.value || 'all';
+            const filtered = products.filter(p => {
+                const name = String(p.name || '').toLowerCase();
+                return name.includes(query) && (category === 'all' || p.category === category);
+            });
+
+            if (!filtered.length) {
+                list.innerHTML = '<div class="empty-msg">No products found.</div>';
+                updateBulkSelectionCount();
+                return;
+            }
+
+            list.innerHTML = filtered.map(p => {
+                const id = String(p.firebaseId);
+                const checked = bulkSelectedProductIds.has(id) ? 'checked' : '';
+                const price = Number(p.price);
+                return `<label class="bulk-product-row">
+                    <input type="checkbox" ${checked} onchange="toggleBulkProduct('${escapeBulkText(id)}', this.checked)">
+                    <span class="bulk-product-name" title="${escapeBulkText(p.name || '')}">${escapeBulkText(p.name || 'Unnamed Product')}<span class="bulk-product-category">${escapeBulkText(getBulkCategoryLabel(p.category))}</span></span>
+                    <span class="bulk-product-price">Rs. ${Number.isFinite(price) ? price.toLocaleString('en-PK') : '0'}</span>
+                    <span style="font-size:11px;color:#6c757d;">ID: ${escapeBulkText(id)}</span>
+                </label>`;
+            }).join('');
+
+            updateBulkSelectionCount();
+        }
+
+        function toggleBulkProduct(firebaseId, checked) {
+            const id = String(firebaseId);
+            if (checked) bulkSelectedProductIds.add(id);
+            else bulkSelectedProductIds.delete(id);
+            updateBulkSelectionCount();
+            document.getElementById('bulk-price-preview').style.display = 'none';
+            bulkPricePreviewData = [];
+        }
+
+        function bulkSelectAll() {
+            const query = (document.getElementById('bulk-product-search')?.value || '').trim().toLowerCase();
+            const category = document.getElementById('bulk-category-filter')?.value || 'all';
+            products.forEach(p => {
+                const name = String(p.name || '').toLowerCase();
+                if (name.includes(query) && (category === 'all' || p.category === category)) bulkSelectedProductIds.add(String(p.firebaseId));
+            });
+            renderBulkPriceProducts();
+            document.getElementById('bulk-price-preview').style.display = 'none';
+            bulkPricePreviewData = [];
+        }
+
+        function bulkClearSelection() {
+            bulkSelectedProductIds.clear();
+            renderBulkPriceProducts();
+            document.getElementById('bulk-price-preview').style.display = 'none';
+            bulkPricePreviewData = [];
+        }
+
+        function prepareBulkPricePreview(direction) {
+            if (bulkSelectedProductIds.size === 0) {
+                alert('Please select at least one product.');
+                return;
+            }
+
+            const rawValue = document.getElementById('bulk-adjust-value').value.trim();
+            const value = Number(rawValue);
+            if (rawValue === '' || !Number.isFinite(value) || value < 0) {
+                alert('Please enter a valid adjustment value.');
+                return;
+            }
+
+            const type = document.getElementById('bulk-adjust-type').value;
+            bulkPricePreviewData = products.filter(p => bulkSelectedProductIds.has(String(p.firebaseId))).map(p => {
+                const oldPrice = Number(p.price);
+                const safeOldPrice = Number.isFinite(oldPrice) && oldPrice >= 0 ? oldPrice : 0;
+                let change = type === 'percentage' ? (safeOldPrice * value / 100) : value;
+                let newPrice = direction === 'increase' ? safeOldPrice + change : Math.max(0, safeOldPrice - change);
+                newPrice = Math.round(newPrice * 100) / 100;
+                return { firebaseId: String(p.firebaseId), name: p.name || 'Unnamed Product', oldPrice: safeOldPrice, newPrice };
+            });
+
+            const body = document.getElementById('bulk-preview-body');
+            body.innerHTML = bulkPricePreviewData.map(item => `<tr><td>${escapeBulkText(item.name)}</td><td>Rs. ${item.oldPrice.toLocaleString('en-PK')}</td><td><strong>Rs. ${item.newPrice.toLocaleString('en-PK')}</strong></td></tr>`).join('');
+            document.getElementById('bulk-price-preview').style.display = 'block';
+            document.getElementById('bulk-price-preview').scrollIntoView({ behavior:'smooth', block:'nearest' });
+        }
+
+        function confirmBulkPriceUpdate() {
+            const count = bulkPricePreviewData.length;
+            if (!count) {
+                alert('Please preview the price changes first.');
+                return;
+            }
+
+            if (!confirm(`Are you sure you want to update ${count} products?`)) return;
+
+            const updates = {};
+            bulkPricePreviewData.forEach(item => {
+                updates['products/' + item.firebaseId + '/price'] = item.newPrice;
+            });
+
+            db.ref().update(updates).then(() => {
+                alert(`Successfully updated prices for ${count} product(s).`);
+                bulkPricePreviewData = [];
+                document.getElementById('bulk-price-preview').style.display = 'none';
+                renderBulkPriceProducts();
+            }).catch(error => {
+                console.error('Bulk price update failed:', error);
+                alert('Price update failed. Please try again.');
+            });
+        }
+
         function openAdminModal() {
             document.getElementById('input-store-name').value = siteSettings.storeName;
             document.getElementById('input-whatsapp').value = siteSettings.whatsapp;
@@ -2422,6 +2643,7 @@
             document.getElementById('input-lock-target-time').value = siteSettings.lockTargetTime || '';
             document.getElementById('input-lock-msg').value = siteSettings.lockMsg || '';
 
+            renderBulkPriceProducts();
             document.getElementById('adminModal').style.display = 'flex';
         }
 
