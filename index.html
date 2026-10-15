@@ -1,1 +1,4038 @@
+        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; 
+        }
 
+        .product-card { 
+            border: 1px solid #cfe2ff; 
+            padding: 15px; 
+            border-radius: 6px; 
+            background: #ffffff; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #cfe2ff;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+        }
+
+        .product-card h3 { margin: 0 0 10px 0; color: var(--primary-color); }
+        .product-card p { color: #495057; font-size: 14px; line-height: 1.4; }
+        .product-card input { width: 60px; padding: 5px; margin-bottom: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: #ffffff; color: #333333; }
+
+        .product-card button { 
+            background: #0b5ed7; 
+            color: white; 
+            border: none; 
+            padding: 8px 12px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .edit-btn { background: #17a2b8 !important; color: white !important; }
+        .delete-btn { background: #dc3545 !important; color: white !important; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #333333; }
+        .form-group input, .form-group textarea, .form-group select { 
+            width: 100%; 
+            padding: 10px; 
+            box-sizing: border-box; 
+            border: 1px solid var(--border-color); 
+            border-radius: 4px; 
+            background: #ffffff;
+            color: #333333;
+        }
+
+        .confirm-btn { 
+            background: var(--whatsapp-color); 
+            color: white; 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .confirm-btn:hover { background: #1ebe5d; }
+
+        .social-link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8f9fa;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #cfe2ff;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+        .social-link-card:hover {
+            background: #e9ecef;
+            border-color: var(--primary-color);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100002;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            color: #333333;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid #cfe2ff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .modal-content label { display: block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; color: #333333; font-weight: bold; }
+        .modal-content input, .modal-content textarea, .modal-content select {
+            width: 100%;
+            padding: 10px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: #333333;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .modal-buttons { display: flex; gap: 10px; margin-top: 25px; }
+        .save-btn { background: #0b5ed7; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
+        .cancel-btn { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
+        .admin-box { background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #cfe2ff; margin-top: 20px; }
+        .empty-msg { color: #6c757d; font-style: italic; text-align: center; padding: 20px; }
+
+        /* LTH Lightning Challenge Game */
+        .game-shell {
+            margin-top: 24px;
+            padding: 24px;
+            border-radius: 18px;
+            background:
+                radial-gradient(circle at 85% 15%, rgba(85,199,255,0.22), transparent 30%),
+                radial-gradient(circle at 15% 85%, rgba(18,107,255,0.18), transparent 32%),
+                linear-gradient(145deg, #07152f 0%, #0b2c67 52%, #07152f 100%);
+            color: white;
+            border: 1px solid rgba(85,199,255,0.35);
+            box-shadow: 0 18px 45px rgba(7, 21, 47, 0.22);
+            overflow: hidden;
+        }
+        .game-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .game-title {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 0.4px;
+        }
+        .game-subtitle {
+            margin: 4px 0 0 0;
+            color: #cfe4ff;
+            font-size: 13px;
+        }
+        .game-stats {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+        }
+        .game-stat {
+            min-width: 84px;
+            text-align: center;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+        }
+        .game-stat b {
+            display: block;
+            font-size: 18px;
+            color: #55c7ff;
+        }
+        .game-stat span {
+            font-size: 10px;
+            color: #d8e8ff;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+        .game-arena {
+            position: relative;
+            height: 330px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px),
+                radial-gradient(circle at center, rgba(38,140,255,0.16), transparent 60%),
+                #061227;
+            background-size: 34px 34px, 34px 34px, auto, auto;
+            overflow: hidden;
+        }
+        .game-arena::after {
+            content: "LTH • BUILD • INNOVATE • INSPIRE";
+            position: absolute;
+            left: 50%;
+            bottom: 12px;
+            transform: translateX(-50%);
+            color: rgba(210,230,255,0.26);
+            font-size: 10px;
+            letter-spacing: 2px;
+            pointer-events: none;
+        }
+        .game-bolt {
+            position: absolute;
+            width: 54px;
+            height: 54px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            border-radius: 16px;
+            cursor: pointer;
+            user-select: none;
+            background: radial-gradient(circle at 35% 30%, #ffffff 0%, #8bdcff 34%, #2787ff 68%, #0c44a7 100%);
+            color: #07152f;
+            box-shadow: 0 0 16px rgba(85,199,255,0.75), 0 0 34px rgba(18,107,255,0.4);
+            transition: transform 0.08s ease;
+            z-index: 3;
+        }
+        .game-bolt:active { transform: scale(0.88); }
+        .game-message {
+            margin: 13px 0 0 0;
+            text-align: center;
+            color: #dcecff;
+            font-size: 13px;
+            min-height: 20px;
+        }        }
+        .game-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .game-btn {
+            flex: 1;
+            background: #126bff;
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 11px 14px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 6px 16px rgba(18,107,255,0.28);
+        }
+        .game-btn:hover { background: #0b5cdf; }
+        .game-btn.secondary {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow: none;
+        }
+        .game-btn.secondary:hover { background: rgba(255,255,255,0.14); }
+        .game-note {
+            margin: 10px 0 0 0;
+            text-align: center;
+            color: rgba(220,236,255,0.72);
+            font-size: 11px;
+        }
+
+
+        /* LTH Firebase Login Gate */
+        #login-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 100003;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            box-sizing: border-box;
+            background:
+                radial-gradient(circle at 14% 12%, rgba(85,199,255,.22), transparent 28%),
+                radial-gradient(circle at 86% 88%, rgba(18,107,255,.22), transparent 32%),
+                linear-gradient(145deg, #06132c 0%, #0b2d68 55%, #07152f 100%);
+        }
+        .login-card {
+            width: 100%;
+            max-width: 390px;
+            background: rgba(255,255,255,.98);
+            border: 1px solid #cfe2ff;
+            border-radius: 18px;
+            padding: 28px;
+            box-sizing: border-box;
+            box-shadow: 0 22px 60px rgba(0,0,0,.28);
+            text-align: center;
+        }
+        .login-logo {
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 14px;
+            border-radius: 16px;
+            object-fit: contain;
+            display: block;
+        }
+        .login-card h2 { margin: 0 0 6px; color: #0b2d68; }
+        .login-card p { margin: 0 0 18px; color: #6c757d; font-size: 13px; }
+        .login-card input {
+            width: 100%;
+            padding: 11px 12px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #cfe2ff;
+            border-radius: 8px;
+            outline: none;
+        }
+        .login-card input:focus { border-color: #126bff; box-shadow: 0 0 0 3px rgba(18,107,255,.10); }
+        .login-actions { display: flex; gap: 9px; margin-top: 6px; }
+        .login-action-btn {
+            flex: 1;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 10px;
+            background: #126bff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .login-action-btn.alt { background: #eef5ff; color: #0b5ed7; border: 1px solid #cfe2ff; }
+        #login-status { min-height: 18px; margin-top: 12px; font-size: 12px; color: #dc3545; }
+        #top-login-btn {
+            position: fixed;
+            top: 12px;
+            right: 14px;
+            z-index: 100004;
+            display: none;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 13px;
+            background: #126bff;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(18,107,255,.25);
+        }
+        /* Create Account form */
+        #create-account-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100005;
+            background: rgba(0,0,0,0.55);
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            box-sizing: border-box;
+        }
+        .create-account-card {
+            width: 100%;
+            max-width: 430px;
+            background: #ffffff;
+            border: 1px solid #cfe2ff;
+            border-radius: 18px;
+            padding: 28px;
+            box-sizing: border-box;
+            box-shadow: 0 22px 60px rgba(0,0,0,.28);
+        }
+        .create-account-card h2 {
+            margin: 0 0 6px;
+            color: #0b2d68;
+            text-align: center;
+        }
+        .create-account-card p {
+            margin: 0 0 18px;
+            color: #6c757d;
+            font-size: 13px;
+            text-align: center;
+        }
+        .create-account-card label {
+            display: block;
+            margin: 12px 0 5px;
+            color: #333333;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .create-account-card input {
+            width: 100%;
+            padding: 11px 12px;
+            box-sizing: border-box;
+            border: 1px solid #cfe2ff;
+            border-radius: 8px;
+            outline: none;
+        }
+        .create-account-card input:focus {
+            border-color: #126bff;
+            box-shadow: 0 0 0 3px rgba(18,107,255,.10);
+        }
+        .create-account-actions {
+            display: flex;
+            gap: 9px;
+            margin-top: 20px;
+        }
+        .create-account-actions button {
+            flex: 1;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .create-account-submit {
+            background: #126bff;
+            color: white;
+        }
+        .create-account-cancel {
+            background: #eef5ff;
+            color: #0b5ed7;
+            border: 1px solid #cfe2ff !important;
+        }
+        #create-account-status {
+            min-height: 18px;
+            margin-top: 12px;
+            font-size: 12px;
+            text-align: center;
+            color: #dc3545;
+        }
+
+        #top-user-label {
+            position: fixed;
+            top: 12px;
+            right: 14px;
+            z-index: 100004;
+            display: none;
+            min-width: 105px;
+            border-radius: 8px;
+            background: #f0f6ff;
+            color: #0b5ed7;
+            border: 1px solid #cfe2ff;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        #top-user-name {
+            display: block;
+            padding: 8px 13px;
+            white-space: nowrap;
+        }
+        #top-logout-option {
+            display: none;
+            padding: 8px 13px;
+            border-top: 1px solid #cfe2ff;
+            background: #ffffff;
+            color: #dc3545;
+            text-align: center;
+            cursor: pointer;
+        }
+        #top-user-label.open #top-logout-option {
+            display: block;
+        }
+        #top-logout-option:hover {
+            background: #fff5f5;
+        }
+
+
+        .leaderboard-box{margin-top:18px;background:rgba(255,255,255,.96);border:1px solid #cfe2ff;border-radius:14px;padding:16px;box-shadow:0 10px 25px rgba(18,107,255,.08);color:#1f2d3d}
+        .leaderboard-title{margin:0 0 4px;color:#0b5ed7;font-size:18px}
+        .leaderboard-note{margin:0 0 12px;color:#6c757d;font-size:12px}
+        .leaderboard-table{width:100%;border-collapse:collapse;font-size:13px}
+        .leaderboard-table th,.leaderboard-table td{padding:9px 8px;border-bottom:1px solid #e8f1ff;text-align:left}
+        .leaderboard-table th{color:#0b5ed7;font-size:11px;text-transform:uppercase;letter-spacing:.6px}
+        .leaderboard-you{background:#f0f7ff;font-weight:bold}
+        .record-banner{margin-top:12px;padding:11px 12px;border-radius:9px;background:#eef6ff;border:1px solid #cfe2ff;color:#0b5ed7;font-size:12px;font-weight:bold;text-align:center}
+        .name-gate-card{margin-top:12px;padding:12px;border-radius:10px;background:#f8fbff;border:1px solid #dbeaff}
+        .name-gate-card input{width:100%;box-sizing:border-box;padding:9px 10px;border:1px solid #cfe2ff;border-radius:7px;margin:7px 0 8px}
+
+
+        /* LTH MAIN WEBSITE COLOR THEME
+           Matched to the supplied background: deep navy blue.
+           Game page intentionally remains white. */
+        :root {
+            --lth-bg: #0f2e5b;
+            --lth-bg-dark: #0b2852;
+            --lth-text: #ffffff;
+            --lth-muted: #d7e5f5;
+        }
+
+        html, body {
+            background: var(--lth-bg) !important;
+            color: var(--lth-text) !important;
+        }
+
+        header {
+            background: var(--lth-bg) !important;
+            color: #ffffff !important;
+            border-bottom-color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.22) !important;
+        }
+
+        header h1, header h2, header p, header span,
+        .header-top-row, .site-title {
+            color: #ffffff !important;
+        }
+
+        .navbar {
+            background: var(--lth-bg-dark) !important;
+            border-bottom-color: rgba(255,255,255,0.25) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18) !important;
+        }
+
+        .navbar button {
+            color: #ffffff !important;
+        }
+
+        .navbar button:hover,
+        .navbar button.active-tab {
+            background: rgba(255,255,255,0.16) !important;
+            color: #ffffff !important;
+        }        .container {
+            background: var(--lth-bg) !important;
+            color: #ffffff !important;
+            border-color: rgba(255,255,255,0.22) !important;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.20) !important;
+        }
+
+        .page-section,
+        .page-section h1,
+        .page-section h2,
+        .page-section h3,
+        .page-section h4,
+        .page-section h5,
+        .page-section h6,
+        .page-section p,
+        .page-section label,
+        .page-section span,
+        .page-section strong {
+            color: #ffffff;
+        }
+
+        .search-container input {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+            border-color: #cfe2ff !important;
+        }
+
+        .hero-banner-container {
+            background: var(--lth-bg-dark) !important;
+            border-color: rgba(255,255,255,0.20) !important;
+        }
+
+        .product-card {
+            background: var(--lth-bg-dark) !important;
+            color: #ffffff !important;
+            border-color: rgba(255,255,255,0.22) !important;
+            box-shadow: 0 5px 14px rgba(0,0,0,0.18) !important;
+        }
+
+        .product-card h3,
+        .product-card p,
+        .product-card label,
+        .product-card span,
+        .product-card strong {
+            color: #ffffff !important;
+        }
+
+        .product-card input,
+        .product-card select,
+        .product-card textarea {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+        }
+
+        .product-img {
+            background: #ffffff !important;
+            border-color: rgba(255,255,255,0.25) !important;
+        }
+
+        /* Common content boxes used by About/Cart/other sections */
+        #page-about > div,
+        #cart-items-list,
+        #page-cart > div {
+            background: var(--lth-bg-dark) !important;
+            color: #ffffff !important;
+            border-color: rgba(255,255,255,0.20) !important;
+        }
+
+        #page-about > div *,
+        #cart-items-list *,
+        #page-cart > div * {
+            color: #ffffff;
+        }
+
+        /* FIX: Customer checkout fields must keep typed text visible. */
+        #page-cart input,
+        #page-cart textarea,
+        #page-cart select {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+            -webkit-text-fill-color: #1f2937 !important;
+            caret-color: #1f2937 !important;
+        }
+
+        #page-cart input::placeholder,
+        #page-cart textarea::placeholder {
+            color: #6b7280 !important;
+            opacity: 1 !important;
+        }
+
+        /* Keep login/create-account cards readable while the page behind them
+           uses the new navy theme. */
+        .login-card,
+        .create-account-card {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+        }
+
+        .login-card h1, .login-card h2, .login-card h3,
+        .create-account-card h1, .create-account-card h2, .create-account-card h3,
+        .login-card label, .create-account-card label {
+            color: #0b2d68 !important;
+        }
+
+        /* GAME PAGE: white background as requested */
+        #page-game {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+            border-radius: 10px;
+            padding: 20px;
+            margin: -20px;
+        }
+
+        #page-game h1, #page-game h2, #page-game h3,
+        #page-game h4, #page-game h5, #page-game h6,
+        #page-game p:not(.game-message):not(.game-note),
+        #page-game span,
+        #page-game label,
+        #page-game strong {
+            color: #1f2937 !important;
+        }
+
+        /* The game itself is also kept light; the playable arena stays dark
+           for contrast and visibility. */
+        #page-game .game-shell {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+            border-color: #dbe5f2 !important;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.10) !important;
+        }
+
+        #page-game .game-title {
+            color: #0b2d68 !important;
+        }
+
+        #page-game .game-subtitle,
+        #page-game .game-message,
+        #page-game .game-note {
+            color: #5b6777 !important;
+        }
+
+        #page-game .game-stat {
+            background: #f5f8fc !important;
+            border-color: #dbe5f2 !important;
+        }
+
+        #page-game .game-stat span {
+            color: #5b6777 !important;
+        }
+
+        #page-game .game-arena {
+            background:
+                linear-gradient(rgba(15,46,91,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(15,46,91,0.035) 1px, transparent 1px),
+                #0f2e5b !important;
+        }
+
+        #page-game .leaderboard-box {
+            background: #f7f9fc !important;
+            color: #1f2937 !important;
+            border-color: #dbe5f2 !important;
+        }
+
+        #page-game .leaderboard-title,
+        #page-game .leaderboard-box * {
+            color: #1f2937 !important;
+        }
+
+        /* Keep the supplied dark theme visible behind modals/overlays. */
+        #login-gate {
+            background: var(--lth-bg) !important;
+        }
+
+        /* Logged-in name control */
+        #top-user-label {
+            background: #ffffff !important;
+            color: #0b2d68 !important;
+        }
+
+        #top-user-name {
+            color: #0b2d68 !important;
+        }
+
+
+        /* Final requested logo + login theme */
+        .login-card,
+        .create-account-card {
+            background: #0f2e5b !important;
+            border: 1px solid rgba(255,255,255,0.25) !important;
+            color: #ffffff !important;
+        }
+
+        .login-card h2,
+        .login-card p,
+        .create-account-card h2,
+        .create-account-card p,
+        .create-account-card label {
+            color: #ffffff !important;
+        }
+
+        .login-card input,
+        .create-account-card input {
+            background: #ffffff !important;
+            color: #172033 !important;
+            border-color: #cfe2ff !important;
+        }
+
+        .login-action-btn,
+        .create-account-submit {
+            background: #126bff !important;
+            color: #ffffff !important;
+        }
+
+        .login-action-btn.alt,
+        .create-account-cancel {
+            background: rgba(255,255,255,0.10) !important;
+            color: #ffffff !important;
+            border-color: rgba(255,255,255,0.35) !important;
+        }
+
+        .login-logo,
+        .create-account-logo {
+            width: 112px;
+            height: 112px;
+            margin: 0 auto 14px;
+            border-radius: 16px;
+            object-fit: cover;
+            display: block;            box-shadow: 0 0 24px rgba(85,199,255,0.30);
+        }
+
+        .create-account-logo {
+            border: 1px solid rgba(255,255,255,0.28);
+        }
+
+
+        /* FINAL RESPONSIVE LAYOUT
+           Desktop uses the full desktop layout; mobile automatically switches
+           to a compact, touch-friendly layout without changing functionality. */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            overflow-x: hidden;
+        }
+
+        img, video, canvas, iframe {
+            max-width: 100%;
+        }
+
+        .container {
+            width: min(100% - 32px, 1000px);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        header {
+            width: 100%;
+            padding-left: clamp(14px, 3vw, 30px);
+            padding-right: clamp(14px, 3vw, 30px);
+        }
+
+        .header-top-row {
+            flex-wrap: wrap;
+        }
+
+        .navbar {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .navbar > * {
+            flex: 0 0 auto;
+        }
+
+        .products-grid {
+            width: 100%;
+        }
+
+        .product-card {
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        /* Tablet */
+        @media (max-width: 900px) {
+            .container {
+                width: min(100% - 24px, 1000px);
+            }
+
+            header {
+                padding-top: 12px;
+                padding-bottom: 12px;
+            }
+
+            .header-top-row {
+                gap: 10px;
+            }
+
+            .product-card {
+                overflow: hidden;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            body {
+                font-size: 14px;
+            }
+
+            .container {
+                width: calc(100% - 16px) !important;
+                margin-left: 8px !important;
+                margin-right: 8px !important;
+                padding: 14px !important;
+                border-radius: 10px;
+            }
+
+            header {
+                padding: 10px 10px 12px !important;
+                gap: 8px;
+            }
+
+            .header-top-row {
+                width: 100%;
+                gap: 7px;
+                justify-content: center;
+            }
+
+            .header-top-row img {
+                max-width: 62px;
+                max-height: 62px;
+            }
+
+            .header-top-row h1,
+            .header-top-row h2 {
+                font-size: clamp(20px, 7vw, 30px) !important;
+                line-height: 1.12;
+                text-align: center;
+            }
+
+            .navbar {
+                padding: 5px 4px !important;
+                gap: 4px !important;
+            }
+
+            .navbar button {
+                min-height: 40px;
+                padding: 8px 11px !important;
+                font-size: 12px !important;
+                white-space: nowrap;
+            }
+
+            .search-container {
+                width: 100% !important;
+                padding: 8px !important;
+            }
+
+            .search-container input {
+                width: 100% !important;
+                min-width: 0 !important;
+                font-size: 14px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+
+            .product-card {
+                width: 100% !important;
+            }
+
+            .product-card img {
+                max-height: 220px;
+                object-fit: contain;
+            }
+
+            .hero-banner-container {
+                width: 100% !important;
+                overflow: hidden;
+            }
+
+            .hero-banner-container img {
+                width: 100% !important;
+                height: auto !important;
+                max-height: 300px;
+                object-fit: cover;
+            }
+
+            /* Login/Create Account remain centered and fit the phone screen. */
+            #login-gate,
+            #create-account-modal {
+                padding: 12px !important;
+                overflow-y: auto;
+            }
+
+            .login-card,
+            .create-account-card {
+                width: min(100%, 390px) !important;
+                max-width: 100% !important;
+                padding: 20px 16px !important;
+                margin: auto;
+                border-radius: 14px;
+            }
+
+            .login-logo,
+            .create-account-logo {
+                width: 86px !important;
+                height: 86px !important;
+            }
+
+            .login-actions,
+            .create-account-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .login-action-btn,
+            .create-account-actions button {
+                width: 100%;
+                min-height: 42px;
+            }
+
+            #top-login-btn {
+                top: 8px;
+                right: 8px;
+                padding: 8px 10px;
+                max-width: calc(100vw - 16px);
+            }
+
+            #top-user-label {
+                top: 8px;
+                right: 8px;
+                max-width: calc(100vw - 16px);
+                min-width: 0;
+            }
+
+            #top-user-name {
+                max-width: calc(100vw - 40px);
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            /* Game page stays white, but scales naturally to the phone width. */
+            #page-game {
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 12px !important;
+                border-radius: 8px;
+                overflow-x: hidden;
+            }
+
+            #page-game .game-arena {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: min(62vh, 420px) !important;
+            }
+
+            #page-game .game-stats,
+            #page-game .game-controls {
+                flex-wrap: wrap !important;
+            }            #page-game button {
+                min-height: 40px;
+            }
+
+            /* Tables/lists never force the phone page wider than the viewport. */
+            table {
+                width: 100% !important;
+                max-width: 100%;
+                display: block;
+                overflow-x: auto;
+            }
+
+            textarea,
+            select,
+            input,
+            button {
+                max-width: 100%;
+            }
+        }
+
+        /* Very small phones */
+        @media (max-width: 380px) {
+            .container {
+                width: calc(100% - 10px) !important;
+                margin-left: 5px !important;
+                margin-right: 5px !important;
+                padding: 11px !important;
+            }
+
+            .header-top-row h1,
+            .header-top-row h2 {
+                font-size: 21px !important;
+            }
+
+            .navbar button {
+                padding: 7px 9px !important;
+                font-size: 11px !important;
+            }
+
+            .login-card,
+            .create-account-card {
+                padding: 17px 13px !important;
+            }
+
+            .login-logo,
+            .create-account-logo {
+                width: 76px !important;
+                height: 76px !important;
+            }
+        }
+
+        /* Prevent desktop-only fixed widths from creating horizontal scrolling. */
+        [style*="width: 1000px"],
+        [style*="width:1000px"],
+        [style*="width: 900px"],
+        [style*="width:900px"] {
+            max-width: 100% !important;
+        }
+
+
+        /* LTH Bulk Price Manager - additive admin feature only */
+        .bulk-price-manager { background:#f8fbff; border:1px solid #cfe2ff; }
+        .bulk-price-toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:12px 0; }
+        .bulk-price-toolbar input, .bulk-price-toolbar select { flex:1 1 180px; margin:0 !important; }
+        .bulk-selection-count { font-weight:bold; color:var(--primary-color); padding:8px 12px; background:#eef6ff; border:1px solid #cfe2ff; border-radius:7px; }
+        .bulk-product-list { max-height:360px; overflow:auto; border:1px solid #dbeaff; border-radius:7px; background:#fff; }
+        .bulk-product-row { display:grid; grid-template-columns:32px 1fr 120px 130px; gap:8px; align-items:center; padding:9px 10px; border-bottom:1px solid #edf3fb; font-size:13px; }
+        .bulk-product-row:last-child { border-bottom:none; }
+        .bulk-product-row:hover { background:#f7fbff; }
+        .bulk-product-row input[type="checkbox"] { width:18px; height:18px; margin:0; }
+        .bulk-product-name { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .bulk-product-category { color:#6c757d; font-size:11px; }
+        .bulk-product-price { font-weight:bold; text-align:right; }
+        .bulk-adjust-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+        .bulk-adjust-grid input, .bulk-adjust-grid select { width:100%; box-sizing:border-box; }
+        .bulk-action-buttons { display:flex; gap:10px; margin-top:12px; }
+        .bulk-action-buttons button { flex:1; }
+        .bulk-preview { display:none; margin-top:15px; border:1px solid #cfe2ff; border-radius:8px; overflow:hidden; background:#fff; }
+        .bulk-preview h4 { margin:0; padding:11px 12px; background:#eef6ff; color:var(--primary-color); }
+        .bulk-preview-table { width:100%; border-collapse:collapse; font-size:12px; }
+        .bulk-preview-table th, .bulk-preview-table td { padding:8px; border-bottom:1px solid #edf3fb; text-align:left; }
+        .bulk-preview-table th { background:#f8fbff; color:#0b5ed7; }
+        .bulk-confirm-btn { background:#198754 !important; color:#fff; border:none; padding:10px 14px; border-radius:5px; cursor:pointer; font-weight:bold; width:100%; margin-top:10px; }
+        @media (max-width:700px) {
+            .bulk-product-row { grid-template-columns:30px 1fr 95px; }
+            .bulk-product-row .bulk-product-category { display:none; }
+            .bulk-adjust-grid { grid-template-columns:1fr; }
+            .bulk-action-buttons { flex-direction:column; }
+        }
+
+
+/* FIX: Public content text visibility + structured description formatting */
+#page-home #display-home-desc,
+#page-about > div,
+#page-help > div,
+#page-help .support-content,
+#page-social > div {
+    color: #1f2937 !important;
+}
+#page-home #display-home-desc *,
+#page-about > div *,
+#page-help > div *,
+#page-help .support-content *,
+#page-social > div * {
+    color: #1f2937 !important;
+}
+#page-home #display-home-desc {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+    text-align: left;
+}
+#page-home #display-home-desc .content-heading,
+#page-about #display-about-text .content-heading,
+#page-help .content-heading {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0b5ed7 !important;
+    margin: 18px 0 7px;
+}
+#page-home #display-home-desc .content-heading:first-child,
+#page-about #display-about-text .content-heading:first-child { margin-top: 0; }
+#page-home #display-home-desc .content-paragraph,
+#page-about #display-about-text .content-paragraph,
+#page-help .content-paragraph {
+    display: block;
+    color: #1f2937 !important;
+    line-height: 1.75;
+    margin: 0 0 12px;
+}
+#page-about #display-about-text { color: #1f2937 !important; }
+#page-about #display-about-text strong { color: #0b5ed7 !important; }
+#page-help .content-paragraph { color: #1f2937 !important; }
+
+
+/* LTH add-on: entrance animations and checkout button visibility */
+@keyframes lthIntroReveal { from {opacity:0;transform:translateY(22px)} to {opacity:1;transform:translateY(0)} }
+@keyframes lthImageReveal { from {opacity:0;transform:scale(.96)} to {opacity:1;transform:scale(1)} }
+#page-home h2, #display-home-desc { animation:lthIntroReveal .8s ease both; }
+.hero-banner-img, .product-img { animation:lthImageReveal .75s ease both; }
+.product-card { animation:lthIntroReveal .6s ease both; transition:transform .22s ease,box-shadow .22s ease; }
+.product-card:hover { transform:translateY(-4px); box-shadow:0 12px 25px rgba(85,199,255,.2); }
+#page-cart #place-order-btn { display:flex !important; visibility:visible !important; opacity:1 !important; position:relative; z-index:20; width:100%; min-height:48px; cursor:pointer; pointer-events:auto; }
+#page-cart #place-order-btn:disabled { opacity:.7 !important; cursor:wait; }
+.lth-panel { margin:18px 0; padding:20px; background:#fff; color:#172033; border:1px solid #cfe2ff; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.12); }
+.lth-panel h2,.lth-panel h3,.lth-panel p,.lth-panel label { color:#172033 !important; }
+.lth-panel input,.lth-panel select { width:100%; padding:11px; margin:6px 0 12px; box-sizing:border-box; border:1px solid #cfe2ff; border-radius:7px; background:#fff; color:#172033; }
+.lth-action { display:block; width:100%; padding:12px; margin-top:10px; border:0; border-radius:8px; background:#126bff; color:#fff; font-weight:bold; cursor:pointer; }
+.lth-timeline { display:grid; grid-template-columns:1fr; gap:9px; margin-top:16px; }
+.lth-stage { padding:12px; border-radius:8px; background:#eef3fa; border-left:5px solid #9ca3af; color:#172033; }
+.lth-stage.completed { background:#e5f8ed; border-left-color:#198754; }
+.lth-invoice { padding:18px; margin-top:16px; background:#fff; color:#172033; border:2px dashed #126bff; border-radius:10px; }
+.lth-invoice table { width:100%; border-collapse:collapse; }
+.lth-invoice th,.lth-invoice td { padding:9px; border-bottom:1px solid #e5e7eb; text-align:left; color:#172033; }
+@media(prefers-reduced-motion:reduce){#page-home h2,#display-home-desc,.hero-banner-img,.product-img,.product-card{animation:none!important;transition:none!important}}
+
+</style>        /* LTH MAIN WEBSITE COLOR THEME
+           Matched to the supplied background: deep navy blue.
+           Game page intentionally remains white. */
+        :root {
+            --lth-bg: #0f2e5b;
+            --lth-bg-dark: #0b2852;
+            --lth-text: #ffffff;
+            --lth-muted: #d7e5f5;
+        }
+
+        html, body {
+            background: var(--lth-bg) !important;
+            color: var(--lth-text) !important;
+        }
+
+        header {
+            background: var(--lth-bg) !important;
+            color: #ffffff !important;
+            border-bottom-color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.22) !important;
+        }
+
+        header h1, header h2, header p, header span,
+        .header-top-row, .site-title {
+            color: #ffffff !important;
+        }
+
+        .navbar {
+            background: var(--lth-bg-dark) !important;
+            border-bottom-color: rgba(255,255,255,0.25) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18) !important;
+        }
+
+        .navbar button {
+            color: #ffffff !important;
+        }
+
+        .navbar button:hover,
+        .navbar button.active-tab {
+            background: rgba(255,255,255,0.16) !important;
+            color: #ffffff !important;
+        }<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">LTH Lightning Tech Hub</title>
+
+    <!-- Firebase SDK Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #126bff; /* Electric Blue */
+            --accent-color: #55c7ff;
+            --success-color: #0b5ed7;
+            --whatsapp-color: #25D366;
+            --bg-color: #f5f9ff; /* Soft Blue tint */
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #126bff;
+        }
+
+        body { 
+            font-family: 'Tahoma', sans-serif; 
+            /* 14th August Theme Background */
+            background: radial-gradient(circle at 15% 10%, #eaf5ff 0%, #ffffff 42%, #f2f7ff 100%);
+            color: var(--text-color);
+            margin: 0; 
+            padding: 0; 
+        }
+
+        /* Professional Maintenance & Lock Screen Styles */
+        #lock-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #071b45 0%, #0b2d68 48%, #126bff 100%);
+            color: white;
+            z-index: 99999;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 25px;
+            box-sizing: border-box;
+        }
+
+        .lock-card {
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .lock-logo {
+            width: 170px;
+            height: 90px;
+            border-radius: 14px;
+            border: 3px solid #ffffff;
+            object-fit: contain;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.45);
+        }
+
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .countdown-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #ffffff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            min-width: 70px;
+        }
+
+        .countdown-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #9dccff;
+            display: block;
+        }
+
+        .countdown-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #cccccc;
+        }
+
+        header { 
+            background: #ffffff; 
+            color: var(--primary-color); 
+            padding: 15px 30px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 12px;
+            box-shadow: 0 4px 10px rgba(11, 94, 215, 0.18);
+            border-bottom: 5px solid #0b5ed7;
+        }
+
+        .header-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .site-logo {
+            height: 75px;
+            width: 75px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 0 10px rgba(11, 94, 215, 0.25);
+        }
+
+        #display-store-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding-top: 5px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .cart-icon, .admin-btn { 
+            cursor: pointer; 
+            background: var(--primary-color); 
+            color: white;
+            padding: 8px 18px; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            border: none;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .admin-btn {
+            background: #0b5ed7;
+            color: white;
+        }
+
+        .navbar {
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px;
+            border-bottom: 2px solid #0b5ed7;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .navbar button {
+            background: transparent;
+            color: #495057;
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .navbar button:hover, .navbar button.active-tab {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .container { 
+            max-width: 1000px; 
+            margin: 20px auto; 
+            padding: 20px; 
+            background: #ffffff; 
+            border-radius: 8px; 
+            box-shadow: 0 0 15px rgba(11, 94, 215, 0.12); 
+            border: 2px solid #0b5ed7;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            color: #333333;
+            font-size: 15px;
+        }
+
+        .page-section { display: none; }
+        .page-section.active-page { display: block; }
+
+        .hero-banner-container {
+            width: 100%;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #cfe2ff;
+            background: #f8f9fa;
+            text-align: center;
+        }
+
+        .hero-banner-img {
+            width: 100%;
+            max-height: 420px;
+            object-fit: cover;
+            display: block;
+        }        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; 
+        }
+
+        .product-card { 
+            border: 1px solid #cfe2ff; 
+            padding: 15px; 
+            border-radius: 6px; 
+            background: #ffffff; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #cfe2ff;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+        }
+
+        .product-card h3 { margin: 0 0 10px 0; color: var(--primary-color); }
+        .product-card p { color: #495057; font-size: 14px; line-height: 1.4; }
+        .product-card input { width: 60px; padding: 5px; margin-bottom: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: #ffffff; color: #333333; }
+
+        .product-card button { 
+            background: #0b5ed7; 
+            color: white; 
+            border: none; 
+            padding: 8px 12px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .edit-btn { background: #17a2b8 !important; color: white !important; }
+        .delete-btn { background: #dc3545 !important; color: white !important; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #333333; }
+        .form-group input, .form-group textarea, .form-group select { 
+            width: 100%; 
+            padding: 10px; 
+            box-sizing: border-box; 
+            border: 1px solid var(--border-color); 
+            border-radius: 4px; 
+            background: #ffffff;
+            color: #333333;
+        }
+
+        .confirm-btn { 
+            background: var(--whatsapp-color); 
+            color: white; 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .confirm-btn:hover { background: #1ebe5d; }
+
+        .social-link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8f9fa;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #cfe2ff;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+        .social-link-card:hover {
+            background: #e9ecef;
+            border-color: var(--primary-color);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100002;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            color: #333333;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid #cfe2ff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .modal-content label { display: block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; color: #333333; font-weight: bold; }
+        .modal-content input, .modal-content textarea, .modal-content select {
+            width: 100%;
+            padding: 10px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: #333333;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .modal-buttons { display: flex; gap: 10px; margin-top: 25px; }
+        .save-btn { background: #0b5ed7; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
+        .cancel-btn { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
+        .admin-box { background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #cfe2ff; margin-top: 20px; }
+        .empty-msg { color: #6c757d; font-style: italic; text-align: center; padding: 20px; }
+
+        /* LTH Lightning Challenge Game */
+        .game-shell {
+            margin-top: 24px;
+            padding: 24px;
+            border-radius: 18px;
+            background:
+                radial-gradient(circle at 85% 15%, rgba(85,199,255,0.22), transparent 30%),
+                radial-gradient(circle at 15% 85%, rgba(18,107,255,0.18), transparent 32%),
+                linear-gradient(145deg, #07152f 0%, #0b2c67 52%, #07152f 100%);
+            color: white;
+            border: 1px solid rgba(85,199,255,0.35);
+            box-shadow: 0 18px 45px rgba(7, 21, 47, 0.22);
+            overflow: hidden;
+        }
+        .game-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .game-title {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 0.4px;
+        }
+        .game-subtitle {
+            margin: 4px 0 0 0;
+            color: #cfe4ff;
+            font-size: 13px;
+        }
+        .game-stats {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+        }
+        .game-stat {
+            min-width: 84px;
+            text-align: center;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+        }
+        .game-stat b {
+            display: block;
+            font-size: 18px;
+            color: #55c7ff;
+        }
+        .game-stat span {
+            font-size: 10px;
+            color: #d8e8ff;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+        .game-arena {
+            position: relative;
+            height: 330px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px),
+                radial-gradient(circle at center, rgba(38,140,255,0.16), transparent 60%),
+                #061227;
+            background-size: 34px 34px, 34px 34px, auto, auto;
+            overflow: hidden;
+        }
+        .game-arena::after {
+            content: "LTH • BUILD • INNOVATE • INSPIRE";
+            position: absolute;
+            left: 50%;
+            bottom: 12px;
+            transform: translateX(-50%);
+            color: rgba(210,230,255,0.26);
+            font-size: 10px;
+            letter-spacing: 2px;
+            pointer-events: none;
+        }
+        .game-bolt {
+            position: absolute;
+            width: 54px;
+            height: 54px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            border-radius: 16px;
+            cursor: pointer;
+            user-select: none;
+            background: radial-gradient(circle at 35% 30%, #ffffff 0%, #8bdcff 34%, #2787ff 68%, #0c44a7 100%);
+            color: #07152f;
+            box-shadow: 0 0 16px rgba(85,199,255,0.75), 0 0 34px rgba(18,107,255,0.4);
+            transition: transform 0.08s ease;
+            z-index: 3;
+        }
+        .game-bolt:active { transform: scale(0.88); }
+        .game-message {
+            margin: 13px 0 0 0;
+            text-align: center;
+            color: #dcecff;
+            font-size: 13px;
+            min-height: 20px;
+        }        .game-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .game-btn {
+            flex: 1;
+            background: #126bff;
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 11px 14px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 6px 16px rgba(18,107,255,0.28);
+        }
+        .game-btn:hover { background: #0b5cdf; }
+        .game-btn.secondary {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow: none;
+        }
+        .game-btn.secondary:hover { background: rgba(255,255,255,0.14); }
+        .game-note {
+            margin: 10px 0 0 0;
+            text-align: center;
+            color: rgba(220,236,255,0.72);
+            font-size: 11px;
+        }
+
+
+        /* LTH Firebase Login Gate */
+        #login-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 100003;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            box-sizing: border-box;
+            background:
+                radial-gradient(circle at 14% 12%, rgba(85,199,255,.22), transparent 28%),
+                radial-gradient(circle at 86% 88%, rgba(18,107,255,.22), transparent 32%),
+                linear-gradient(145deg, #06132c 0%, #0b2d68 55%, #07152f 100%);
+        }
+        .login-card {
+            width: 100%;
+            max-width: 390px;
+            background: rgba(255,255,255,.98);
+            border: 1px solid #cfe2ff;
+            border-radius: 18px;
+            padding: 28px;
+            box-sizing: border-box;
+            box-shadow: 0 22px 60px rgba(0,0,0,.28);
+            text-align: center;
+        }
+        .login-logo {
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 14px;
+            border-radius: 16px;
+            object-fit: contain;
+            display: block;
+        }
+        .login-card h2 { margin: 0 0 6px; color: #0b2d68; }
+        .login-card p { margin: 0 0 18px; color: #6c757d; font-size: 13px; }
+        .login-card input {
+            width: 100%;
+            padding: 11px 12px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #cfe2ff;
+            border-radius: 8px;
+            outline: none;
+        }
+        .login-card input:focus { border-color: #126bff; box-shadow: 0 0 0 3px rgba(18,107,255,.10); }
+        .login-actions { display: flex; gap: 9px; margin-top: 6px; }
+        .login-action-btn {
+            flex: 1;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 10px;
+            background: #126bff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .login-action-btn.alt { background: #eef5ff; color: #0b5ed7; border: 1px solid #cfe2ff; }
+        #login-status { min-height: 18px; margin-top: 12px; font-size: 12px; color: #dc3545; }
+        #top-login-btn {
+            position: fixed;
+            top: 12px;
+            right: 14px;
+            z-index: 100004;
+            display: none;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 13px;
+            background: #126bff;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(18,107,255,.25);
+        }
+        /* Create Account form */
+        #create-account-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100005;
+            background: rgba(0,0,0,0.55);
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            box-sizing: border-box;
+        }
+        .create-account-card {
+            width: 100%;
+            max-width: 430px;
+            background: #ffffff;
+            border: 1px solid #cfe2ff;
+            border-radius: 18px;
+            padding: 28px;
+            box-sizing: border-box;
+            box-shadow: 0 22px 60px rgba(0,0,0,.28);
+        }
+        .create-account-card h2 {
+            margin: 0 0 6px;
+            color: #0b2d68;
+            text-align: center;
+        }
+        .create-account-card p {
+            margin: 0 0 18px;
+            color: #6c757d;
+            font-size: 13px;
+            text-align: center;
+        }
+        .create-account-card label {
+            display: block;
+            margin: 12px 0 5px;
+            color: #333333;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .create-account-card input {
+            width: 100%;
+            padding: 11px 12px;
+            box-sizing: border-box;
+            border: 1px solid #cfe2ff;
+            border-radius: 8px;
+            outline: none;
+        }
+        .create-account-card input:focus {
+            border-color: #126bff;
+            box-shadow: 0 0 0 3px rgba(18,107,255,.10);
+        }
+        .create-account-actions {
+            display: flex;
+            gap: 9px;
+            margin-top: 20px;
+        }
+        .create-account-actions button {
+            flex: 1;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .create-account-submit {
+            background: #126bff;
+            color: white;
+        }
+        .create-account-cancel {
+            background: #eef5ff;
+            color: #0b5ed7;
+            border: 1px solid #cfe2ff !important;
+        }
+        #create-account-status {
+            min-height: 18px;
+            margin-top: 12px;
+            font-size: 12px;
+            text-align: center;
+            color: #dc3545;
+        }
+
+        #top-user-label {
+            position: fixed;
+            top: 12px;
+            right: 14px;
+            z-index: 100004;
+            display: none;
+            min-width: 105px;
+            border-radius: 8px;
+            background: #f0f6ff;
+            color: #0b5ed7;
+            border: 1px solid #cfe2ff;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        #top-user-name {
+            display: block;
+            padding: 8px 13px;
+            white-space: nowrap;
+        }
+        #top-logout-option {
+            display: none;
+            padding: 8px 13px;
+            border-top: 1px solid #cfe2ff;
+            background: #ffffff;
+            color: #dc3545;
+            text-align: center;
+            cursor: pointer;
+        }
+        #top-user-label.open #top-logout-option {
+            display: block;
+        }
+        #top-logout-option:hover {
+            background: #fff5f5;
+        }
+
+
+        .leaderboard-box{margin-top:18px;background:rgba(255,255,255,.96);border:1px solid #cfe2ff;border-radius:14px;padding:16px;box-shadow:0 10px 25px rgba(18,107,255,.08);color:#1f2d3d}
+        .leaderboard-title{margin:0 0 4px;color:#0b5ed7;font-size:18px}
+        .leaderboard-note{margin:0 0 12px;color:#6c757d;font-size:12px}
+        .leaderboard-table{width:100%;border-collapse:collapse;font-size:13px}
+        .leaderboard-table th,.leaderboard-table td{padding:9px 8px;border-bottom:1px solid #e8f1ff;text-align:left}
+        .leaderboard-table th{color:#0b5ed7;font-size:11px;text-transform:uppercase;letter-spacing:.6px}
+        .leaderboard-you{background:#f0f7ff;font-weight:bold}
+        .record-banner{margin-top:12px;padding:11px 12px;border-radius:9px;background:#eef6ff;border:1px solid #cfe2ff;color:#0b5ed7;font-size:12px;font-weight:bold;text-align:center}
+        .name-gate-card{margin-top:12px;padding:12px;border-radius:10px;background:#f8fbff;border:1px solid #dbeaff}
+        .name-gate-card input{width:100%;box-sizing:border-box;padding:9px 10px;border:1px solid #cfe2ff;border-radius:7px;margin:7px 0 8px}
+
+
+        /* LTH MAIN WEBSITE COLOR THEME
+           Matched to the supplied background: deep navy blue.
+           Game page intentionally remains white. */
+        :root {
+            --lth-bg: #0f2e5b;
+            --lth-bg-dark: #0b2852;
+            --lth-text: #ffffff;
+            --lth-muted: #d7e5f5;
+        }
+
+        html, body {
+            background: var(--lth-bg) !important;
+            color: var(--lth-text) !important;
+        }
+
+        header {
+            background: var(--lth-bg) !important;
+            color: #ffffff !important;
+            border-bottom-color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.22) !important;
+        }
+
+        header h1, header h2, header p, header span,
+        .header-top-row, .site-title {
+            color: #ffffff !important;
+        }        .navbar {
+            background: var(--lth-bg-dark) !important;
+            border-bottom-color: rgba(255,255,255,0.25) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18) !important;
+        }
+
+        .navbar button {
+            color: #ffffff !important;
+        }
+
+        .navbar button:hover,
+        .navbar button.active-tab {
+            background: rgba(255,255,255,0.16) !important;
+            color: #ffffff !important;
+        }
+
+        .container {
+            background: var(--lth-bg) !important;
+            color: #ffffff !important;
+            border-color: rgba(255,255,255,0.22) !important;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.20) !important;
+        }
+
+        .page-section,
+        .page-section h1,
+        .page-section h2,
+        .page-section h3,
+        .page-section h4,
+        .page-section h5,
+        .page-section h6,
+        .page-section p,
+        .page-section label,
+        .page-section span,
+        .page-section strong {
+            color: #ffffff;
+        }
+
+        .search-container input {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+            border-color: #cfe2ff !important;
+        }
+
+        .hero-banner-container {
+            background: var(--lth-bg-dark) !important;
+            border-color: rgba(255,255,255,0.20) !important;
+        }
+
+        .product-card {
+            background: var(--lth-bg-dark) !important;
+            color: #ffffff !important;
+            border-color: rgba(255,255,255,0.22) !important;
+            box-shadow: 0 5px 14px rgba(0,0,0,0.18) !important;
+        }
+
+        .product-card h3,
+        .product-card p,
+        .product-card label,
+        .product-card span,
+        .product-card strong {
+            color: #ffffff !important;
+        }
+
+        .product-card input,
+        .product-card select,
+        .product-card textarea {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+        }
+
+        .product-img {
+            background: #ffffff !important;
+            border-color: rgba(255,255,255,0.25) !important;
+        }
+
+        /* Common content boxes used by About/Cart/other sections */
+        #page-about > div,
+        #cart-items-list,
+        #page-cart > div {
+            background: var(--lth-bg-dark) !important;
+            color: #ffffff !important;
+            border-color: rgba(255,255,255,0.20) !important;
+        }
+
+        #page-about > div *,
+        #cart-items-list *,
+        #page-cart > div * {
+            color: #ffffff;
+        }
+
+        /* FIX: Customer checkout fields must keep typed text visible. */
+        #page-cart input,
+        #page-cart textarea,
+        #page-cart select {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+            -webkit-text-fill-color: #1f2937 !important;
+            caret-color: #1f2937 !important;
+        }
+
+        #page-cart input::placeholder,
+        #page-cart textarea::placeholder {
+            color: #6b7280 !important;
+            opacity: 1 !important;
+        }
+
+        /* Keep login/create-account cards readable while the page behind them
+           uses the new navy theme. */
+        .login-card,
+        .create-account-card {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+        }
+
+        .login-card h1, .login-card h2, .login-card h3,
+        .create-account-card h1, .create-account-card h2, .create-account-card h3,
+        .login-card label, .create-account-card label {
+            color: #0b2d68 !important;
+        }
+
+        /* GAME PAGE: white background as requested */
+        #page-game {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+            border-radius: 10px;
+            padding: 20px;
+            margin: -20px;
+        }
+
+        #page-game h1, #page-game h2, #page-game h3,
+        #page-game h4, #page-game h5, #page-game h6,
+        #page-game p:not(.game-message):not(.game-note),
+        #page-game span,
+        #page-game label,
+        #page-game strong {
+            color: #1f2937 !important;
+        }
+
+        /* The game itself is also kept light; the playable arena stays dark
+           for contrast and visibility. */
+        #page-game .game-shell {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+            border-color: #dbe5f2 !important;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.10) !important;
+        }
+
+        #page-game .game-title {
+            color: #0b2d68 !important;
+        }
+
+        #page-game .game-subtitle,
+        #page-game .game-message,
+        #page-game .game-note {
+            color: #5b6777 !important;
+        }
+
+        #page-game .game-stat {
+            background: #f5f8fc !important;
+            border-color: #dbe5f2 !important;
+        }
+
+        #page-game .game-stat span {
+            color: #5b6777 !important;
+        }
+
+        #page-game .game-arena {
+            background:
+                linear-gradient(rgba(15,46,91,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(15,46,91,0.035) 1px, transparent 1px),
+                #0f2e5b !important;
+        }
+
+        #page-game .leaderboard-box {
+            background: #f7f9fc !important;
+            color: #1f2937 !important;
+            border-color: #dbe5f2 !important;
+        }
+
+        #page-game .leaderboard-title,
+        #page-game .leaderboard-box * {
+            color: #1f2937 !important;
+        }
+
+        /* Keep the supplied dark theme visible behind modals/overlays. */
+        #login-gate {
+            background: var(--lth-bg) !important;
+        }
+
+        /* Logged-in name control */
+        #top-user-label {
+            background: #ffffff !important;
+            color: #0b2d68 !important;
+        }
+
+        #top-user-name {
+            color: #0b2d68 !important;
+        }
+
+
+        /* Final requested logo + login theme */
+        .login-card,
+        .create-account-card {
+            background: #0f2e5b !important;
+            border: 1px solid rgba(255,255,255,0.25) !important;
+            color: #ffffff !important;
+        }
+
+        .login-card h2,
+        .login-card p,
+        .create-account-card h2,
+        .create-account-card p,
+        .create-account-card label {
+            color: #ffffff !important;
+        }
+
+        .login-card input,
+        .create-account-card input {
+            background: #ffffff !important;
+            color: #172033 !important;
+            border-color: #cfe2ff !important;
+        }
+
+        .login-action-btn,
+        .create-account-submit {
+            background: #126bff !important;
+            color: #ffffff !important;
+        }
+
+        .login-action-btn.alt,
+        .create-account-cancel {
+            background: rgba(255,255,255,0.10) !important;
+            color: #ffffff !important;
+            border-color: rgba(255,255,255,0.35) !important;
+        }
+
+        .login-logo,
+        .create-account-logo {
+            width: 112px;
+            height: 112px;
+            margin: 0 auto 14px;
+            border-radius: 16px;
+            object-fit: cover;
+            display: block;            box-shadow: 0 0 24px rgba(85,199,255,0.30);
+        }
+
+        .create-account-logo {
+            border: 1px solid rgba(255,255,255,0.28);
+        }
+
+
+        /* FINAL RESPONSIVE LAYOUT
+           Desktop uses the full desktop layout; mobile automatically switches
+           to a compact, touch-friendly layout without changing functionality. */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            overflow-x: hidden;
+        }
+
+        img, video, canvas, iframe {
+            max-width: 100%;
+        }
+
+        .container {
+            width: min(100% - 32px, 1000px);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        header {
+            width: 100%;
+            padding-left: clamp(14px, 3vw, 30px);
+            padding-right: clamp(14px, 3vw, 30px);
+        }
+
+        .header-top-row {
+            flex-wrap: wrap;
+        }
+
+        .navbar {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .navbar > * {
+            flex: 0 0 auto;
+        }
+
+        .products-grid {
+            width: 100%;
+        }
+
+        .product-card {
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        /* Tablet */
+        @media (max-width: 900px) {
+            .container {
+                width: min(100% - 24px, 1000px);
+            }
+
+            header {
+                padding-top: 12px;
+                padding-bottom: 12px;
+            }
+
+            .header-top-row {
+                gap: 10px;
+            }
+
+            .product-card {
+                overflow: hidden;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            body {
+                font-size: 14px;
+            }
+
+            .container {
+                width: calc(100% - 16px) !important;
+                margin-left: 8px !important;
+                margin-right: 8px !important;
+                padding: 14px !important;
+                border-radius: 10px;
+            }
+
+            header {
+                padding: 10px 10px 12px !important;
+                gap: 8px;
+            }
+
+            .header-top-row {
+                width: 100%;
+                gap: 7px;
+                justify-content: center;
+            }
+
+            .header-top-row img {
+                max-width: 62px;
+                max-height: 62px;
+            }
+
+            .header-top-row h1,
+            .header-top-row h2 {
+                font-size: clamp(20px, 7vw, 30px) !important;
+                line-height: 1.12;
+                text-align: center;
+            }
+
+            .navbar {
+                padding: 5px 4px !important;
+                gap: 4px !important;
+            }
+
+            .navbar button {
+                min-height: 40px;
+                padding: 8px 11px !important;
+                font-size: 12px !important;
+                white-space: nowrap;
+            }
+
+            .search-container {
+                width: 100% !important;
+                padding: 8px !important;
+            }
+
+            .search-container input {
+                width: 100% !important;
+                min-width: 0 !important;
+                font-size: 14px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+
+            .product-card {
+                width: 100% !important;
+            }
+
+            .product-card img {
+                max-height: 220px;
+                object-fit: contain;
+            }
+
+            .hero-banner-container {
+                width: 100% !important;
+                overflow: hidden;
+            }
+
+            .hero-banner-container img {
+                width: 100% !important;
+                height: auto !important;
+                max-height: 300px;
+                object-fit: cover;
+            }
+
+            /* Login/Create Account remain centered and fit the phone screen. */
+            #login-gate,
+            #create-account-modal {
+                padding: 12px !important;
+                overflow-y: auto;
+            }
+
+            .login-card,
+            .create-account-card {
+                width: min(100%, 390px) !important;
+                max-width: 100% !important;
+                padding: 20px 16px !important;
+                margin: auto;
+                border-radius: 14px;
+            }
+
+            .login-logo,
+            .create-account-logo {
+                width: 86px !important;
+                height: 86px !important;
+            }
+
+            .login-actions,
+            .create-account-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .login-action-btn,
+            .create-account-actions button {
+                width: 100%;
+                min-height: 42px;
+            }
+
+            #top-login-btn {
+                top: 8px;
+                right: 8px;
+                padding: 8px 10px;
+                max-width: calc(100vw - 16px);
+            }
+
+            #top-user-label {
+                top: 8px;
+                right: 8px;
+                max-width: calc(100vw - 16px);
+                min-width: 0;
+            }
+
+            #top-user-name {
+                max-width: calc(100vw - 40px);
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            /* Game page stays white, but scales naturally to the phone width. */
+            #page-game {
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 12px !important;
+                border-radius: 8px;
+                overflow-x: hidden;
+            }
+
+            #page-game .game-arena {
+                width: 100% !important;                max-width: 100% !important;
+                height: min(62vh, 420px) !important;
+            }
+
+            #page-game .game-stats,
+            #page-game .game-controls {
+                flex-wrap: wrap !important;
+            }
+
+            #page-game button {
+                min-height: 40px;
+            }
+
+            /* Tables/lists never force the phone page wider than the viewport. */
+            table {
+                width: 100% !important;
+                max-width: 100%;
+                display: block;
+                overflow-x: auto;
+            }
+
+            textarea,
+            select,
+            input,
+            button {
+                max-width: 100%;
+            }
+        }
+
+        /* Very small phones */
+        @media (max-width: 380px) {
+            .container {
+                width: calc(100% - 10px) !important;
+                margin-left: 5px !important;
+                margin-right: 5px !important;
+                padding: 11px !important;
+            }
+
+            .header-top-row h1,
+            .header-top-row h2 {
+                font-size: 21px !important;
+            }
+
+            .navbar button {
+                padding: 7px 9px !important;
+                font-size: 11px !important;
+            }
+
+            .login-card,
+            .create-account-card {
+                padding: 17px 13px !important;
+            }
+
+            .login-logo,
+            .create-account-logo {
+                width: 76px !important;
+                height: 76px !important;
+            }
+        }
+
+        /* Prevent desktop-only fixed widths from creating horizontal scrolling. */
+        [style*="width: 1000px"],
+        [style*="width:1000px"],
+        [style*="width: 900px"],
+        [style*="width:900px"] {
+            max-width: 100% !important;
+        }
+
+
+        /* LTH Bulk Price Manager - additive admin feature only */
+        .bulk-price-manager { background:#f8fbff; border:1px solid #cfe2ff; }
+        .bulk-price-toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:12px 0; }
+        .bulk-price-toolbar input, .bulk-price-toolbar select { flex:1 1 180px; margin:0 !important; }
+        .bulk-selection-count { font-weight:bold; color:var(--primary-color); padding:8px 12px; background:#eef6ff; border:1px solid #cfe2ff; border-radius:7px; }
+        .bulk-product-list { max-height:360px; overflow:auto; border:1px solid #dbeaff; border-radius:7px; background:#fff; }
+        .bulk-product-row { display:grid; grid-template-columns:32px 1fr 120px 130px; gap:8px; align-items:center; padding:9px 10px; border-bottom:1px solid #edf3fb; font-size:13px; }
+        .bulk-product-row:last-child { border-bottom:none; }
+        .bulk-product-row:hover { background:#f7fbff; }
+        .bulk-product-row input[type="checkbox"] { width:18px; height:18px; margin:0; }
+        .bulk-product-name { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .bulk-product-category { color:#6c757d; font-size:11px; }
+        .bulk-product-price { font-weight:bold; text-align:right; }
+        .bulk-adjust-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+        .bulk-adjust-grid input, .bulk-adjust-grid select { width:100%; box-sizing:border-box; }
+        .bulk-action-buttons { display:flex; gap:10px; margin-top:12px; }
+        .bulk-action-buttons button { flex:1; }
+        .bulk-preview { display:none; margin-top:15px; border:1px solid #cfe2ff; border-radius:8px; overflow:hidden; background:#fff; }
+        .bulk-preview h4 { margin:0; padding:11px 12px; background:#eef6ff; color:var(--primary-color); }
+        .bulk-preview-table { width:100%; border-collapse:collapse; font-size:12px; }
+        .bulk-preview-table th, .bulk-preview-table td { padding:8px; border-bottom:1px solid #edf3fb; text-align:left; }
+        .bulk-preview-table th { background:#f8fbff; color:#0b5ed7; }
+        .bulk-confirm-btn { background:#198754 !important; color:#fff; border:none; padding:10px 14px; border-radius:5px; cursor:pointer; font-weight:bold; width:100%; margin-top:10px; }
+        @media (max-width:700px) {
+            .bulk-product-row { grid-template-columns:30px 1fr 95px; }
+            .bulk-product-row .bulk-product-category { display:none; }
+            .bulk-adjust-grid { grid-template-columns:1fr; }
+            .bulk-action-buttons { flex-direction:column; }
+        }
+
+
+/* FIX: Public content text visibility + structured description formatting */
+#page-home #display-home-desc,
+#page-about > div,
+#page-help > div,
+#page-help .support-content,
+#page-social > div {
+    color: #1f2937 !important;
+}
+#page-home #display-home-desc *,
+#page-about > div *,
+#page-help > div *,
+#page-help .support-content *,
+#page-social > div * {
+    color: #1f2937 !important;
+}
+#page-home #display-home-desc {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+    text-align: left;
+}
+#page-home #display-home-desc .content-heading,
+#page-about #display-about-text .content-heading,
+#page-help .content-heading {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0b5ed7 !important;
+    margin: 18px 0 7px;
+}
+#page-home #display-home-desc .content-heading:first-child,
+#page-about #display-about-text .content-heading:first-child { margin-top: 0; }
+#page-home #display-home-desc .content-paragraph,
+#page-about #display-about-text .content-paragraph,
+#page-help .content-paragraph {
+    display: block;
+    color: #1f2937 !important;
+    line-height: 1.75;
+    margin: 0 0 12px;
+}
+#page-about #display-about-text { color: #1f2937 !important; }
+#page-about #display-about-text strong { color: #0b5ed7 !important; }
+#page-help .content-paragraph { color: #1f2937 !important; }
+
+
+/* LTH add-on: entrance animations and checkout button visibility */
+@keyframes lthIntroReveal { from {opacity:0;transform:translateY(22px)} to {opacity:1;transform:translateY(0)} }
+@keyframes lthImageReveal { from {opacity:0;transform:scale(.96)} to {opacity:1;transform:scale(1)} }
+#page-home h2, #display-home-desc { animation:lthIntroReveal .8s ease both; }
+.hero-banner-img, .product-img { animation:lthImageReveal .75s ease both; }
+.product-card { animation:lthIntroReveal .6s ease both; transition:transform .22s ease,box-shadow .22s ease; }
+.product-card:hover { transform:translateY(-4px); box-shadow:0 12px 25px rgba(85,199,255,.2); }
+#page-cart #place-order-btn { display:flex !important; visibility:visible !important; opacity:1 !important; position:relative; z-index:20; width:100%; min-height:48px; cursor:pointer; pointer-events:auto; }
+#page-cart #place-order-btn:disabled { opacity:.7 !important; cursor:wait; }
+.lth-panel { margin:18px 0; padding:20px; background:#fff; color:#172033; border:1px solid #cfe2ff; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.12); }
+.lth-panel h2,.lth-panel h3,.lth-panel p,.lth-panel label { color:#172033 !important; }
+.lth-panel input,.lth-panel select { width:100%; padding:11px; margin:6px 0 12px; box-sizing:border-box; border:1px solid #cfe2ff; border-radius:7px; background:#fff; color:#172033; }
+.lth-action { display:block; width:100%; padding:12px; margin-top:10px; border:0; border-radius:8px; background:#126bff; color:#fff; font-weight:bold; cursor:pointer; }
+.lth-timeline { display:grid; grid-template-columns:1fr; gap:9px; margin-top:16px; }
+.lth-stage { padding:12px; border-radius:8px; background:#eef3fa; border-left:5px solid #9ca3af; color:#172033; }
+.lth-stage.completed { background:#e5f8ed; border-left-color:#198754; }
+.lth-invoice { padding:18px; margin-top:16px; background:#fff; color:#172033; border:2px dashed #126bff; border-radius:10px; }
+.lth-invoice table { width:100%; border-collapse:collapse; }
+.lth-invoice th,.lth-invoice td { padding:9px; border-bottom:1px solid #e5e7eb; text-align:left; color:#172033; }
+@media(prefers-reduced-motion:reduce){#page-home h2,#display-home-desc,.hero-banner-img,.product-img,.product-card{animation:none!important;transition:none!important}}
+
+</style>
+</head>
+<body>
+
+    <div id="login-gate">
+        <div class="login-card">            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230f2e5b'/%3E%3Cpath d='M58 8 28 55h20l-5 37 31-52H53z' fill='%2355c7ff'/%3E%3C/svg%3E" alt="LTH Logo" class="login-logo">
+            <h2>LTH Lightning Tech Hub</h2>
+            <p>Login first to access the LTH website and Lightning Challenge.</p>
+            <input id="login-email" type="email" placeholder="Gmail address" autocomplete="off" name="lth-login-email">
+            <input id="login-password" type="password" placeholder="Password" autocomplete="off" name="lth-login-password">
+            <div class="login-actions">
+                <button class="login-action-btn" onclick="loginUser()">🔐 Login</button>
+                <button class="login-action-btn alt" onclick="openCreateAccount()">Create Account</button>
+            </div>
+            <div id="login-status"></div>
+        </div>
+    </div>
+
+    <div id="create-account-modal">
+        <div class="create-account-card">
+            <img class="create-account-logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230f2e5b'/%3E%3Cpath d='M58 8 28 55h20l-5 37 31-52H53z' fill='%2355c7ff'/%3E%3C/svg%3E" alt="LTH Lightning Tech Hub Logo">
+
+            <h2>Create Account</h2>
+            <p>Enter your details to create your LTH account.</p>
+
+            <label for="create-first-name">First Name</label>
+            <input id="create-first-name" type="text" placeholder="Enter your first name" autocomplete="given-name">
+
+            <label for="create-last-name">Last Name</label>
+            <input id="create-last-name" type="text" placeholder="Enter your last name" autocomplete="family-name">
+
+            <label for="create-email">Gmail</label>
+            <input id="create-email" type="email" placeholder="Enter your Gmail" autocomplete="email">
+
+            <label for="create-password">Password</label>
+            <input id="create-password" type="password" placeholder="Enter your password" autocomplete="new-password">
+
+            <div class="create-account-actions">
+                <button class="create-account-submit" onclick="registerUser()">Create Account</button>
+                <button class="create-account-cancel" onclick="closeCreateAccount()">Cancel</button>
+            </div>
+            <div id="create-account-status"></div>
+        </div>
+    </div>
+
+    <button id="top-login-btn" onclick="openLoginGate()">🔐 Login</button>
+    <div id="top-user-label" onclick="toggleUserMenu()" title="Click your name for logout">
+        <span id="top-user-name"></span>
+        <div id="top-logout-option" onclick="event.stopPropagation(); logoutUser()">Logout</div>
+    </div>
+
+
+    <div id="lock-screen">
+        <div class="lock-card">
+            <img class="lock-logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230f2e5b'/%3E%3Cpath d='M58 8 28 55h20l-5 37 31-52H53z' fill='%2355c7ff'/%3E%3C/svg%3E" alt="LTH Logo" style="display:block;margin:0 auto;width:90px;height:90px;border-radius:50%;object-fit:cover;">
+            <h1 id="lock-screen-title" style="margin: 0 0 10px 0; font-size: 28px;">LTH Lightning Tech Hub</h1>
+            <p id="lock-screen-msg" style="font-size: 15px; margin: 0 0 20px 0; color: #d4edda; line-height: 1.5;">Website is currently locked. It will automatically unlock when the timer ends:</p>
+
+            <div class="countdown-grid">
+                <div class="countdown-box">
+                    <span id="cd-hours" class="countdown-number">00</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="cd-mins" class="countdown-number">00</span>
+                    <span class="countdown-label">Mins</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="cd-secs" class="countdown-number">00</span>
+                    <span class="countdown-label">Secs</span>
+                </div>
+            </div>
+            <button onclick="verifyAdminAccess()" style="position:absolute;top:18px;right:18px;z-index:100001;background:rgba(255,255,255,0.14);color:white;border:1px solid rgba(255,255,255,0.5);padding:7px 12px;border-radius:7px;font-size:12px;font-weight:bold;cursor:pointer;backdrop-filter:blur(6px);">⚙️ ADMIN PANEL</button><p style="margin-top: 20px; font-size: 12px; color: #d7e9ff;">🔒 Security Lock Managed via Admin Control Center</p>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-top-row">
+            <img class="site-logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230f2e5b'/%3E%3Cpath d='M58 8 28 55h20l-5 37 31-52H53z' fill='%2355c7ff'/%3E%3C/svg%3E" alt="LTH Logo" style="display:block;width:75px;height:75px;border-radius:50%;object-fit:cover;">
+            <h1 id="display-store-name">LTH Lightning Tech Hub</h1>
+        </div>
+        <div class="header-actions">
+            <div class="cart-icon" onclick="switchPage('cart')">🛒 Cart (<span id="cart-count">0</span>)</div>
+            <button class="admin-btn" onclick="verifyAdminAccess()">⚙️ Admin Panel</button>
+        </div>
+    </header>
+
+    <nav class="navbar">
+        <button id="nav-home" class="active-tab" onclick="switchPage('home')">Home Page</button>
+        <button id="nav-kits" onclick="switchPage('kits')">Project Kits</button>
+        <button id="nav-items" onclick="switchPage('items')">Project Items</button>
+        <button id="nav-tools" onclick="switchPage('tools')">Project Tools</button>
+        <button id="nav-cart" onclick="switchPage('cart')">Cart & Checkout</button>
+        <button id="nav-help" onclick="switchPage('help')">🤝 Community Support</button>
+        <button id="nav-track" onclick="switchPage('track')">📦 Track Order</button>
+        <button id="nav-social" onclick="switchPage('social')">🌐 Social Links</button>
+        <button id="nav-game" onclick="switchPage('game')">⚡ Lightning Challenge</button>
+        <button id="nav-reports" onclick="switchPage('reports')">📋 Previous Reports</button>
+    </nav>
+
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="global-search" placeholder="🔍 Search any project kit, item or tool..." onkeyup="filterProducts()">
+        </div>
+
+        <div id="page-home" class="page-section active-page">
+            <div class="hero-banner-container">
+                <img id="display-hero-banner" src="" alt="Home Banner" class="hero-banner-img" style="display: none;">
+                <div id="hero-banner-placeholder" class="empty-msg">No banner image uploaded yet. Go to Admin Panel to upload one.</div>
+            </div>
+            <h2>Welcome to LTH Lightning Tech Hub</h2>
+            <div id="display-home-desc" style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #cfe2ff; line-height: 1.6;">
+                Explore our advanced project kits, electronic components, and smart city prototyping tools. Click on <b>"⚙️ Admin Panel"</b> at the top right, enter your secure PIN to update banner images, settings, discounts and products live via Firebase database.
+            </div>
+        </div>
+
+        <div id="page-kits" class="page-section">
+            <h2>Project Kits Page</h2>
+            <div class="product-grid" id="grid-kits"></div>
+        </div>
+
+        <div id="page-items" class="page-section">
+            <h2>Project Items Page</h2>
+            <div class="product-grid" id="grid-items"></div>
+        </div>
+
+        <div id="page-tools" class="page-section">
+            <h2>Project Tools Page</h2>
+            <div class="product-grid" id="grid-tools"></div>
+        </div>
+
+        <div id="page-cart" class="page-section">
+            <h2>Shopping Cart & Checkout</h2>
+            <div id="cart-items-list" style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #cfe2ff;">
+                Your cart is currently empty.
+            </div>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #cfe2ff; margin-bottom: 15px;">
+                <p style="margin: 5px 0;">Subtotal: <span id="sub-total">0</span> PKR</p>
+                <p style="margin: 5px 0; color: var(--primary-color);">Discount Applied (<span id="display-discount-pct">0</span>%): -<span id="discount-val">0</span> PKR</p>
+                <h4 style="margin: 5px 0;">Final Total Price: <span id="total-price">0</span> PKR</h4>
+            </div>
+            <hr style="margin: 25px 0; border:0; border-top:1px solid #cfe2ff;">
+            <h3>Customer Information</h3>
+            <div class="form-group"><label>Full Name:</label><input type="text" id="cust-name" placeholder="Enter your full name"></div>
+            <div class="form-group"><label>Phone Number:</label><input type="text" id="cust-phone" placeholder="03XXXXXXXXX"></div>
+            <div class="form-group"><label>Location / Address:</label><input type="text" id="cust-address" placeholder="Enter your city and complete address"></div>
+            <div class="form-group"><label>Email:</label><input type="email" id="cust-email" placeholder="example@email.com" required></div>
+            <button id="place-order-btn" class="confirm-btn" onclick="placeOrder()">Place Order</button>
+        </div>
+
+        <div id="page-help" class="page-section">
+            <div class="hero-banner-container" style="margin-bottom: 20px;">
+                <img id="display-charity-banner" src="" alt="Charity Banner" class="hero-banner-img" style="display: none;">
+            </div>
+            <h2><i class="fa-solid fa-hands-holding-child" style="color: var(--primary-color);"></i> Community Support Program</h2>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #cfe2ff; margin-bottom: 25px; line-height: 1.6;">
+                <h3 style="color: var(--primary-color); margin-top: 0;">Our Step Towards Your Support</h3>
+                <p>Fill out this form to request support or charity items. Your information is completely private and will be sent directly to our WhatsApp channel under the topic <b>Charity and Support</b>.</p>
+            </div>
+
+            <div style="background: #ffffff; padding: 20px; border-radius: 6px; border: 1px solid #cfe2ff; margin-bottom: 30px;">
+                <h3 style="margin-top: 0; color: var(--primary-color);">Submit Support Request</h3>
+
+                <div class="form-group">
+                    <label for="help-name">Full Name:</label>
+                    <input type="text" id="help-name" placeholder="Enter the full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="help-phone">Contact Number:</label>
+                    <input type="tel" id="help-phone" placeholder="Enter mobile / phone number">
+                </div>
+
+                <div class="form-group">
+                    <label for="help-address">Address:</label>
+                    <textarea id="help-address" rows="3" placeholder="Enter complete address or area"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="help-item">Required Item / Thing Needed:</label>
+                    <input type="text" id="help-item" placeholder="What item or assistance is needed? (e.g., Kits, Components)">
+                </div>
+
+                <button class="confirm-btn" onclick="submitHelpRequestToWhatsApp()">
+                    <i class="fa-brands fa-whatsapp fa-xl"></i> Submit & Send Request via WhatsApp
+                </button>
+                <div style="margin-top: 10px; font-size: 12px; color: #e74c3c; text-align: center;">
+                    🔒 Privacy Note: No request details or names will ever be shown publicly on the website.
+                </div>            </div>
+        </div>
+
+        <div id="page-track" class="page-section">
+            <div class="lth-panel">
+                <h2>📦 Track Your LTH Order</h2>
+                <p>Enter your order ID to check its current status and estimated timeline.</p>
+                <label for="lth-track-id">Order ID</label>
+                <input id="lth-track-id" placeholder="Enter your order ID">
+                <button class="lth-action" onclick="lthTrackOrder()">Track Order</button>
+                <div id="lth-track-result" aria-live="polite"></div>
+            </div>
+            <div class="lth-panel">
+                <h2>🧾 Order Invoice</h2>
+                <p>View the saved order summary and bill.</p>
+                <label for="lth-invoice-id">Order ID</label>
+                <input id="lth-invoice-id" placeholder="Enter your order ID">
+                <button class="lth-action" onclick="lthShowInvoice()">View Invoice</button>
+                <div id="lth-invoice-result" aria-live="polite"></div>
+            </div>
+            <div class="lth-panel" id="lth-delivery-admin-panel" style="display:none">
+                <h2>🚚 Delivery Charges Catalogue (Admin)</h2>
+                <p>Manage delivery fee rules. These rules are stored in Firebase.</p>
+                <label for="lth-delivery-name">Rule / Area Name</label>
+                <input id="lth-delivery-name" placeholder="e.g. Lahore">
+                <label for="lth-delivery-charge">Delivery Charges (PKR)</label>
+                <input id="lth-delivery-charge" type="number" min="0" step="1" placeholder="Enter delivery fee">
+                <button class="lth-action" onclick="lthAddDeliveryRule()">Add Delivery Rule</button>
+                <div id="lth-delivery-rules"></div>
+            </div>
+            <div class="lth-panel" id="lth-rider-panel" style="display:none">
+                <h2>🏍️ Rider Order Verification</h2>
+                <p>Rider verification must be completed through a trusted server. Browser-only codes are not secure enough to confirm delivery.</p>
+                <p id="lth-rider-result">Rider completion is not enabled until a secure verification endpoint is configured.</p>
+            </div>
+        </div>
+
+        <div id="page-game" class="page-section">
+            <h2>⚡ LTH Lightning Challenge</h2>
+            <p style="color: #6c757d; margin-bottom: 20px;">A dedicated LTH mini-game for quick reflexes and fun.</p>
+            <div class="game-shell">
+                <div class="game-head">
+                    <div>
+                        <h3 class="game-title">⚡ LTH Lightning Challenge</h3>
+                        <p class="game-subtitle">Catch the lightning before time runs out.</p>
+                    </div>
+                    <div class="game-stats">
+                        <div class="game-stat"><b id="game-score">0</b><span>Score</span></div>
+                        <div class="game-stat"><b id="game-time">20</b><span>Seconds</span></div>
+                        <div class="game-stat"><b id="game-best">0</b><span>Best</span></div>
+                    </div>
+                </div>
+                <div class="game-arena" id="game-arena">
+                    <div class="game-bolt" id="game-bolt" onclick="catchLightning()">⚡</div>
+                </div>
+                <p class="game-message" id="game-message">Press Start Game and catch as many ⚡ as you can!</p>
+                <div class="game-controls">
+                    <button class="game-btn" onclick="startLightningGame()">▶ Start Game</button>
+                    <button class="game-btn secondary" onclick="resetLightningGame()">↺ Reset</button>
+                </div>
+                <p class="game-note">A small LTH mini-game • Fast reflexes, sharp thinking, big innovation.</p>
+                <div id="record-banner" class="record-banner">🏆 Current highest score: Loading...</div>
+                <div id="name-gate" class="name-gate-card" style="display:none;">
+                    <strong>Make your record permanent</strong>
+                    <div style="font-size:12px;color:#6c757d;margin-top:4px;">Log in first, then save your display name and score to the Firebase leaderboard.</div>
+                    <input id="leader-name" type="text" maxlength="40" placeholder="Enter your display name">
+                    <button class="game-btn" onclick="savePermanentGameRecord()">Save My Record</button>
+                </div>
+                <div class="leaderboard-box">
+                    <h4 class="leaderboard-title">🏆 LTH Live Leaderboard</h4>
+                    <p class="leaderboard-note">Permanent scores are stored in Firebase and shown to every visitor.</p>
+                    <div id="leaderboard-list">Loading leaderboard...</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-reports" class="page-section">
+            <div class="previous-report-shell">
+                <h2>📋 Previous Reports</h2>
+                <p class="previous-report-subtitle">Your previous orders and shopping history for this account.</p>
+                <div id="previous-orders-list">Loading your previous orders...</div>
+            </div>
+        </div>
+
+        <div id="page-social" class="page-section">
+            <h2>🌐 LTH Community Zone</h2>
+            <p style="color: #6c757d; margin-bottom: 20px;">Play the LTH Lightning Challenge and visit our official channels below.</p>
+
+            <h3 style="margin-top: 28px; color: var(--primary-color);">Connect With Us</h3>
+            <p style="color: #6c757d; margin-bottom: 20px;">Visit our official channels and pages below:</p>
+            <div id="social-links-container"></div>
+        </div>
+    </div>    <div class="modal-overlay" id="adminModal">
+        <div class="modal-content">
+            <h2>⚙️ Complete Website Control Center</h2>
+
+            <div class="admin-box" style="border: 2px dashed #ffc107; background: #fffdf4;">
+                <h3 style="color: #856404; margin-top: 0;">⏳ Site Lock & Countdown Manager</h3>
+                <p style="font-size: 13px; color: #555;">Control when the website should lock and show a timer:</p>
+
+                <label>Lock Status:</label>
+                <select id="input-lock-enabled">
+                    <option value="false">Unlocked (Normal Website Active)</option>
+                    <option value="true">Locked (Show Countdown Screen)</option>
+                </select>
+
+                <label>Target Unlock Date & Time:</label>
+                <input type="datetime-local" id="input-lock-target-time">
+
+                <label>Lock Screen Custom Message:</label>
+                <input type="text" id="input-lock-msg" placeholder="e.g. Website is under maintenance, unlocking soon!">
+            </div>
+
+            <div class="admin-box" style="border: 2px dashed var(--primary-color); background: #f4f8ff;">
+                <h3 style="color: var(--primary-color); margin-top: 0;">🖼️ Dedicated Image Uploads Manager</h3>
+                <p style="font-size: 13px; color: #555;">Upload or update high-impact pictures for specific pages:</p>
+
+                <label>1. Home Page Hero Banner Image:</label>
+                <input type="file" id="input-hero-image-file" accept="image/*">
+                <input type="hidden" id="input-hero-image-base64">
+
+                <label>2. About Us Page Image:</label>
+                <input type="file" id="input-about-image-file" accept="image/*">
+                <input type="hidden" id="input-about-image-base64">
+
+                <label>3. Charity / Community Support Banner Image:</label>
+                <input type="file" id="input-charity-image-file" accept="image/*">
+                <input type="hidden" id="input-charity-image-base64">
+            </div>
+
+            <div class="admin-box">
+                <h3>1. General Website Settings & Discounts</h3>
+                <label>Store Name:</label><input type="text" id="input-store-name">
+                <label>WhatsApp Order / Help Number:</label><input type="text" id="input-whatsapp">
+
+                <label style="margin-top:15px; color: var(--primary-color); font-weight: bold;">🏷️ Global Discount Percentage (%):</label>
+                <input type="number" id="input-discount" value="0" min="0" max="100" placeholder="e.g. 10 for 10% discount">
+
+                <label style="margin-top:15px; color: var(--primary-color); font-weight: bold;">⭐ Home Page Description (Admin Exclusive):</label>
+                <textarea id="input-home-desc" rows="4" placeholder="Enter your custom home page description here..."></textarea>
+
+                <label style="margin-top:15px;">About Us Text:</label><textarea id="input-about-text" rows="3"></textarea>
+            </div>
+
+            <div class="admin-box">
+                <h3>2. Social Media Links Setup</h3>
+                <label>Facebook URL:</label><input type="text" id="input-facebook" placeholder="https://facebook.com/...">
+                <label>Instagram URL:</label><input type="text" id="input-instagram" placeholder="https://instagram.com/...">
+                <label>YouTube URL:</label><input type="text" id="input-youtube" placeholder="https://youtube.com/...">
+                <label>TikTok URL:</label><input type="text" id="input-tiktok" placeholder="https://tiktok.com/...">
+                <label>Other / Custom Social URL:</label><input type="text" id="input-custom-social" placeholder="https://...">
+            </div>
+
+            <div class="admin-box">
+                <h3>3. Add New Product / Item</h3>
+                <label>Category:</label>
+                <select id="new-item-category">
+                    <option value="kits">Project Kits</option>
+                    <option value="items">Project Items</option>
+                    <option value="tools">Project Tools</option>
+                </select>
+                <label>Product Name:</label><input type="text" id="new-item-name" placeholder="Name">
+                <label>Price (PKR):</label><input type="number" id="new-item-price" placeholder="Price">
+                <label>Description:</label><textarea id="new-item-desc" rows="2" placeholder="Description"></textarea>
+                <label>Product Image:</label><input type="file" id="new-item-image" accept="image/*">
+                <button class="save-btn" style="margin-top:15px;" onclick="addNewProduct()">Add Item with Image</button>
+            </div>
+
+
+            <div class="admin-box bulk-price-manager">
+                <h3 style="color:var(--primary-color); margin-top:0;">💰 Bulk Price Manager</h3>
+                <p style="font-size:13px;color:#555;">Select multiple products and preview price changes before updating Firebase.</p>
+
+                <div class="bulk-price-toolbar">
+                    <button type="button" class="save-btn" style="width:auto;" onclick="importArduinoProductCatalog()">🔧 Import Arduino Product Catalog</button>
+                    <span style="font-size:12px;color:#666;">Adds only missing Arduino-related products.</span>
+                </div>
+
+                <div class="bulk-price-toolbar">
+                    <input type="text" id="bulk-product-search" placeholder="Search product name..." oninput="renderBulkPriceProducts()">
+                    <select id="bulk-category-filter" onchange="renderBulkPriceProducts()">
+                        <option value="all">All Categories</option>
+                        <option value="kits">Project Kits</option>
+                        <option value="items">Project Items</option>
+                        <option value="tools">Project Tools</option>
+                    </select>
+                </div>
+
+                <div class="bulk-price-toolbar">
+                    <button type="button" class="save-btn" style="width:auto;" onclick="bulkSelectAll()">Select All</button>
+                    <button type="button" class="cancel-btn" style="width:auto;" onclick="bulkClearSelection()">Clear Selection</button>
+                    <span class="bulk-selection-count" id="bulk-selected-count">0 selected</span>
+                </div>
+
+                <div class="bulk-product-list" id="bulk-product-list"></div>
+
+                <div class="bulk-adjust-grid">
+                    <div>
+                        <label for="bulk-adjust-type">Adjustment Type:</label>
+                        <select id="bulk-adjust-type">
+                            <option value="fixed">Fixed Amount</option>
+                            <option value="percentage">Percentage</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="bulk-adjust-value">Adjustment Value:</label>
+                        <input type="number" id="bulk-adjust-value" min="0" step="any" placeholder="e.g. 20 or 10">
+                    </div>
+                </div>
+
+                <div class="bulk-action-buttons">
+                    <button type="button" class="save-btn" onclick="prepareBulkPricePreview('increase')">Increase Price</button>
+                    <button type="button" class="cancel-btn" onclick="prepareBulkPricePreview('decrease')">Decrease Price</button>
+                </div>
+
+                <div class="bulk-preview" id="bulk-price-preview">
+                    <h4>Preview Before Update</h4>
+                    <div style="max-height:280px;overflow:auto;">
+                        <table class="bulk-preview-table">
+                            <thead><tr><th>Product Name</th><th>Old Price</th><th>New Price</th></tr></thead>
+                            <tbody id="bulk-preview-body"></tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="bulk-confirm-btn" onclick="confirmBulkPriceUpdate()">Confirm &amp; Update Products</button>
+                </div>
+            </div>
+
+            <div class="modal-buttons" style="flex-direction: column; gap: 10px;">
+                <button class="save-btn" onclick="saveAdminSettings()">💾 Save All Changes Live</button>
+                <button class="cancel-btn" onclick="closeAdminModal()">❌ Close Panel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content">
+            <h2>✏️ Edit Product Details & Image</h2>
+            <input type="hidden" id="edit-product-id">
+            <input type="hidden" id="edit-product-old-image">
+            <div class="form-group">
+                <label>Category:</label>
+                <select id="edit-product-category">
+                    <option value="kits">Project Kits</option>
+                    <option value="items">Project Items</option>
+                    <option value="tools">Project Tools</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Product Name:</label>
+                <input type="text" id="edit-product-name">
+            </div>
+            <div class="form-group">
+                <label>Price (PKR):</label>
+                <input type="number" id="edit-product-price">
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                <textarea id="edit-product-desc" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Change Product Image (Optional):</label>
+                <input type="file" id="edit-product-image" accept="image/*">
+            </div>
+            <div class="modal-buttons">
+                <button class="save-btn" onclick="updateProductLive()">Update Product Live</button>
+                <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>        let siteSettings = {
+            storeName: "LTH Lightning Tech Hub",
+            whatsapp: "923043337555",
+            discount: 0,
+            heroBanner: "",
+            homeDesc: "",
+            aboutText: "",
+            aboutImage: "",
+            charityBanner: "",
+            facebook: "",
+            instagram: "",
+            youtube: "",
+            tiktok: "",
+            customSocial: "",
+            isLocked: false,
+            lockTargetTime: "",
+            lockMsg: "Website is currently locked. It will automatically unlock when the timer ends:"
+        };
+
+
+        /* LTH Firebase Authentication */
+        let currentLTHUser = null;
+
+        const LTH_USER_ORDERS_PATH = 'lthOrderHistory';
+
+        function getUserCartKey() { return currentLTHUser && currentLTHUser.uid ? 'lth_cart_' + currentLTHUser.uid : null; }
+        function saveCurrentUserCart() { const key=getUserCartKey(); if(!key)return; try{localStorage.setItem(key,JSON.stringify(cart));}catch(e){} }
+        function loadCurrentUserCart() { const key=getUserCartKey(); if(!key)return; try{const saved=JSON.parse(localStorage.getItem(key)||'[]'); if(Array.isArray(saved)) cart=saved;}catch(e){cart=[];} }
+
+        function renderPreviousOrders() {
+            const list=document.getElementById('previous-orders-list'); if(!list)return;
+            if(!currentLTHUser || !currentLTHUser.uid){ list.innerHTML='<div class="previous-empty">Please login to view your previous reports.</div>'; return; }
+            list.innerHTML='Loading your previous orders...';
+            db.ref(LTH_USER_ORDERS_PATH+'/'+currentLTHUser.uid).once('value').then(snapshot=>{
+                const orders=[]; snapshot.forEach(child=>orders.push({id:child.key,...child.val()}));
+                orders.sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+                if(!orders.length){list.innerHTML='<div class="previous-empty">No previous orders found for this account yet.</div>';return;}
+                list.innerHTML=orders.map(order=>{
+                    const safeItems=escapeLeaderboardText(order.orderDetails||order.product||'Order details unavailable');
+                    const safeId=escapeLeaderboardText(order.orderId||order.id);
+                    const safeDate=escapeLeaderboardText(order.date||'');
+                    const safeStatus=escapeLeaderboardText(order.status||'Pending');
+                    const total=Number(order.finalTotal??order.total??0);
+                    return `<div class="previous-order-card"><div class="previous-order-head"><span class="previous-order-id">Order ID: ${safeId}</span><span>${safeDate}</span><span class="previous-order-status">${safeStatus}</span></div><div class="previous-order-items">${safeItems}</div><div class="previous-order-total">Total: Rs. ${Number.isFinite(total)?total.toLocaleString('en-PK'):'0'}</div></div>`;
+                }).join('');
+            }).catch(error=>{console.error('Previous orders load failed:',error);list.innerHTML='<div class="previous-empty">Could not load your previous reports. Please try again.</div>';});
+        }
+
+        function saveUserProfileToFirebase(){
+            if(!currentLTHUser||!currentLTHUser.uid)return Promise.resolve();
+            return db.ref('lthUsers/'+currentLTHUser.uid).update({uid:currentLTHUser.uid,email:currentLTHUser.email||'',displayName:currentLTHUser.displayName||'',lastLoginAt:firebase.database.ServerValue.TIMESTAMP});
+        }
+
+
+        /* LTH Firebase Lightning Leaderboard */
+        let pendingGameScore = 0;
+
+        function escapeLeaderboardText(value) {
+            return String(value || '').replace(/[&<>"']/g, ch => ({
+                '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+            }[ch]));
+        }
+
+        function loadLightningLeaderboard() {
+            db.ref('leaderboard/lightning').orderByChild('score').limitToLast(10).on('value', snapshot => {
+                const rows = [];
+                snapshot.forEach(child => rows.push({id: child.key, ...child.val()}));
+                rows.sort((a,b) => (Number(b.score)||0) - (Number(a.score)||0));
+                const list = document.getElementById('leaderboard-list');
+                const banner = document.getElementById('record-banner');
+                if (!list || !banner) return;
+
+                if (!rows.length) {
+                    banner.innerText = '🏆 Current highest score: 0 — Be the first record holder!';
+                    list.innerHTML = '<div style="color:#6c757d;font-size:12px;">No permanent scores yet.</div>';
+                    return;
+                }
+
+                const top = rows.slice(0,10);
+                banner.innerText = `🏆 Current highest score: ${Number(top[0].score)||0} — ${top[0].name || 'Anonymous'}`;
+
+                let html = '<table class="leaderboard-table"><thead><tr><th>#</th><th>Player</th><th>Points</th></tr></thead><tbody>';
+                top.forEach((row,index) => {
+                    const mine = currentLTHUser && row.uid === currentLTHUser.uid ? 'leaderboard-you' : '';
+                    html += `<tr class="${mine}"><td>${index+1}</td><td>${escapeLeaderboardText(row.name)}</td><td>${Number(row.score)||0}</td></tr>`;
+                });
+                html += '</tbody></table>';
+                list.innerHTML = html;
+            });
+        }
+
+        function requestPermanentGameRecord(score) {
+            pendingGameScore = Number(score) || 0;
+            if (pendingGameScore <= 0) return;
+
+            const gate = document.getElementById('name-gate');
+            const gameMsg = document.getElementById('game-message');
+            if (!gate) return;
+
+            gate.style.display = 'block';
+
+            if (!currentLTHUser) {
+                gate.querySelector('strong').innerText = 'Login required for a permanent record';
+                if (gameMsg) gameMsg.innerText = `You scored ${pendingGameScore} points. Login first to publish your name and score.`;
+            } else {
+                gate.querySelector('strong').innerText = 'Save your permanent record';
+                if (gameMsg) gameMsg.innerText = `You scored ${pendingGameScore} points. Enter your name to save it.`;
+            }
+        }
+
+        function savePermanentGameRecord() {
+            if (!currentLTHUser) {
+                openLoginGate();
+                return;
+            }
+
+            const name = (document.getElementById('leader-name').value || '').trim();
+            if (!name) {
+                document.getElementById('game-message').innerText = 'Please enter your display name.';
+                return;
+            }
+            if (pendingGameScore <= 0) return;
+
+            db.ref('leaderboard/lightning').push({
+                uid: currentLTHUser.uid,
+                name: name,
+                score: pendingGameScore,
+                createdAt: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+                document.getElementById('name-gate').style.display = 'none';
+                document.getElementById('leader-name').value = '';
+                document.getElementById('game-message').innerText = `✅ Record saved: ${name} — ${pendingGameScore} points.`;
+                pendingGameScore = 0;
+            }).catch(() => {
+                document.getElementById('game-message').innerText = 'Could not save the score. Please try again.';
+            });
+        }
+
+        function startLightningLeaderboard() {
+            loadLightningLeaderboard();
+        }        function openLoginGate() {
+            document.getElementById('login-gate').style.display = 'flex';
+            document.getElementById('login-status').innerText = '';
+            // Always open a completely blank login form.
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            closeCreateAccount();
+        }
+
+        function closeLoginGate() {
+            document.getElementById('login-gate').style.display = 'none';
+        }
+
+        function openCreateAccount() {
+            document.getElementById('create-account-modal').style.display = 'flex';
+            document.getElementById('create-account-status').innerText = '';
+            document.getElementById('create-first-name').focus();
+        }
+
+        function closeCreateAccount() {
+            const modal = document.getElementById('create-account-modal');
+            if (modal) modal.style.display = 'none';
+            const status = document.getElementById('create-account-status');
+            if (status) status.innerText = '';
+        }
+
+        /* LTH account system
+           Uses browser storage instead of Firebase Authentication.
+           This avoids the Firebase auth/configuration-not-found error while
+           keeping the rest of the website unchanged. Passwords are stored
+           as SHA-256 hashes, not as plain text. */
+        const LTH_ACCOUNTS_KEY = 'lth_accounts_v2';
+        const LTH_SESSION_KEY = 'lth_logged_in_user_v2';
+
+        function getLTHAccounts() {
+            try {
+                return JSON.parse(localStorage.getItem(LTH_ACCOUNTS_KEY) || '{}');
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveLTHAccounts(accounts) {
+            localStorage.setItem(LTH_ACCOUNTS_KEY, JSON.stringify(accounts));
+        }
+
+        async function hashLTHPassword(password) {
+            const data = new TextEncoder().encode(password);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+
+        function normalizeLTHEmail(email) {
+            return email.trim().toLowerCase();
+        }
+
+        async function loginUser() {
+            const email = normalizeLTHEmail(document.getElementById('login-email').value);
+            const password = document.getElementById('login-password').value;
+            const status = document.getElementById('login-status');
+
+            if (!email || !password) {
+                status.style.color = '#dc3545';
+                status.innerText = 'Please enter your Gmail and password.';
+                return;
+            }
+
+            status.style.color = '#0b5ed7';
+            status.innerText = 'Signing in...';
+
+            try {
+                const accounts = getLTHAccounts();
+                const account = accounts[email];
+
+                if (!account) {
+                    status.style.color = '#dc3545';
+                    status.innerText = 'Account not found. Please create an account first.';
+                    return;
+                }
+
+                const passwordHash = await hashLTHPassword(password);
+                if (account.passwordHash !== passwordHash) {
+                    status.style.color = '#dc3545';
+                    status.innerText = 'Incorrect Gmail or password.';
+                    return;
+                }
+
+                currentLTHUser = {
+                    uid: account.uid,
+                    email: account.email,
+                    displayName: account.name
+                };
+
+                localStorage.setItem(LTH_SESSION_KEY, JSON.stringify(currentLTHUser));
+                saveUserProfileToFirebase().catch(() => {});
+                loadCurrentUserCart();
+                updateCartUI();
+                renderPreviousOrders();
+                status.innerText = '';
+                closeLoginGate();
+                showLoggedInState();
+            } catch (error) {
+                status.style.color = '#dc3545';
+                status.innerText = 'Login failed. Please try again.';
+            }
+        }
+
+        async function registerUser() {
+            const firstName = document.getElementById('create-first-name').value.trim();
+            const lastName = document.getElementById('create-last-name').value.trim();
+            const email = normalizeLTHEmail(document.getElementById('create-email').value);
+            const password = document.getElementById('create-password').value;
+            const status = document.getElementById('create-account-status');
+
+            if (!firstName || !lastName || !email || !password) {
+                status.style.color = '#dc3545';
+                status.innerText = 'Please fill in First Name, Last Name, Gmail and Password.';
+                return;
+            }
+
+            if (!/^[^\s@]+@gmail\.com$/i.test(email)) {
+                status.style.color = '#dc3545';
+                status.innerText = 'Please enter a valid Gmail address.';
+                return;
+            }
+
+            if (password.length < 6) {
+                status.style.color = '#dc3545';
+                status.innerText = 'Password should be at least 6 characters.';
+                return;
+            }
+
+            status.style.color = '#0b5ed7';
+            status.innerText = 'Creating account...';
+
+            try {
+                const accounts = getLTHAccounts();
+
+                if (accounts[email]) {
+                    status.style.color = '#dc3545';
+                    status.innerText = 'This Gmail account already exists. Please login instead.';
+                    return;
+                }
+
+                const fullName = `${firstName} ${lastName}`.trim();
+                const passwordHash = await hashLTHPassword(password);
+                const uid = 'lth_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+
+                accounts[email] = {
+                    uid: uid,
+                    firstName: firstName,
+                    lastName: lastName,
+                    name: fullName,
+                    email: email,
+                    passwordHash: passwordHash,
+                    createdAt: new Date().toISOString()
+                };
+
+                saveLTHAccounts(accounts);
+
+                currentLTHUser = {
+                    uid: uid,
+                    email: email,
+                    displayName: fullName
+                };
+                localStorage.setItem(LTH_SESSION_KEY, JSON.stringify(currentLTHUser));
+                saveUserProfileToFirebase().catch(() => {});
+                loadCurrentUserCart();
+                updateCartUI();
+                renderPreviousOrders();
+
+                status.innerText = '';
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
+                closeCreateAccount();
+                closeLoginGate();
+                loadCurrentUserCart();
+                updateCartUI();
+                renderPreviousOrders();
+                saveUserProfileToFirebase().catch(() => {});
+                showLoggedInState();
+            } catch (error) {
+                status.style.color = '#dc3545';
+                status.innerText = 'Account could not be created. Please try again.';
+            }
+        }
+
+        function logoutUser() {
+            cart = [];
+            updateCartUI();
+            currentLTHUser = null;
+            localStorage.removeItem(LTH_SESSION_KEY);
+            const label = document.getElementById('top-user-label');
+            label.classList.remove('open');
+            label.style.display = 'none';
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('top-login-btn').style.display = 'block';
+            openLoginGate();
+        }
+
+        function toggleUserMenu() {
+            const label = document.getElementById('top-user-label');
+            if (!currentLTHUser) return;
+            label.classList.toggle('open');
+        }
+
+        function showLoggedInState() {
+            document.getElementById('top-login-btn').style.display = 'none';
+            const label = document.getElementById('top-user-label');
+            const nameEl = document.getElementById('top-user-name');
+            nameEl.innerText = '👤 ' + ((currentLTHUser && currentLTHUser.displayName) || 'User');
+            label.classList.remove('open');
+            label.style.display = 'block';
+            renderPreviousOrders();
+        }
+
+        function initLTHAuth() {
+            try {
+                const savedSession = localStorage.getItem(LTH_SESSION_KEY);
+                currentLTHUser = savedSession ? JSON.parse(savedSession) : null;
+            } catch (e) {
+                currentLTHUser = null;
+            }
+
+            if (currentLTHUser && currentLTHUser.email) {
+                closeCreateAccount();
+                closeLoginGate();
+                showLoggedInState();
+            } else {
+                currentLTHUser = null;
+                document.getElementById('top-user-label').classList.remove('open');
+                document.getElementById('top-user-label').style.display = 'none';
+                document.getElementById('top-login-btn').style.display = 'block';
+                openLoginGate();
+            }
+        }        function runLockEngine() {
+            if (!siteSettings.isLocked || siteSettings.isLocked === "false" || siteSettings.isLocked === false) {
+                document.getElementById('lock-screen').style.display = 'none';
+                return;
+            }
+
+            if (!siteSettings.lockTargetTime) {
+                document.getElementById('lock-screen').style.display = 'flex';
+                document.getElementById('cd-hours').innerText = "00";
+                document.getElementById('cd-mins').innerText = "00";
+                document.getElementById('cd-secs').innerText = "00";
+                return;
+            }
+
+            const now = new Date().getTime();
+            const targetTime = new Date(siteSettings.lockTargetTime).getTime();
+            const diff = targetTime - now;
+
+            if (diff > 0) {
+                document.getElementById('lock-screen').style.display = 'flex';
+
+                const h = Math.floor(diff / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('cd-hours').innerText = h.toString().padStart(2, '0');
+                document.getElementById('cd-mins').innerText = m.toString().padStart(2, '0');
+                document.getElementById('cd-secs').innerText = s.toString().padStart(2, '0');
+
+                if (siteSettings.lockMsg) {
+                    document.getElementById('lock-screen-msg').innerText = siteSettings.lockMsg;
+                }
+            } else {
+                document.getElementById('lock-screen').style.display = 'none'; siteSettings.isLocked = false; siteSettings.lockTargetTime = ""; db.ref('settings').update({ isLocked: false, lockTargetTime: "" }); switchPage('home');
+            }
+        }
+        setInterval(runLockEngine, 1000);
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBvm6sWky8M6lYU0N8fFHLFnV_viJhRBZE",
+            authDomain: "sg-labs-store.firebaseapp.com",
+            databaseURL: "https://sg-labs-store-default-rtdb.firebaseio.com",
+            projectId: "sg-labs-store",
+            storageBucket: "sg-labs-store.firebasestorage.app",
+            messagingSenderId: "84680698655",
+            appId: "1:84680698655:web:17b5f7595b2f317cf55e2a",
+            measurementId: "G-RC7E0RMX4P"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        startLightningLeaderboard();
+        initLTHAuth();
+
+        let products = [];
+        let cart = [];
+
+        db.ref('settings').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                siteSettings = { ...siteSettings, ...data };
+                document.getElementById('display-store-name').innerText = siteSettings.storeName;
+                document.getElementById('page-title').innerText = siteSettings.storeName;
+                document.getElementById('lock-screen-title').innerText = siteSettings.storeName;
+
+                if (siteSettings.homeDesc) {
+                    document.getElementById('display-home-desc').innerHTML = formatPublicDescription(siteSettings.homeDesc);
+                }
+
+                document.getElementById('display-about-text').innerHTML = formatPublicDescription(siteSettings.aboutText);
+
+                let heroBannerElem = document.getElementById('display-hero-banner');
+                let heroPlaceholder = document.getElementById('hero-banner-placeholder');
+                if (siteSettings.heroBanner) {
+                    heroBannerElem.src = siteSettings.heroBanner;
+                    heroBannerElem.style.display = 'block';
+                    heroPlaceholder.style.display = 'none';
+                } else {
+                    heroBannerElem.style.display = 'none';
+                    heroPlaceholder.style.display = 'block';
+                }
+
+                let aboutImgElem = document.getElementById('display-about-img');
+                if (siteSettings.aboutImage) {
+                    aboutImgElem.src = siteSettings.aboutImage;
+                    aboutImgElem.style.display = 'block';
+                } else {
+                    aboutImgElem.style.display = 'none';
+                }
+
+                let charityBannerElem = document.getElementById('display-charity-banner');
+                if (siteSettings.charityBanner) {
+                    charityBannerElem.src = siteSettings.charityBanner;
+                    charityBannerElem.style.display = 'block';
+                } else {
+                    charityBannerElem.style.display = 'none';
+                }
+
+                runLockEngine();
+                renderSocialLinks();
+                updateCartUI();
+            }
+        });
+
+        db.ref('products').on('value', (snapshot) => {
+            const data = snapshot.val();
+            products = [];
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    products.push({ firebaseId: key, ...data[key] });
+                });
+            }
+            renderProducts(products);
+        });
+
+        function renderSocialLinks() {
+            let container = document.getElementById('social-links-container');
+            let html = '';
+
+            if (siteSettings.facebook) {
+                html += `<a href="${siteSettings.facebook}" target="_blank" class="social-link-card"><span>📘 Facebook Official Page</span> ➔</a>`;
+            }
+            if (siteSettings.instagram) {
+                html += `<a href="${siteSettings.instagram}" target="_blank" class="social-link-card"><span>📸 Instagram Profile</span> ➔</a>`;
+            }
+            if (siteSettings.youtube) {
+                html += `<a href="${siteSettings.youtube}" target="_blank" class="social-link-card"><span>▶️ YouTube Channel</span> ➔</a>`;
+            }
+            if (siteSettings.tiktok) {
+                html += `<a href="${siteSettings.tiktok}" target="_blank" class="social-link-card"><span>🎵 TikTok Account</span> ➔</a>`;
+            }
+            if (siteSettings.customSocial) {
+                html += `<a href="${siteSettings.customSocial}" target="_blank" class="social-link-card"><span>🌐 Other Social Link</span> ➔</a>`;
+            }
+
+            if (html === '') {
+                html = '<div class="empty-msg">No social links added yet. Admin can add them via the Admin Panel.</div>';
+            }
+            container.innerHTML = html;
+        }
+
+
+        /* LTH Lightning Challenge */
+        let lightningTimer = null;
+        let lightningRunning = false;
+        let lightningScore = 0;
+        let lightningTime = 60;
+        let lightningBest = parseInt(localStorage.getItem('lthLightningBest') || '0', 10);
+
+        function updateLightningStats() {
+            document.getElementById('game-score').innerText = lightningScore;
+            document.getElementById('game-time').innerText = lightningTime;
+            document.getElementById('game-best').innerText = lightningBest;
+        }
+
+        function moveLightningBolt() {
+            const arena = document.getElementById('game-arena');
+            const bolt = document.getElementById('game-bolt');
+            const padding = 14;
+            const maxX = Math.max(padding, arena.clientWidth - bolt.offsetWidth - padding);
+            const maxY = Math.max(padding, arena.clientHeight - bolt.offsetHeight - padding - 12);
+            bolt.style.left = (padding + Math.random() * Math.max(0, maxX - padding)) + 'px';
+            bolt.style.top = (padding + Math.random() * Math.max(0, maxY - padding)) + 'px';
+            bolt.style.display = 'flex';
+        }
+
+        function startLightningGame() {
+            clearInterval(lightningTimer);
+            lightningRunning = true;
+            lightningScore = 0;
+            lightningTime = 60;
+            document.getElementById('game-message').innerText = '⚡ Go! Catch the lightning!';
+            updateLightningStats();
+            moveLightningBolt();
+
+            lightningTimer = setInterval(() => {
+                lightningTime--;
+                updateLightningStats();
+                if (lightningTime <= 0) {
+                    endLightningGame();
+                }
+            }, 1000);
+        }
+
+        function catchLightning() {
+            if (!lightningRunning) return;
+            lightningScore++;
+            if (lightningScore > lightningBest) {
+                lightningBest = lightningScore;
+                localStorage.setItem('lthLightningBest', lightningBest);
+            }
+            updateLightningStats();
+            moveLightningBolt();
+        }
+
+        function endLightningGame() {
+            clearInterval(lightningTimer);
+            lightningRunning = false;
+            document.getElementById('game-bolt').style.display = 'none';
+            document.getElementById('game-message').innerText =
+                `⏱️ Time up! You caught ${lightningScore} lightning bolts.`;
+            updateLightningStats();
+            requestPermanentGameRecord(lightningScore);
+        }
+
+        function resetLightningGame() {
+            clearInterval(lightningTimer);
+            lightningRunning = false;
+            lightningScore = 0;
+            lightningTime = 60;
+            document.getElementById('game-bolt').style.display = 'none';
+            document.getElementById('game-message').innerText = 'Press Start Game and catch as many ⚡ as you can!';
+            updateLightningStats();
+        }
+
+        document.addEventListener('DOMContentLoaded', updateLightningStats);        function submitHelpRequestToWhatsApp() {
+            let name = document.getElementById('help-name').value.trim();
+            let phone = document.getElementById('help-phone').value.trim();
+            let address = document.getElementById('help-address').value.trim();
+            let requiredItem = document.getElementById('help-item').value.trim();
+
+            if (!name || !phone || !address || !requiredItem) {
+                alert("Please fill in all fields (Name, Contact Number, Address, and Required Item)!");
+                return;
+            }
+
+            let message = `*Topic: Charity and Support*%0A%0A`;
+            message += `👤 *Name:* ${encodeURIComponent(name)}%0A`;
+            message += `📞 *Contact:* ${encodeURIComponent(phone)}%0A`;
+            message += `📍 *Address:* ${encodeURIComponent(address)}%0A`;
+            message += `🎁 *Required Item:* ${encodeURIComponent(requiredItem)}%0A`;
+
+            // Save the complete order to Google Sheets (one row per cart item).
+            const orderId = "LTH-" + Date.now().toString().slice(-8);
+            const orderDate = new Date().toISOString();
+
+            cart.forEach(item => {
+                saveOrderToGoogleSheet({
+                    orderId: orderId,
+                    date: orderDate,
+                    customerName: name,
+                    phone: phone,
+                    product: item.name,
+                    quantity: item.qty,
+                    price: item.price,
+                    total: (item.price * item.qty).toFixed(0),
+                    address: address,
+                    status: "Pending"
+                });
+            });
+
+            let waNumber = (siteSettings && siteSettings.whatsapp) ? siteSettings.whatsapp : "923043337555";
+            waNumber = waNumber.replace(/\D/g, '');
+
+            let whatsappURL = `https://wa.me/${waNumber}?text=${message}`;
+
+            document.getElementById('help-name').value = '';
+            document.getElementById('help-phone').value = '';
+            document.getElementById('help-address').value = '';
+            document.getElementById('help-item').value = '';
+
+            let link = document.createElement('a');
+            link.href = whatsappURL;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function verifyAdminAccess() {
+            let enteredPin = prompt("Enter Admin PIN Code:");
+            if (enteredPin === "1947") {
+                openAdminModal();
+            } else if (enteredPin !== null) {
+                alert("Incorrect PIN Code! Access Denied.");
+            }
+        }
+
+        function renderProducts(productsToRender) {
+            let kitHTML = '', itemHTML = '', toolHTML = '';
+            let kitCount = 0, itemCount = 0, toolCount = 0;
+
+            productsToRender.forEach((p) => {
+                let imgSrc = p.image ? p.image : 'https://via.placeholder.com/250x160?text=LTH+Lightning+Tech+Hub';
+                let card = `
+                    <div class="product-card">
+                        <div>
+                            <p style="font-size: 11px; color: #6c757d; margin: 0 0 5px 0;">ID: ${p.firebaseId}</p>
+                            <img src="${imgSrc}" alt="${p.name}" class="product-img">
+                            <h3>${p.name}</h3>
+                            <p>${p.desc}</p>
+                            <p><strong>Price: ${p.price} PKR</strong></p>
+                        </div>
+                        <div>
+                            <label>Quantity: <input type="number" id="prod-${p.firebaseId}-qty" value="1" min="1"></label>
+                            <button onclick="addToCart('${p.name}', ${p.price}, 'prod-${p.firebaseId}-qty')">Add to Cart</button>
+                            <button class="edit-btn" onclick="checkEditPin('${p.firebaseId}')">✏️ Edit Item</button>
+                            <button class="delete-btn" onclick="checkDeletePin('${p.firebaseId}')">❌ Delete Item</button>
+                        </div>
+                    </div>
+                `;
+
+                if (p.category === 'kits') { kitHTML += card; kitCount++; }
+                else if (p.category === 'items') { itemHTML += card; itemCount++; }
+                else if (p.category === 'tools') { toolHTML += card; toolCount++; }
+            });
+
+            document.getElementById('grid-kits').innerHTML = kitCount > 0 ? kitHTML : '<div class="empty-msg">No project kits found.</div>';
+            document.getElementById('grid-items').innerHTML = itemCount > 0 ? itemHTML : '<div class="empty-msg">No project items found.</div>';
+            document.getElementById('grid-tools').innerHTML = toolCount > 0 ? toolHTML : '<div class="empty-msg">No project tools found.</div>';
+        }
+
+        function filterProducts() {
+            let query = document.getElementById('global-search').value.toLowerCase();
+            let filtered = products.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.desc.toLowerCase().includes(query)
+            );
+            renderProducts(filtered);
+        }
+
+        function addNewProduct() {
+            let category = document.getElementById('new-item-category').value;
+            let name = document.getElementById('new-item-name').value;
+            let price = parseInt(document.getElementById('new-item-price').value);
+            let desc = document.getElementById('new-item-desc').value;
+            let imageFile = document.getElementById('new-item-image').files[0];
+
+            if (!name || isNaN(price) || !desc) {
+                alert("Please fill in all product details correctly!");
+                return;
+            }
+
+            if (imageFile) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let base64Image = e.target.result;
+                    db.ref('products').push({ category, name, price, desc, image: base64Image });
+                    resetAddForm();
+                    alert("New item added with image successfully!");
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                db.ref('products').push({ category, name, price, desc, image: "" });
+                resetAddForm();
+                alert("New item added successfully!");
+            }
+        }
+
+        function resetAddForm() {
+            document.getElementById('new-item-name').value = '';
+            document.getElementById('new-item-price').value = '';
+            document.getElementById('new-item-desc').value = '';
+            document.getElementById('new-item-image').value = '';
+        }
+
+        function checkEditPin(firebaseId) {
+            let enteredPin = prompt("Enter Admin PIN Code to Edit:");
+            if (enteredPin === "1947") {
+                openEditModal(firebaseId);
+            } else if (enteredPin !== null) {
+                alert("Incorrect PIN! Action Denied.");
+            }
+        }
+
+        function openEditModal(firebaseId) {
+            let product = products.find(p => p.firebaseId === firebaseId);
+            if (!product) return;
+
+            document.getElementById('edit-product-id').value = product.firebaseId;
+            document.getElementById('edit-product-old-image').value = product.image || "";
+            document.getElementById('edit-product-category').value = product.category;
+            document.getElementById('edit-product-name').value = product.name;
+            document.getElementById('edit-product-price').value = product.price;
+            document.getElementById('edit-product-desc').value = product.desc;
+            document.getElementById('edit-product-image').value = "";
+
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function updateProductLive() {
+            let firebaseId = document.getElementById('edit-product-id').value;
+            let oldImage = document.getElementById('edit-product-old-image').value;
+            let category = document.getElementById('edit-product-category').value;
+            let name = document.getElementById('edit-product-name').value;
+            let price = parseInt(document.getElementById('edit-product-price').value);
+            let desc = document.getElementById('edit-product-desc').value;
+            let imageFile = document.getElementById('edit-product-image').files[0];
+
+            if (!name || isNaN(price) || !desc) {
+                alert("Please fill all fields properly!");
+                return;
+            }
+
+            if (imageFile) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let base64Image = e.target.result;
+                    db.ref('products/' + firebaseId).set({ category, name, price, desc, image: base64Image });
+                    closeEditModal();
+                    alert("Product and image updated successfully!");
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                db.ref('products/' + firebaseId).set({ category, name, price, desc, image: oldImage });
+                closeEditModal();
+                alert("Product updated successfully!");
+            }
+        }
+
+        function checkDeletePin(firebaseId) {
+            let enteredPin = prompt("Enter Admin PIN Code to Delete:");
+            if (enteredPin === "1947") {
+                if (confirm("Are you sure you want to delete this item?")) {
+                    db.ref('products/' + firebaseId).remove();
+                }
+            } else if (enteredPin !== null) {
+                alert("Incorrect PIN! Action Denied.");
+            }
+        }        /* LTH Arduino Product Catalog Import - 70 Kits + 100 Items + 70 Tools */
+        function makeArduinoCatalogImage(name, category) {
+            // Product-specific remote image URL. The product name is part of the prompt,
+            // so every catalog entry receives its own matching image URL automatically.
+            const prompt = `${name}, electronics product photography, isolated product, clean white background, accurate Arduino component or electronics kit, no text, no watermark`;
+            return 'https://image.pollinations.ai/prompt/' + encodeURIComponent(prompt) + '?width=800&height=600&nologo=true&seed=' + encodeURIComponent(String(name).split('').reduce((a,c)=>((a*31+c.charCodeAt(0))>>>0),7));
+        }
+        const ARDUINO_PRODUCT_CATALOG = [
+            { category:'kits', name:'Arduino Starter Kit R4', price:0, desc:'Includes: Arduino UNO R3 Development Board.' },
+            { category:'kits', name:'Arduino Starter Kit', price:0, desc:'Includes: Arduino UNO R4 Minima.' },
+            { category:'kits', name:'Arduino Starter Kit Classroom Pack', price:0, desc:'Includes: Arduino UNO R4 WiFi.' },
+            { category:'kits', name:'Arduino Sensor Kit', price:0, desc:'Includes: Arduino UNO Q 2GB.' },
+            { category:'kits', name:'Arduino Student Kit', price:0, desc:'Includes: Arduino UNO Q 4GB.' },
+            { category:'kits', name:'Arduino Education Starter Kit', price:0, desc:'Includes: Arduino Mega 2560 Rev3.' },
+            { category:'kits', name:'Arduino Education Starter Kit Classroom Pack', price:0, desc:'Includes: Arduino Nano.' },
+            { category:'kits', name:'Arduino Plug and Make Kit', price:0, desc:'Includes: Arduino Nano Every.' },
+            { category:'kits', name:'Arduino Oplà IoT Kit', price:0, desc:'Includes: Arduino Nano 33 IoT.' },
+            { category:'kits', name:'Arduino Science Kit Physics Lab', price:0, desc:'Includes: Arduino Nano 33 BLE.' },
+            { category:'kits', name:'Arduino Science Kit R3', price:0, desc:'Includes: Arduino Nano 33 BLE Sense Rev2.' },
+            { category:'kits', name:'Arduino PLC Starter Kit', price:0, desc:'Includes: Arduino Nano ESP32.' },
+            { category:'kits', name:'Arduino Portenta Proto Kit', price:0, desc:'Includes: Arduino Nano Matter.' },
+            { category:'kits', name:'Arduino Engineering Kit Rev2', price:0, desc:'Includes: Arduino GIGA R1 WiFi.' },
+            { category:'kits', name:'Arduino Explore IoT Kit', price:0, desc:'Includes: Arduino GIGA Display Shield.' },
+            { category:'kits', name:'Arduino Explore IoT Kit Rev2', price:0, desc:'Includes: Arduino MKR WiFi 1010.' },
+            { category:'kits', name:'Arduino CTC 101 Kit', price:0, desc:'Includes: Arduino MKR Zero.' },
+            { category:'kits', name:'Arduino CTC GO! Core Module', price:0, desc:'Includes: Arduino MKR 1000 WiFi.' },
+            { category:'kits', name:'Arduino CTC GO! MOTION Module', price:0, desc:'Includes: Arduino Portenta H7.' },
+            { category:'kits', name:'Arduino CTC GO! CORE Classroom Pack', price:0, desc:'Includes: Arduino Portenta C33.' },
+            { category:'kits', name:'Arduino IoT Micro Kit', price:0, desc:'Includes: Arduino Portenta X8.' },
+            { category:'kits', name:'Arduino Robotics Starter Kit', price:0, desc:'Includes: Arduino Nicla Vision.' },
+            { category:'kits', name:'Arduino Robotics Advanced Kit', price:0, desc:'Includes: Arduino Nicla Sense ME.' },
+            { category:'kits', name:'Arduino Smart Home Kit', price:0, desc:'Includes: Arduino Nicla Voice.' },
+            { category:'kits', name:'Arduino Home Automation Kit', price:0, desc:'Includes: Arduino Opta WiFi.' },
+            { category:'kits', name:'Arduino Weather Station Kit', price:0, desc:'Includes: Arduino Alvik.' },
+            { category:'kits', name:'Arduino Plant Monitoring Kit', price:0, desc:'Includes: Arduino Modulino LED Matrix.' },
+            { category:'kits', name:'Arduino Security System Kit', price:0, desc:'Includes: Arduino Modulino Motors.' },
+            { category:'kits', name:'Arduino Smart Garden Kit', price:0, desc:'Includes: Arduino Modulino Hub.' },
+            { category:'kits', name:'Arduino Bluetooth Robotics Kit', price:0, desc:'Includes: Arduino Modulino Extender.' },
+            { category:'kits', name:'Arduino WiFi IoT Starter Kit', price:0, desc:'Includes: Arduino Modulino Latch Relay.' },
+            { category:'kits', name:'Arduino ESP32 IoT Starter Kit', price:0, desc:'Includes: Arduino Modulino Light.' },
+            { category:'kits', name:'Arduino Mega Robotics Kit', price:0, desc:'Includes: Arduino Modulino Joystick.' },
+            { category:'kits', name:'Arduino Nano IoT Starter Kit', price:0, desc:'Includes: Arduino Modulino Vibro.' },
+            { category:'kits', name:'Arduino Nano Sensor Kit', price:0, desc:'Includes: Arduino Modulino Buttons.' },
+            { category:'kits', name:'Arduino Uno Sensor Kit', price:0, desc:'Includes: Arduino Modulino Pixels.' },
+            { category:'kits', name:'Arduino Uno Robotics Kit', price:0, desc:'Includes: Arduino Modulino Buzzer.' },
+            { category:'kits', name:'Arduino Uno Automation Kit', price:0, desc:'Includes: Arduino Modulino Knob.' },
+            { category:'kits', name:'Arduino Uno Home Automation Kit', price:0, desc:'Includes: Arduino Sensor Shield V5.' },
+            { category:'kits', name:'Arduino Uno Weather Kit', price:0, desc:'Includes: Arduino Proto Shield.' },
+            { category:'kits', name:'Arduino Uno Smart Garden Kit', price:0, desc:'Includes: Arduino Motor Shield.' },
+            { category:'kits', name:'Arduino Uno Traffic Light Kit', price:0, desc:'Includes: Arduino Ethernet Shield.' },
+            { category:'kits', name:'Arduino Uno Line Follower Kit', price:0, desc:'Includes: Arduino WiFi Shield.' },
+            { category:'kits', name:'Arduino Uno Obstacle Avoidance Kit', price:0, desc:'Includes: Arduino Relay Shield.' },
+            { category:'kits', name:'Arduino Uno Bluetooth Car Kit', price:0, desc:'Includes: Arduino CNC Shield.' },
+            { category:'kits', name:'Arduino Uno WiFi Car Kit', price:0, desc:'Includes: Arduino GSM Shield.' },
+            { category:'kits', name:'Arduino Uno RFID Security Kit', price:0, desc:'Includes: Arduino SD Card Module.' },
+            { category:'kits', name:'Arduino Uno RFID Attendance Kit', price:0, desc:'Includes: HC-SR04 Ultrasonic Sensor.' },
+            { category:'kits', name:'Arduino Uno RFID Door Lock Kit', price:0, desc:'Includes: HC-SR501 PIR Motion Sensor.' },
+            { category:'kits', name:'Arduino Uno Fingerprint Security Kit', price:0, desc:'Includes: DHT11 Temperature Sensor.' },
+            { category:'kits', name:'Arduino Uno GSM Security Kit', price:0, desc:'Includes: DHT22 Temperature Humidity Sensor.' },
+            { category:'kits', name:'Arduino Uno GPS Tracking Kit', price:0, desc:'Includes: DS18B20 Waterproof Temperature Sensor.' },
+            { category:'kits', name:'Arduino Uno Data Logger Kit', price:0, desc:'Includes: BMP180 Barometric Pressure Sensor.' },
+            { category:'kits', name:'Arduino Uno LCD Learning Kit', price:0, desc:'Includes: BMP280 Pressure Sensor.' },
+            { category:'kits', name:'Arduino Uno Keypad Learning Kit', price:0, desc:'Includes: BME280 Environmental Sensor.' },
+            { category:'kits', name:'Arduino Uno Motor Control Kit', price:0, desc:'Includes: MPU6050 Gyroscope Accelerometer.' },
+            { category:'kits', name:'Arduino Uno Servo Control Kit', price:0, desc:'Includes: MPU9250 9-Axis IMU Module.' },
+            { category:'kits', name:'Arduino Uno Stepper Control Kit', price:0, desc:'Includes: ADXL345 Accelerometer Module.' },
+            { category:'kits', name:'Arduino Uno Relay Automation Kit', price:0, desc:'Includes: LDR Light Sensor Module.' },
+            { category:'kits', name:'Arduino Uno LED Matrix Kit', price:0, desc:'Includes: Soil Moisture Sensor Module.' },
+            { category:'kits', name:'Arduino Uno OLED Display Kit', price:0, desc:'Includes: Capacitive Soil Moisture Sensor.' },
+            { category:'kits', name:'Arduino Uno Temperature Monitor Kit', price:0, desc:'Includes: Rain Drop Sensor Module.' },
+            { category:'kits', name:'Arduino Uno Humidity Monitor Kit', price:0, desc:'Includes: Flame Sensor Module.' },
+            { category:'kits', name:'Arduino Uno Soil Moisture Kit', price:0, desc:'Includes: IR Obstacle Avoidance Sensor.' },
+            { category:'kits', name:'Arduino Uno Rain Detection Kit', price:0, desc:'Includes: IR Receiver Module.' },
+            { category:'kits', name:'Arduino Uno Flame Detection Kit', price:0, desc:'Includes: IR Transmitter Module.' },
+            { category:'kits', name:'Arduino Uno IR Remote Kit', price:0, desc:'Includes: PIR Motion Sensor Mini.' },
+            { category:'kits', name:'Arduino Uno Sound and Buzzer Kit', price:0, desc:'Includes: MQ-2 Gas Sensor.' },
+            { category:'kits', name:'Arduino Uno Mini Projects Kit', price:0, desc:'Includes: MQ-3 Alcohol Sensor.' },
+            { category:'kits', name:'Arduino Beginner Electronics Project Kit', price:0, desc:'Includes: MQ-5 Gas Sensor.' },
+            { category:'items', name:'Arduino UNO R3 Development Board', price:0, desc:'Arduino UNO R3 Development Board for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino UNO R4 Minima', price:0, desc:'Arduino UNO R4 Minima for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino UNO R4 WiFi', price:0, desc:'Arduino UNO R4 WiFi for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino UNO Q 2GB', price:0, desc:'Arduino UNO Q 2GB for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino UNO Q 4GB', price:0, desc:'Arduino UNO Q 4GB for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Mega 2560 Rev3', price:0, desc:'Arduino Mega 2560 Rev3 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano', price:0, desc:'Arduino Nano for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano Every', price:0, desc:'Arduino Nano Every for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano 33 IoT', price:0, desc:'Arduino Nano 33 IoT for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano 33 BLE', price:0, desc:'Arduino Nano 33 BLE for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano 33 BLE Sense Rev2', price:0, desc:'Arduino Nano 33 BLE Sense Rev2 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano ESP32', price:0, desc:'Arduino Nano ESP32 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano Matter', price:0, desc:'Arduino Nano Matter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino GIGA R1 WiFi', price:0, desc:'Arduino GIGA R1 WiFi for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino GIGA Display Shield', price:0, desc:'Arduino GIGA Display Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino MKR WiFi 1010', price:0, desc:'Arduino MKR WiFi 1010 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino MKR Zero', price:0, desc:'Arduino MKR Zero for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino MKR 1000 WiFi', price:0, desc:'Arduino MKR 1000 WiFi for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Portenta H7', price:0, desc:'Arduino Portenta H7 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Portenta C33', price:0, desc:'Arduino Portenta C33 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Portenta X8', price:0, desc:'Arduino Portenta X8 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nicla Vision', price:0, desc:'Arduino Nicla Vision for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nicla Sense ME', price:0, desc:'Arduino Nicla Sense ME for Arduino electronics, robotics, automation and STEM projects.' },            { category:'items', name:'Arduino GIGA R1 WiFi', price:0, desc:'Arduino GIGA R1 WiFi for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino GIGA Display Shield', price:0, desc:'Arduino GIGA Display Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino MKR WiFi 1010', price:0, desc:'Arduino MKR WiFi 1010 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino MKR Zero', price:0, desc:'Arduino MKR Zero for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino MKR 1000 WiFi', price:0, desc:'Arduino MKR 1000 WiFi for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Portenta H7', price:0, desc:'Arduino Portenta H7 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Portenta C33', price:0, desc:'Arduino Portenta C33 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Portenta X8', price:0, desc:'Arduino Portenta X8 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nicla Vision', price:0, desc:'Arduino Nicla Vision for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nicla Sense ME', price:0, desc:'Arduino Nicla Sense ME for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nicla Voice', price:0, desc:'Arduino Nicla Voice for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Opta WiFi', price:0, desc:'Arduino Opta WiFi for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Alvik', price:0, desc:'Arduino Alvik for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino LED Matrix', price:0, desc:'Arduino Modulino LED Matrix for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Motors', price:0, desc:'Arduino Modulino Motors for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Hub', price:0, desc:'Arduino Modulino Hub for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Extender', price:0, desc:'Arduino Modulino Extender for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Latch Relay', price:0, desc:'Arduino Modulino Latch Relay for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Light', price:0, desc:'Arduino Modulino Light for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Joystick', price:0, desc:'Arduino Modulino Joystick for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Vibro', price:0, desc:'Arduino Modulino Vibro for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Buttons', price:0, desc:'Arduino Modulino Buttons for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Pixels', price:0, desc:'Arduino Modulino Pixels for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Buzzer', price:0, desc:'Arduino Modulino Buzzer for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Knob', price:0, desc:'Arduino Modulino Knob for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Sensor Shield V5', price:0, desc:'Arduino Sensor Shield V5 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Proto Shield', price:0, desc:'Arduino Proto Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Motor Shield', price:0, desc:'Arduino Motor Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Ethernet Shield', price:0, desc:'Arduino Ethernet Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino WiFi Shield', price:0, desc:'Arduino WiFi Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Relay Shield', price:0, desc:'Arduino Relay Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino CNC Shield', price:0, desc:'Arduino CNC Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino GSM Shield', price:0, desc:'Arduino GSM Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino SD Card Module', price:0, desc:'Arduino SD Card Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'HC-SR04 Ultrasonic Sensor', price:0, desc:'HC-SR04 Ultrasonic Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'HC-SR501 PIR Motion Sensor', price:0, desc:'HC-SR501 PIR Motion Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'DHT11 Temperature Sensor', price:0, desc:'DHT11 Temperature Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'DHT22 Temperature Humidity Sensor', price:0, desc:'DHT22 Temperature Humidity Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'DS18B20 Waterproof Temperature Sensor', price:0, desc:'DS18B20 Waterproof Temperature Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'BMP180 Barometric Pressure Sensor', price:0, desc:'BMP180 Barometric Pressure Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'BMP280 Pressure Sensor', price:0, desc:'BMP280 Pressure Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'BME280 Environmental Sensor', price:0, desc:'BME280 Environmental Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MPU6050 Gyroscope Accelerometer', price:0, desc:'MPU6050 Gyroscope Accelerometer for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MPU9250 9-Axis IMU Module', price:0, desc:'MPU9250 9-Axis IMU Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'ADXL345 Accelerometer Module', price:0, desc:'ADXL345 Accelerometer Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'LDR Light Sensor Module', price:0, desc:'LDR Light Sensor Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Soil Moisture Sensor Module', price:0, desc:'Soil Moisture Sensor Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Capacitive Soil Moisture Sensor', price:0, desc:'Capacitive Soil Moisture Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Rain Drop Sensor Module', price:0, desc:'Rain Drop Sensor Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Flame Sensor Module', price:0, desc:'Flame Sensor Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'IR Obstacle Avoidance Sensor', price:0, desc:'IR Obstacle Avoidance Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'IR Receiver Module', price:0, desc:'IR Receiver Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'IR Transmitter Module', price:0, desc:'IR Transmitter Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'PIR Motion Sensor Mini', price:0, desc:'PIR Motion Sensor Mini for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MQ-2 Gas Sensor', price:0, desc:'MQ-2 Gas Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MQ-3 Alcohol Sensor', price:0, desc:'MQ-3 Alcohol Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MQ-5 Gas Sensor', price:0, desc:'MQ-5 Gas Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MQ-7 Carbon Monoxide Sensor', price:0, desc:'MQ-7 Carbon Monoxide Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MQ-135 Air Quality Sensor', price:0, desc:'MQ-135 Air Quality Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Sound Detection Sensor', price:0, desc:'Sound Detection Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Vibration Sensor Module', price:0, desc:'Vibration Sensor Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Tilt Switch Module', price:0, desc:'Tilt Switch Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Reed Switch Module', price:0, desc:'Reed Switch Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Hall Effect Sensor Module', price:0, desc:'Hall Effect Sensor Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'RFID RC522 Module', price:0, desc:'RFID RC522 Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'PN532 NFC Module', price:0, desc:'PN532 NFC Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'HC-05 Bluetooth Module', price:0, desc:'HC-05 Bluetooth Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'HC-06 Bluetooth Module', price:0, desc:'HC-06 Bluetooth Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'ESP8266 WiFi Module', price:0, desc:'ESP8266 WiFi Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'ESP32 Development Board', price:0, desc:'ESP32 Development Board for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'NRF24L01 Wireless Module', price:0, desc:'NRF24L01 Wireless Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'433MHz RF Transmitter Receiver', price:0, desc:'433MHz RF Transmitter Receiver for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'GPS NEO-6M Module', price:0, desc:'GPS NEO-6M Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'SIM800L GSM Module', price:0, desc:'SIM800L GSM Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'16x2 LCD Display', price:0, desc:'16x2 LCD Display for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'20x4 LCD Display', price:0, desc:'20x4 LCD Display for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'I2C LCD Adapter', price:0, desc:'I2C LCD Adapter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'0.96 inch OLED Display', price:0, desc:'0.96 inch OLED Display for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'1.3 inch OLED Display', price:0, desc:'1.3 inch OLED Display for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'4 Digit 7 Segment Display', price:0, desc:'4 Digit 7 Segment Display for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'8x8 LED Matrix Module', price:0, desc:'8x8 LED Matrix Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MAX7219 LED Matrix Driver', price:0, desc:'MAX7219 LED Matrix Driver for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'TM1637 Display Module', price:0, desc:'TM1637 Display Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'SG90 Micro Servo Motor', price:0, desc:'SG90 Micro Servo Motor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MG90S Metal Gear Servo', price:0, desc:'MG90S Metal Gear Servo for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MG996R High Torque Servo', price:0, desc:'MG996R High Torque Servo for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'28BYJ-48 Stepper Motor + ULN2003', price:0, desc:'28BYJ-48 Stepper Motor + ULN2003 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Arduino USB Type-B Programming Cable', price:0, desc:'Arduino USB Type-B Programming Cable for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Arduino Mini USB Programming Cable', price:0, desc:'Arduino Mini USB Programming Cable for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Arduino USB Type-C Programming Cable', price:0, desc:'Arduino USB Type-C Programming Cable for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'USB to TTL Serial Adapter', price:0, desc:'USB to TTL Serial Adapter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'FTDI USB Serial Adapter', price:0, desc:'FTDI USB Serial Adapter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Dupont Jumper Wire Crimping Tool', price:0, desc:'Dupont Jumper Wire Crimping Tool for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Jumper Wire Kit', price:0, desc:'Jumper Wire Kit for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Dupont Connector Assortment', price:0, desc:'Dupont Connector Assortment for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Digital Multimeter', price:0, desc:'Digital Multimeter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'LCR Meter', price:0, desc:'LCR Meter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Continuity Tester', price:0, desc:'Continuity Tester for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Logic Probe', price:0, desc:'Logic Probe for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'USB Oscilloscope Mini', price:0, desc:'USB Oscilloscope Mini for Arduino electronics, robotics, automation and STEM projects.' },
