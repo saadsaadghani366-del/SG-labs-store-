@@ -3,18 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">LTH Lightning Tech Hub | Build • Innovate • Inspire</title>
-    <meta name="description" content="LTH Lightning Tech Hub — build, innovate and inspire with technology products, projects, learning resources and interactive experiences.">
-    <meta name="keywords" content="LTH Lightning Tech Hub, Lightning Tech Hub, technology, gadgets, electronics, STEM, innovation, tech projects">
-    <meta name="author" content="Lightning Tech Hub">
-    <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#0f2e5b">
-    <meta name="application-name" content="LTH Lightning Tech Hub">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="LTH Lightning Tech Hub">
-    <meta property="og:description" content="Build • Innovate • Inspire — Lightning Tech Hub.">
-    <meta property="og:site_name" content="LTH Lightning Tech Hub">
-    <meta name="twitter:card" content="summary">
+    <title id="page-title">LTH Lightning Tech Hub</title>
     
     <!-- Firebase SDK Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -49,7 +38,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: linear-gradient(90deg, #006b3c 0%, #006b3c 72%, #ffffff 72%, #ffffff 100%);
+            background: linear-gradient(135deg, #071b45 0%, #0b2d68 48%, #126bff 100%);
             color: white;
             z-index: 99999;
             display: none;
@@ -845,6 +834,22 @@
             color: #ffffff;
         }
 
+        /* FIX: Customer checkout fields must keep typed text visible. */
+        #page-cart input,
+        #page-cart textarea,
+        #page-cart select {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+            -webkit-text-fill-color: #1f2937 !important;
+            caret-color: #1f2937 !important;
+        }
+
+        #page-cart input::placeholder,
+        #page-cart textarea::placeholder {
+            color: #6b7280 !important;
+            opacity: 1 !important;
+        }
+
         /* Keep login/create-account cards readable while the page behind them
            uses the new navy theme. */
         .login-card,
@@ -1291,16 +1296,81 @@
             max-width: 100% !important;
         }
 
+
+        /* LTH Bulk Price Manager - additive admin feature only */
+        .bulk-price-manager { background:#f8fbff; border:1px solid #cfe2ff; }
+        .bulk-price-toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:12px 0; }
+        .bulk-price-toolbar input, .bulk-price-toolbar select { flex:1 1 180px; margin:0 !important; }
+        .bulk-selection-count { font-weight:bold; color:var(--primary-color); padding:8px 12px; background:#eef6ff; border:1px solid #cfe2ff; border-radius:7px; }
+        .bulk-product-list { max-height:360px; overflow:auto; border:1px solid #dbeaff; border-radius:7px; background:#fff; }
+        .bulk-product-row { display:grid; grid-template-columns:32px 1fr 120px 130px; gap:8px; align-items:center; padding:9px 10px; border-bottom:1px solid #edf3fb; font-size:13px; }
+        .bulk-product-row:last-child { border-bottom:none; }
+        .bulk-product-row:hover { background:#f7fbff; }
+        .bulk-product-row input[type="checkbox"] { width:18px; height:18px; margin:0; }
+        .bulk-product-name { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .bulk-product-category { color:#6c757d; font-size:11px; }
+        .bulk-product-price { font-weight:bold; text-align:right; }
+        .bulk-adjust-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+        .bulk-adjust-grid input, .bulk-adjust-grid select { width:100%; box-sizing:border-box; }
+        .bulk-action-buttons { display:flex; gap:10px; margin-top:12px; }
+        .bulk-action-buttons button { flex:1; }
+        .bulk-preview { display:none; margin-top:15px; border:1px solid #cfe2ff; border-radius:8px; overflow:hidden; background:#fff; }
+        .bulk-preview h4 { margin:0; padding:11px 12px; background:#eef6ff; color:var(--primary-color); }
+        .bulk-preview-table { width:100%; border-collapse:collapse; font-size:12px; }
+        .bulk-preview-table th, .bulk-preview-table td { padding:8px; border-bottom:1px solid #edf3fb; text-align:left; }
+        .bulk-preview-table th { background:#f8fbff; color:#0b5ed7; }
+        .bulk-confirm-btn { background:#198754 !important; color:#fff; border:none; padding:10px 14px; border-radius:5px; cursor:pointer; font-weight:bold; width:100%; margin-top:10px; }
+        @media (max-width:700px) {
+            .bulk-product-row { grid-template-columns:30px 1fr 95px; }
+            .bulk-product-row .bulk-product-category { display:none; }
+            .bulk-adjust-grid { grid-template-columns:1fr; }
+            .bulk-action-buttons { flex-direction:column; }
+        }
+
+
+/* FIX: Public content text visibility + structured description formatting */
+#page-home #display-home-desc,
+#page-about > div,
+#page-help > div,
+#page-help .support-content,
+#page-social > div {
+    color: #1f2937 !important;
+}
+#page-home #display-home-desc *,
+#page-about > div *,
+#page-help > div *,
+#page-help .support-content *,
+#page-social > div * {
+    color: #1f2937 !important;
+}
+#page-home #display-home-desc {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+    text-align: left;
+}
+#page-home #display-home-desc .content-heading,
+#page-about #display-about-text .content-heading,
+#page-help .content-heading {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0b5ed7 !important;
+    margin: 18px 0 7px;
+}
+#page-home #display-home-desc .content-heading:first-child,
+#page-about #display-about-text .content-heading:first-child { margin-top: 0; }
+#page-home #display-home-desc .content-paragraph,
+#page-about #display-about-text .content-paragraph,
+#page-help .content-paragraph {
+    display: block;
+    color: #1f2937 !important;
+    line-height: 1.75;
+    margin: 0 0 12px;
+}
+#page-about #display-about-text { color: #1f2937 !important; }
+#page-about #display-about-text strong { color: #0b5ed7 !important; }
+#page-help .content-paragraph { color: #1f2937 !important; }
 </style>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "LTH Lightning Tech Hub",
-      "description": "Lightning Tech Hub — build, innovate and inspire.",
-      "url": "./"
-    }
-    </script>
 </head>
 <body>
 
@@ -1398,6 +1468,7 @@
         <button id="nav-about" onclick="switchPage('about')">About Us</button>
         <button id="nav-social" onclick="switchPage('social')">🌐 Social Links</button>
         <button id="nav-game" onclick="switchPage('game')">⚡ Lightning Challenge</button>
+        <button id="nav-reports" onclick="switchPage('reports')">📋 Previous Reports</button>
     </nav>
 
     <div class="container">
@@ -1446,8 +1517,8 @@
             <div class="form-group"><label>Full Name:</label><input type="text" id="cust-name" placeholder="Enter your full name"></div>
             <div class="form-group"><label>Phone Number:</label><input type="text" id="cust-phone" placeholder="03XXXXXXXXX"></div>
             <div class="form-group"><label>Location / Address:</label><input type="text" id="cust-address" placeholder="Enter your city and complete address"></div>
-            <div class="form-group"><label>Email:</label><input type="email" id="cust-email" placeholder="example@email.com"></div>
-            <button class="confirm-btn" onclick="sendToWhatsApp()"><i class="fa-brands fa-whatsapp fa-xl"></i> Confirm Order (Send via WhatsApp)</button>
+            <div class="form-group"><label>Email:</label><input type="email" id="cust-email" placeholder="example@email.com" required></div>
+            <button id="place-order-btn" class="confirm-btn" onclick="placeOrder()">Place Order</button>
         </div>
 
         <div id="page-help" class="page-section">
@@ -1543,6 +1614,14 @@
             </div>
         </div>
 
+<div id="page-reports" class="page-section">
+            <div class="previous-report-shell">
+                <h2>📋 Previous Reports</h2>
+                <p class="previous-report-subtitle">Your previous orders and shopping history for this account.</p>
+                <div id="previous-orders-list">Loading your previous orders...</div>
+            </div>
+        </div>
+
 <div id="page-social" class="page-section">
             <h2>🌐 LTH Community Zone</h2>
             <p style="color: #6c757d; margin-bottom: 20px;">Play the LTH Lightning Challenge and visit our official channels below.</p>
@@ -1631,6 +1710,65 @@
                 <button class="save-btn" style="margin-top:15px;" onclick="addNewProduct()">Add Item with Image</button>
             </div>
 
+
+            <div class="admin-box bulk-price-manager">
+                <h3 style="color:var(--primary-color); margin-top:0;">💰 Bulk Price Manager</h3>
+                <p style="font-size:13px;color:#555;">Select multiple products and preview price changes before updating Firebase.</p>
+
+                <div class="bulk-price-toolbar">
+                    <button type="button" class="save-btn" style="width:auto;" onclick="importArduinoProductCatalog()">🔧 Import Arduino Product Catalog</button>
+                    <span style="font-size:12px;color:#666;">Adds only missing Arduino-related products.</span>
+                </div>
+
+                <div class="bulk-price-toolbar">
+                    <input type="text" id="bulk-product-search" placeholder="Search product name..." oninput="renderBulkPriceProducts()">
+                    <select id="bulk-category-filter" onchange="renderBulkPriceProducts()">
+                        <option value="all">All Categories</option>
+                        <option value="kits">Project Kits</option>
+                        <option value="items">Project Items</option>
+                        <option value="tools">Project Tools</option>
+                    </select>
+                </div>
+
+                <div class="bulk-price-toolbar">
+                    <button type="button" class="save-btn" style="width:auto;" onclick="bulkSelectAll()">Select All</button>
+                    <button type="button" class="cancel-btn" style="width:auto;" onclick="bulkClearSelection()">Clear Selection</button>
+                    <span class="bulk-selection-count" id="bulk-selected-count">0 selected</span>
+                </div>
+
+                <div class="bulk-product-list" id="bulk-product-list"></div>
+
+                <div class="bulk-adjust-grid">
+                    <div>
+                        <label for="bulk-adjust-type">Adjustment Type:</label>
+                        <select id="bulk-adjust-type">
+                            <option value="fixed">Fixed Amount</option>
+                            <option value="percentage">Percentage</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="bulk-adjust-value">Adjustment Value:</label>
+                        <input type="number" id="bulk-adjust-value" min="0" step="any" placeholder="e.g. 20 or 10">
+                    </div>
+                </div>
+
+                <div class="bulk-action-buttons">
+                    <button type="button" class="save-btn" onclick="prepareBulkPricePreview('increase')">Increase Price</button>
+                    <button type="button" class="cancel-btn" onclick="prepareBulkPricePreview('decrease')">Decrease Price</button>
+                </div>
+
+                <div class="bulk-preview" id="bulk-price-preview">
+                    <h4>Preview Before Update</h4>
+                    <div style="max-height:280px;overflow:auto;">
+                        <table class="bulk-preview-table">
+                            <thead><tr><th>Product Name</th><th>Old Price</th><th>New Price</th></tr></thead>
+                            <tbody id="bulk-preview-body"></tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="bulk-confirm-btn" onclick="confirmBulkPriceUpdate()">Confirm &amp; Update Products</button>
+                </div>
+            </div>
+
             <div class="modal-buttons" style="flex-direction: column; gap: 10px;">
                 <button class="save-btn" onclick="saveAdminSettings()">💾 Save All Changes Live</button>
                 <button class="cancel-btn" onclick="closeAdminModal()">❌ Close Panel</button>
@@ -1697,6 +1835,36 @@
 
         /* LTH Firebase Authentication */
         let currentLTHUser = null;
+
+        const LTH_USER_ORDERS_PATH = 'lthOrderHistory';
+
+        function getUserCartKey() { return currentLTHUser && currentLTHUser.uid ? 'lth_cart_' + currentLTHUser.uid : null; }
+        function saveCurrentUserCart() { const key=getUserCartKey(); if(!key)return; try{localStorage.setItem(key,JSON.stringify(cart));}catch(e){} }
+        function loadCurrentUserCart() { const key=getUserCartKey(); if(!key)return; try{const saved=JSON.parse(localStorage.getItem(key)||'[]'); if(Array.isArray(saved)) cart=saved;}catch(e){cart=[];} }
+
+        function renderPreviousOrders() {
+            const list=document.getElementById('previous-orders-list'); if(!list)return;
+            if(!currentLTHUser || !currentLTHUser.uid){ list.innerHTML='<div class="previous-empty">Please login to view your previous reports.</div>'; return; }
+            list.innerHTML='Loading your previous orders...';
+            db.ref(LTH_USER_ORDERS_PATH+'/'+currentLTHUser.uid).once('value').then(snapshot=>{
+                const orders=[]; snapshot.forEach(child=>orders.push({id:child.key,...child.val()}));
+                orders.sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+                if(!orders.length){list.innerHTML='<div class="previous-empty">No previous orders found for this account yet.</div>';return;}
+                list.innerHTML=orders.map(order=>{
+                    const safeItems=escapeLeaderboardText(order.orderDetails||order.product||'Order details unavailable');
+                    const safeId=escapeLeaderboardText(order.orderId||order.id);
+                    const safeDate=escapeLeaderboardText(order.date||'');
+                    const safeStatus=escapeLeaderboardText(order.status||'Pending');
+                    const total=Number(order.finalTotal??order.total??0);
+                    return `<div class="previous-order-card"><div class="previous-order-head"><span class="previous-order-id">Order ID: ${safeId}</span><span>${safeDate}</span><span class="previous-order-status">${safeStatus}</span></div><div class="previous-order-items">${safeItems}</div><div class="previous-order-total">Total: Rs. ${Number.isFinite(total)?total.toLocaleString('en-PK'):'0'}</div></div>`;
+                }).join('');
+            }).catch(error=>{console.error('Previous orders load failed:',error);list.innerHTML='<div class="previous-empty">Could not load your previous reports. Please try again.</div>';});
+        }
+
+        function saveUserProfileToFirebase(){
+            if(!currentLTHUser||!currentLTHUser.uid)return Promise.resolve();
+            return db.ref('lthUsers/'+currentLTHUser.uid).update({uid:currentLTHUser.uid,email:currentLTHUser.email||'',displayName:currentLTHUser.displayName||'',lastLoginAt:firebase.database.ServerValue.TIMESTAMP});
+        }
 
 
         /* LTH Firebase Lightning Leaderboard */
@@ -1813,39 +1981,36 @@
             if (status) status.innerText = '';
         }
 
-        /* LTH Firebase account system
-           Accounts are stored in Firebase Authentication. User profile
-           information is stored in Realtime Database. */
-        function normalizeLTHEmail(email) {
-            return email.trim().toLowerCase();
+        /* LTH account system
+           Uses browser storage instead of Firebase Authentication.
+           This avoids the Firebase auth/configuration-not-found error while
+           keeping the rest of the website unchanged. Passwords are stored
+           as SHA-256 hashes, not as plain text. */
+        const LTH_ACCOUNTS_KEY = 'lth_accounts_v2';
+        const LTH_SESSION_KEY = 'lth_logged_in_user_v2';
+
+        function getLTHAccounts() {
+            try {
+                return JSON.parse(localStorage.getItem(LTH_ACCOUNTS_KEY) || '{}');
+            } catch (e) {
+                return {};
+            }
         }
 
-        function getFirebaseAuthErrorMessage(error, action) {
-            const code = error && error.code ? error.code : '';
-            if (code === 'auth/email-already-in-use') {
-                return 'This Gmail account already exists. Please login instead.';
-            }
-            if (code === 'auth/invalid-email') {
-                return 'Please enter a valid Gmail address.';
-            }
-            if (code === 'auth/weak-password') {
-                return 'Password should be at least 6 characters.';
-            }
-            if (code === 'auth/user-not-found' || code === 'auth/wrong-password' || code === 'auth/invalid-credential') {
-                return 'Incorrect Gmail or password.';
-            }
-            if (code === 'auth/operation-not-allowed') {
-                return 'Email/Password login is not enabled in Firebase. Enable it in Firebase Authentication.';
-            }
-            if (code === 'auth/network-request-failed') {
-                return 'Network error. Please check your internet connection and try again.';
-            }
-            if (code === 'auth/configuration-not-found') {
-                return 'Firebase Authentication is not configured for this project yet.';
-            }
-            return (action === 'create')
-                ? 'Account could not be created. Please try again.'
-                : 'Login failed. Please check your Gmail and password.';
+        function saveLTHAccounts(accounts) {
+            localStorage.setItem(LTH_ACCOUNTS_KEY, JSON.stringify(accounts));
+        }
+
+        async function hashLTHPassword(password) {
+            const data = new TextEncoder().encode(password);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+
+        function normalizeLTHEmail(email) {
+            return email.trim().toLowerCase();
         }
 
         async function loginUser() {
@@ -1863,14 +2028,39 @@
             status.innerText = 'Signing in...';
 
             try {
-                const cred = await firebase.auth().signInWithEmailAndPassword(email, password);
-                currentLTHUser = cred.user;
+                const accounts = getLTHAccounts();
+                const account = accounts[email];
+
+                if (!account) {
+                    status.style.color = '#dc3545';
+                    status.innerText = 'Account not found. Please create an account first.';
+                    return;
+                }
+
+                const passwordHash = await hashLTHPassword(password);
+                if (account.passwordHash !== passwordHash) {
+                    status.style.color = '#dc3545';
+                    status.innerText = 'Incorrect Gmail or password.';
+                    return;
+                }
+
+                currentLTHUser = {
+                    uid: account.uid,
+                    email: account.email,
+                    displayName: account.name
+                };
+
+                localStorage.setItem(LTH_SESSION_KEY, JSON.stringify(currentLTHUser));
+                saveUserProfileToFirebase().catch(() => {});
+                loadCurrentUserCart();
+                updateCartUI();
+                renderPreviousOrders();
                 status.innerText = '';
                 closeLoginGate();
                 showLoggedInState();
             } catch (error) {
                 status.style.color = '#dc3545';
-                status.innerText = getFirebaseAuthErrorMessage(error, 'login');
+                status.innerText = 'Login failed. Please try again.';
             }
         }
 
@@ -1903,51 +2093,69 @@
             status.innerText = 'Creating account...';
 
             try {
-                const cred = await firebase.auth().createUserWithEmailAndPassword(email, password);
-                const fullName = `${firstName} ${lastName}`.trim();
+                const accounts = getLTHAccounts();
 
-                await cred.user.updateProfile({ displayName: fullName });
-
-                // Save profile details; if database rules block this optional
-                // profile write, the Firebase Auth account remains valid.
-                try {
-                    await db.ref('users/' + cred.user.uid).set({
-                        firstName: firstName,
-                        lastName: lastName,
-                        name: fullName,
-                        email: email,
-                        createdAt: firebase.database.ServerValue.TIMESTAMP
-                    });
-                } catch (profileError) {
-                    console.warn('LTH profile save skipped:', profileError);
+                if (accounts[email]) {
+                    status.style.color = '#dc3545';
+                    status.innerText = 'This Gmail account already exists. Please login instead.';
+                    return;
                 }
 
-                currentLTHUser = cred.user;
+                const fullName = `${firstName} ${lastName}`.trim();
+                const passwordHash = await hashLTHPassword(password);
+                const uid = 'lth_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+
+                accounts[email] = {
+                    uid: uid,
+                    firstName: firstName,
+                    lastName: lastName,
+                    name: fullName,
+                    email: email,
+                    passwordHash: passwordHash,
+                    createdAt: new Date().toISOString()
+                };
+
+                saveLTHAccounts(accounts);
+
+                currentLTHUser = {
+                    uid: uid,
+                    email: email,
+                    displayName: fullName
+                };
+                localStorage.setItem(LTH_SESSION_KEY, JSON.stringify(currentLTHUser));
+                saveUserProfileToFirebase().catch(() => {});
+                loadCurrentUserCart();
+                updateCartUI();
+                renderPreviousOrders();
+
                 status.innerText = '';
                 document.getElementById('login-email').value = '';
                 document.getElementById('login-password').value = '';
                 closeCreateAccount();
                 closeLoginGate();
+                loadCurrentUserCart();
+                updateCartUI();
+                renderPreviousOrders();
+                saveUserProfileToFirebase().catch(() => {});
                 showLoggedInState();
             } catch (error) {
                 status.style.color = '#dc3545';
-                status.innerText = getFirebaseAuthErrorMessage(error, 'create');
+                status.innerText = 'Account could not be created. Please try again.';
             }
         }
 
         function logoutUser() {
-            firebase.auth().signOut().then(() => {
-                currentLTHUser = null;
-                const label = document.getElementById('top-user-label');
-                label.classList.remove('open');
-                label.style.display = 'none';
-                document.getElementById('login-email').value = '';
-                document.getElementById('login-password').value = '';
-                document.getElementById('top-login-btn').style.display = 'block';
-                openLoginGate();
-            }).catch(() => {
-                // Keep the user logged in if Firebase cannot complete sign-out.
-            });
+            cart = [];
+            updateCartUI();
+            currentLTHUser = null;
+            localStorage.removeItem(LTH_SESSION_KEY);
+            const label = document.getElementById('top-user-label');
+            label.classList.remove('open');
+            label.style.display = 'none';
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('top-login-btn').style.display = 'block';
+            openLoginGate();
         }
 
         function toggleUserMenu() {
@@ -1963,24 +2171,16 @@
             nameEl.innerText = '👤 ' + ((currentLTHUser && currentLTHUser.displayName) || 'User');
             label.classList.remove('open');
             label.style.display = 'block';
+            renderPreviousOrders();
         }
 
         function initLTHAuth() {
-            firebase.auth().onAuthStateChanged(user => {
-                currentLTHUser = user || null;
-                if (user) {
-                    closeCreateAccount();
-                    closeLoginGate();
-                    showLoggedInState();
-                } else {
-                    currentLTHUser = null;
-                    document.getElementById('top-user-label').classList.remove('open');
-                    document.getElementById('top-user-label').style.display = 'none';
-                    document.getElementById('top-login-btn').style.display = 'block';
-                    openLoginGate();
-                }
-            });
-        }
+            try {
+                const savedSession = localStorage.getItem(LTH_SESSION_KEY);
+                currentLTHUser = savedSession ? JSON.parse(savedSession) : null;
+            } catch (e) {
+                currentLTHUser = null;
+            }
 
             if (currentLTHUser && currentLTHUser.email) {
                 closeCreateAccount();
@@ -2061,10 +2261,10 @@
                 document.getElementById('lock-screen-title').innerText = siteSettings.storeName;
                 
                 if (siteSettings.homeDesc) {
-                    document.getElementById('display-home-desc').innerHTML = siteSettings.homeDesc;
+                    document.getElementById('display-home-desc').innerHTML = formatPublicDescription(siteSettings.homeDesc);
                 }
 
-                document.getElementById('display-about-text').innerHTML = siteSettings.aboutText;
+                document.getElementById('display-about-text').innerHTML = formatPublicDescription(siteSettings.aboutText);
                 
                 let heroBannerElem = document.getElementById('display-hero-banner');
                 let heroPlaceholder = document.getElementById('hero-banner-placeholder');
@@ -2228,6 +2428,25 @@
             message += `📞 *Contact:* ${encodeURIComponent(phone)}%0A`;
             message += `📍 *Address:* ${encodeURIComponent(address)}%0A`;
             message += `🎁 *Required Item:* ${encodeURIComponent(requiredItem)}%0A`;
+
+            // Save the complete order to Google Sheets (one row per cart item).
+            const orderId = "LTH-" + Date.now().toString().slice(-8);
+            const orderDate = new Date().toISOString();
+
+            cart.forEach(item => {
+                saveOrderToGoogleSheet({
+                    orderId: orderId,
+                    date: orderDate,
+                    customerName: name,
+                    phone: phone,
+                    product: item.name,
+                    quantity: item.qty,
+                    price: item.price,
+                    total: (item.price * item.qty).toFixed(0),
+                    address: address,
+                    status: "Pending"
+                });
+            });
 
             let waNumber = (siteSettings && siteSettings.whatsapp) ? siteSettings.whatsapp : "923043337555";
             waNumber = waNumber.replace(/\D/g, '');
@@ -2403,6 +2622,407 @@
             }
         }
 
+
+        /* LTH Arduino Product Catalog Import - 70 Kits + 100 Items + 70 Tools */
+        function makeArduinoCatalogImage(name, category) {
+            // Product-specific remote image URL. The product name is part of the prompt,
+            // so every catalog entry receives its own matching image URL automatically.
+            const prompt = `${name}, electronics product photography, isolated product, clean white background, accurate Arduino component or electronics kit, no text, no watermark`;
+            return 'https://image.pollinations.ai/prompt/' + encodeURIComponent(prompt) + '?width=800&height=600&nologo=true&seed=' + encodeURIComponent(String(name).split('').reduce((a,c)=>((a*31+c.charCodeAt(0))>>>0),7));
+        }
+        const ARDUINO_PRODUCT_CATALOG = [
+            { category:'kits', name:'Arduino Starter Kit R4', price:0, desc:'Includes: Arduino UNO R3 Development Board.' },
+            { category:'kits', name:'Arduino Starter Kit', price:0, desc:'Includes: Arduino UNO R4 Minima.' },
+            { category:'kits', name:'Arduino Starter Kit Classroom Pack', price:0, desc:'Includes: Arduino UNO R4 WiFi.' },
+            { category:'kits', name:'Arduino Sensor Kit', price:0, desc:'Includes: Arduino UNO Q 2GB.' },
+            { category:'kits', name:'Arduino Student Kit', price:0, desc:'Includes: Arduino UNO Q 4GB.' },
+            { category:'kits', name:'Arduino Education Starter Kit', price:0, desc:'Includes: Arduino Mega 2560 Rev3.' },
+            { category:'kits', name:'Arduino Education Starter Kit Classroom Pack', price:0, desc:'Includes: Arduino Nano.' },
+            { category:'kits', name:'Arduino Plug and Make Kit', price:0, desc:'Includes: Arduino Nano Every.' },
+            { category:'kits', name:'Arduino Oplà IoT Kit', price:0, desc:'Includes: Arduino Nano 33 IoT.' },
+            { category:'kits', name:'Arduino Science Kit Physics Lab', price:0, desc:'Includes: Arduino Nano 33 BLE.' },
+            { category:'kits', name:'Arduino Science Kit R3', price:0, desc:'Includes: Arduino Nano 33 BLE Sense Rev2.' },
+            { category:'kits', name:'Arduino PLC Starter Kit', price:0, desc:'Includes: Arduino Nano ESP32.' },
+            { category:'kits', name:'Arduino Portenta Proto Kit', price:0, desc:'Includes: Arduino Nano Matter.' },
+            { category:'kits', name:'Arduino Engineering Kit Rev2', price:0, desc:'Includes: Arduino GIGA R1 WiFi.' },
+            { category:'kits', name:'Arduino Explore IoT Kit', price:0, desc:'Includes: Arduino GIGA Display Shield.' },
+            { category:'kits', name:'Arduino Explore IoT Kit Rev2', price:0, desc:'Includes: Arduino MKR WiFi 1010.' },
+            { category:'kits', name:'Arduino CTC 101 Kit', price:0, desc:'Includes: Arduino MKR Zero.' },
+            { category:'kits', name:'Arduino CTC GO! Core Module', price:0, desc:'Includes: Arduino MKR 1000 WiFi.' },
+            { category:'kits', name:'Arduino CTC GO! MOTION Module', price:0, desc:'Includes: Arduino Portenta H7.' },
+            { category:'kits', name:'Arduino CTC GO! CORE Classroom Pack', price:0, desc:'Includes: Arduino Portenta C33.' },
+            { category:'kits', name:'Arduino IoT Micro Kit', price:0, desc:'Includes: Arduino Portenta X8.' },
+            { category:'kits', name:'Arduino Robotics Starter Kit', price:0, desc:'Includes: Arduino Nicla Vision.' },
+            { category:'kits', name:'Arduino Robotics Advanced Kit', price:0, desc:'Includes: Arduino Nicla Sense ME.' },
+            { category:'kits', name:'Arduino Smart Home Kit', price:0, desc:'Includes: Arduino Nicla Voice.' },
+            { category:'kits', name:'Arduino Home Automation Kit', price:0, desc:'Includes: Arduino Opta WiFi.' },
+            { category:'kits', name:'Arduino Weather Station Kit', price:0, desc:'Includes: Arduino Alvik.' },
+            { category:'kits', name:'Arduino Plant Monitoring Kit', price:0, desc:'Includes: Arduino Modulino LED Matrix.' },
+            { category:'kits', name:'Arduino Security System Kit', price:0, desc:'Includes: Arduino Modulino Motors.' },
+            { category:'kits', name:'Arduino Smart Garden Kit', price:0, desc:'Includes: Arduino Modulino Hub.' },
+            { category:'kits', name:'Arduino Bluetooth Robotics Kit', price:0, desc:'Includes: Arduino Modulino Extender.' },
+            { category:'kits', name:'Arduino WiFi IoT Starter Kit', price:0, desc:'Includes: Arduino Modulino Latch Relay.' },
+            { category:'kits', name:'Arduino ESP32 IoT Starter Kit', price:0, desc:'Includes: Arduino Modulino Light.' },
+            { category:'kits', name:'Arduino Mega Robotics Kit', price:0, desc:'Includes: Arduino Modulino Joystick.' },
+            { category:'kits', name:'Arduino Nano IoT Starter Kit', price:0, desc:'Includes: Arduino Modulino Vibro.' },
+            { category:'kits', name:'Arduino Nano Sensor Kit', price:0, desc:'Includes: Arduino Modulino Buttons.' },
+            { category:'kits', name:'Arduino Uno Sensor Kit', price:0, desc:'Includes: Arduino Modulino Pixels.' },
+            { category:'kits', name:'Arduino Uno Robotics Kit', price:0, desc:'Includes: Arduino Modulino Buzzer.' },
+            { category:'kits', name:'Arduino Uno Automation Kit', price:0, desc:'Includes: Arduino Modulino Knob.' },
+            { category:'kits', name:'Arduino Uno Home Automation Kit', price:0, desc:'Includes: Arduino Sensor Shield V5.' },
+            { category:'kits', name:'Arduino Uno Weather Kit', price:0, desc:'Includes: Arduino Proto Shield.' },
+            { category:'kits', name:'Arduino Uno Smart Garden Kit', price:0, desc:'Includes: Arduino Motor Shield.' },
+            { category:'kits', name:'Arduino Uno Traffic Light Kit', price:0, desc:'Includes: Arduino Ethernet Shield.' },
+            { category:'kits', name:'Arduino Uno Line Follower Kit', price:0, desc:'Includes: Arduino WiFi Shield.' },
+            { category:'kits', name:'Arduino Uno Obstacle Avoidance Kit', price:0, desc:'Includes: Arduino Relay Shield.' },
+            { category:'kits', name:'Arduino Uno Bluetooth Car Kit', price:0, desc:'Includes: Arduino CNC Shield.' },
+            { category:'kits', name:'Arduino Uno WiFi Car Kit', price:0, desc:'Includes: Arduino GSM Shield.' },
+            { category:'kits', name:'Arduino Uno RFID Security Kit', price:0, desc:'Includes: Arduino SD Card Module.' },
+            { category:'kits', name:'Arduino Uno RFID Attendance Kit', price:0, desc:'Includes: HC-SR04 Ultrasonic Sensor.' },
+            { category:'kits', name:'Arduino Uno RFID Door Lock Kit', price:0, desc:'Includes: HC-SR501 PIR Motion Sensor.' },
+            { category:'kits', name:'Arduino Uno Fingerprint Security Kit', price:0, desc:'Includes: DHT11 Temperature Sensor.' },
+            { category:'kits', name:'Arduino Uno GSM Security Kit', price:0, desc:'Includes: DHT22 Temperature Humidity Sensor.' },
+            { category:'kits', name:'Arduino Uno GPS Tracking Kit', price:0, desc:'Includes: DS18B20 Waterproof Temperature Sensor.' },
+            { category:'kits', name:'Arduino Uno Data Logger Kit', price:0, desc:'Includes: BMP180 Barometric Pressure Sensor.' },
+            { category:'kits', name:'Arduino Uno LCD Learning Kit', price:0, desc:'Includes: BMP280 Pressure Sensor.' },
+            { category:'kits', name:'Arduino Uno Keypad Learning Kit', price:0, desc:'Includes: BME280 Environmental Sensor.' },
+            { category:'kits', name:'Arduino Uno Motor Control Kit', price:0, desc:'Includes: MPU6050 Gyroscope Accelerometer.' },
+            { category:'kits', name:'Arduino Uno Servo Control Kit', price:0, desc:'Includes: MPU9250 9-Axis IMU Module.' },
+            { category:'kits', name:'Arduino Uno Stepper Control Kit', price:0, desc:'Includes: ADXL345 Accelerometer Module.' },
+            { category:'kits', name:'Arduino Uno Relay Automation Kit', price:0, desc:'Includes: LDR Light Sensor Module.' },
+            { category:'kits', name:'Arduino Uno LED Matrix Kit', price:0, desc:'Includes: Soil Moisture Sensor Module.' },
+            { category:'kits', name:'Arduino Uno OLED Display Kit', price:0, desc:'Includes: Capacitive Soil Moisture Sensor.' },
+            { category:'kits', name:'Arduino Uno Temperature Monitor Kit', price:0, desc:'Includes: Rain Drop Sensor Module.' },
+            { category:'kits', name:'Arduino Uno Humidity Monitor Kit', price:0, desc:'Includes: Flame Sensor Module.' },
+            { category:'kits', name:'Arduino Uno Soil Moisture Kit', price:0, desc:'Includes: IR Obstacle Avoidance Sensor.' },
+            { category:'kits', name:'Arduino Uno Rain Detection Kit', price:0, desc:'Includes: IR Receiver Module.' },
+            { category:'kits', name:'Arduino Uno Flame Detection Kit', price:0, desc:'Includes: IR Transmitter Module.' },
+            { category:'kits', name:'Arduino Uno IR Remote Kit', price:0, desc:'Includes: PIR Motion Sensor Mini.' },
+            { category:'kits', name:'Arduino Uno Sound and Buzzer Kit', price:0, desc:'Includes: MQ-2 Gas Sensor.' },
+            { category:'kits', name:'Arduino Uno Mini Projects Kit', price:0, desc:'Includes: MQ-3 Alcohol Sensor.' },
+            { category:'kits', name:'Arduino Beginner Electronics Project Kit', price:0, desc:'Includes: MQ-5 Gas Sensor.' },
+            { category:'items', name:'Arduino UNO R3 Development Board', price:0, desc:'Arduino UNO R3 Development Board for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino UNO R4 Minima', price:0, desc:'Arduino UNO R4 Minima for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino UNO R4 WiFi', price:0, desc:'Arduino UNO R4 WiFi for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino UNO Q 2GB', price:0, desc:'Arduino UNO Q 2GB for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino UNO Q 4GB', price:0, desc:'Arduino UNO Q 4GB for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Mega 2560 Rev3', price:0, desc:'Arduino Mega 2560 Rev3 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano', price:0, desc:'Arduino Nano for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano Every', price:0, desc:'Arduino Nano Every for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano 33 IoT', price:0, desc:'Arduino Nano 33 IoT for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano 33 BLE', price:0, desc:'Arduino Nano 33 BLE for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano 33 BLE Sense Rev2', price:0, desc:'Arduino Nano 33 BLE Sense Rev2 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano ESP32', price:0, desc:'Arduino Nano ESP32 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nano Matter', price:0, desc:'Arduino Nano Matter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino GIGA R1 WiFi', price:0, desc:'Arduino GIGA R1 WiFi for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino GIGA Display Shield', price:0, desc:'Arduino GIGA Display Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino MKR WiFi 1010', price:0, desc:'Arduino MKR WiFi 1010 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino MKR Zero', price:0, desc:'Arduino MKR Zero for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino MKR 1000 WiFi', price:0, desc:'Arduino MKR 1000 WiFi for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Portenta H7', price:0, desc:'Arduino Portenta H7 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Portenta C33', price:0, desc:'Arduino Portenta C33 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Portenta X8', price:0, desc:'Arduino Portenta X8 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nicla Vision', price:0, desc:'Arduino Nicla Vision for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nicla Sense ME', price:0, desc:'Arduino Nicla Sense ME for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Nicla Voice', price:0, desc:'Arduino Nicla Voice for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Opta WiFi', price:0, desc:'Arduino Opta WiFi for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Alvik', price:0, desc:'Arduino Alvik for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino LED Matrix', price:0, desc:'Arduino Modulino LED Matrix for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Motors', price:0, desc:'Arduino Modulino Motors for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Hub', price:0, desc:'Arduino Modulino Hub for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Extender', price:0, desc:'Arduino Modulino Extender for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Latch Relay', price:0, desc:'Arduino Modulino Latch Relay for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Light', price:0, desc:'Arduino Modulino Light for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Joystick', price:0, desc:'Arduino Modulino Joystick for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Vibro', price:0, desc:'Arduino Modulino Vibro for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Buttons', price:0, desc:'Arduino Modulino Buttons for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Pixels', price:0, desc:'Arduino Modulino Pixels for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Buzzer', price:0, desc:'Arduino Modulino Buzzer for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Modulino Knob', price:0, desc:'Arduino Modulino Knob for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Sensor Shield V5', price:0, desc:'Arduino Sensor Shield V5 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Proto Shield', price:0, desc:'Arduino Proto Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Motor Shield', price:0, desc:'Arduino Motor Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Ethernet Shield', price:0, desc:'Arduino Ethernet Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino WiFi Shield', price:0, desc:'Arduino WiFi Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino Relay Shield', price:0, desc:'Arduino Relay Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino CNC Shield', price:0, desc:'Arduino CNC Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino GSM Shield', price:0, desc:'Arduino GSM Shield for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Arduino SD Card Module', price:0, desc:'Arduino SD Card Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'HC-SR04 Ultrasonic Sensor', price:0, desc:'HC-SR04 Ultrasonic Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'HC-SR501 PIR Motion Sensor', price:0, desc:'HC-SR501 PIR Motion Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'DHT11 Temperature Sensor', price:0, desc:'DHT11 Temperature Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'DHT22 Temperature Humidity Sensor', price:0, desc:'DHT22 Temperature Humidity Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'DS18B20 Waterproof Temperature Sensor', price:0, desc:'DS18B20 Waterproof Temperature Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'BMP180 Barometric Pressure Sensor', price:0, desc:'BMP180 Barometric Pressure Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'BMP280 Pressure Sensor', price:0, desc:'BMP280 Pressure Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'BME280 Environmental Sensor', price:0, desc:'BME280 Environmental Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MPU6050 Gyroscope Accelerometer', price:0, desc:'MPU6050 Gyroscope Accelerometer for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MPU9250 9-Axis IMU Module', price:0, desc:'MPU9250 9-Axis IMU Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'ADXL345 Accelerometer Module', price:0, desc:'ADXL345 Accelerometer Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'LDR Light Sensor Module', price:0, desc:'LDR Light Sensor Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Soil Moisture Sensor Module', price:0, desc:'Soil Moisture Sensor Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Capacitive Soil Moisture Sensor', price:0, desc:'Capacitive Soil Moisture Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Rain Drop Sensor Module', price:0, desc:'Rain Drop Sensor Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Flame Sensor Module', price:0, desc:'Flame Sensor Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'IR Obstacle Avoidance Sensor', price:0, desc:'IR Obstacle Avoidance Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'IR Receiver Module', price:0, desc:'IR Receiver Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'IR Transmitter Module', price:0, desc:'IR Transmitter Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'PIR Motion Sensor Mini', price:0, desc:'PIR Motion Sensor Mini for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MQ-2 Gas Sensor', price:0, desc:'MQ-2 Gas Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MQ-3 Alcohol Sensor', price:0, desc:'MQ-3 Alcohol Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MQ-5 Gas Sensor', price:0, desc:'MQ-5 Gas Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MQ-7 Carbon Monoxide Sensor', price:0, desc:'MQ-7 Carbon Monoxide Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MQ-135 Air Quality Sensor', price:0, desc:'MQ-135 Air Quality Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Sound Detection Sensor', price:0, desc:'Sound Detection Sensor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Vibration Sensor Module', price:0, desc:'Vibration Sensor Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Tilt Switch Module', price:0, desc:'Tilt Switch Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Reed Switch Module', price:0, desc:'Reed Switch Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'Hall Effect Sensor Module', price:0, desc:'Hall Effect Sensor Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'RFID RC522 Module', price:0, desc:'RFID RC522 Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'PN532 NFC Module', price:0, desc:'PN532 NFC Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'HC-05 Bluetooth Module', price:0, desc:'HC-05 Bluetooth Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'HC-06 Bluetooth Module', price:0, desc:'HC-06 Bluetooth Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'ESP8266 WiFi Module', price:0, desc:'ESP8266 WiFi Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'ESP32 Development Board', price:0, desc:'ESP32 Development Board for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'NRF24L01 Wireless Module', price:0, desc:'NRF24L01 Wireless Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'433MHz RF Transmitter Receiver', price:0, desc:'433MHz RF Transmitter Receiver for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'GPS NEO-6M Module', price:0, desc:'GPS NEO-6M Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'SIM800L GSM Module', price:0, desc:'SIM800L GSM Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'16x2 LCD Display', price:0, desc:'16x2 LCD Display for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'20x4 LCD Display', price:0, desc:'20x4 LCD Display for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'I2C LCD Adapter', price:0, desc:'I2C LCD Adapter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'0.96 inch OLED Display', price:0, desc:'0.96 inch OLED Display for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'1.3 inch OLED Display', price:0, desc:'1.3 inch OLED Display for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'4 Digit 7 Segment Display', price:0, desc:'4 Digit 7 Segment Display for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'8x8 LED Matrix Module', price:0, desc:'8x8 LED Matrix Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MAX7219 LED Matrix Driver', price:0, desc:'MAX7219 LED Matrix Driver for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'TM1637 Display Module', price:0, desc:'TM1637 Display Module for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'SG90 Micro Servo Motor', price:0, desc:'SG90 Micro Servo Motor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MG90S Metal Gear Servo', price:0, desc:'MG90S Metal Gear Servo for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'MG996R High Torque Servo', price:0, desc:'MG996R High Torque Servo for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'items', name:'28BYJ-48 Stepper Motor + ULN2003', price:0, desc:'28BYJ-48 Stepper Motor + ULN2003 for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Arduino USB Type-B Programming Cable', price:0, desc:'Arduino USB Type-B Programming Cable for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Arduino Mini USB Programming Cable', price:0, desc:'Arduino Mini USB Programming Cable for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Arduino USB Type-C Programming Cable', price:0, desc:'Arduino USB Type-C Programming Cable for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'USB to TTL Serial Adapter', price:0, desc:'USB to TTL Serial Adapter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'FTDI USB Serial Adapter', price:0, desc:'FTDI USB Serial Adapter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Dupont Jumper Wire Crimping Tool', price:0, desc:'Dupont Jumper Wire Crimping Tool for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Jumper Wire Kit', price:0, desc:'Jumper Wire Kit for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Dupont Connector Assortment', price:0, desc:'Dupont Connector Assortment for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Digital Multimeter', price:0, desc:'Digital Multimeter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'LCR Meter', price:0, desc:'LCR Meter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Continuity Tester', price:0, desc:'Continuity Tester for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Logic Probe', price:0, desc:'Logic Probe for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'USB Oscilloscope Mini', price:0, desc:'USB Oscilloscope Mini for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Adjustable DC Bench Power Supply', price:0, desc:'Adjustable DC Bench Power Supply for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'5V 3A DC Power Adapter', price:0, desc:'5V 3A DC Power Adapter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'9V DC Adapter', price:0, desc:'9V DC Adapter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'12V DC Adapter', price:0, desc:'12V DC Adapter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'DC Barrel Jack Adapter Set', price:0, desc:'DC Barrel Jack Adapter Set for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Soldering Iron 60W', price:0, desc:'Soldering Iron 60W for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Temperature Controlled Soldering Station', price:0, desc:'Temperature Controlled Soldering Station for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Soldering Iron Stand', price:0, desc:'Soldering Iron Stand for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Soldering Tip Set', price:0, desc:'Soldering Tip Set for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Desoldering Pump', price:0, desc:'Desoldering Pump for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Desoldering Wick', price:0, desc:'Desoldering Wick for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Solder Wire 0.8mm', price:0, desc:'Solder Wire 0.8mm for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Lead-Free Solder Wire', price:0, desc:'Lead-Free Solder Wire for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Flux Pen', price:0, desc:'Flux Pen for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Soldering Helping Hands', price:0, desc:'Soldering Helping Hands for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'PCB Holder', price:0, desc:'PCB Holder for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Third Hand Magnifier', price:0, desc:'Third Hand Magnifier for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Heat Shrink Tube Kit', price:0, desc:'Heat Shrink Tube Kit for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Mini Heat Gun', price:0, desc:'Mini Heat Gun for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Wire Stripper', price:0, desc:'Wire Stripper for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Coaxial Cable Stripper', price:0, desc:'Coaxial Cable Stripper for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Flush Cutter', price:0, desc:'Flush Cutter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Diagonal Cutter', price:0, desc:'Diagonal Cutter for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Long Nose Pliers', price:0, desc:'Long Nose Pliers for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Precision Pliers Set', price:0, desc:'Precision Pliers Set for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Tweezers Set', price:0, desc:'Tweezers Set for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'ESD Tweezers', price:0, desc:'ESD Tweezers for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Precision Screwdriver Set', price:0, desc:'Precision Screwdriver Set for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Torx Precision Driver Set', price:0, desc:'Torx Precision Driver Set for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Hex Key Set', price:0, desc:'Hex Key Set for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Mini Adjustable Wrench', price:0, desc:'Mini Adjustable Wrench for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Small Spanner Set', price:0, desc:'Small Spanner Set for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Precision Knife Tool', price:0, desc:'Precision Knife Tool for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'PCB Drill Bit Set', price:0, desc:'PCB Drill Bit Set for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Mini Rotary Tool', price:0, desc:'Mini Rotary Tool for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Rotary Tool Bit Set', price:0, desc:'Rotary Tool Bit Set for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Digital Vernier Caliper', price:0, desc:'Digital Vernier Caliper for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Steel Ruler', price:0, desc:'Steel Ruler for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Measuring Tape', price:0, desc:'Measuring Tape for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Magnifying Glass', price:0, desc:'Magnifying Glass for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Headband Magnifier', price:0, desc:'Headband Magnifier for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'ESD Wrist Strap', price:0, desc:'ESD Wrist Strap for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'ESD Mat', price:0, desc:'ESD Mat for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Anti-Static Brush', price:0, desc:'Anti-Static Brush for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'PCB Cleaning Brush', price:0, desc:'PCB Cleaning Brush for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'IPA Cleaning Bottle', price:0, desc:'IPA Cleaning Bottle for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Solder Fume Extractor', price:0, desc:'Solder Fume Extractor for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Silicone Work Mat', price:0, desc:'Silicone Work Mat for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Component Storage Box', price:0, desc:'Component Storage Box for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'SMD Component Organizer', price:0, desc:'SMD Component Organizer for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Parts Drawer Cabinet', price:0, desc:'Parts Drawer Cabinet for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'IC Extractor Tool', price:0, desc:'IC Extractor Tool for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'IC Pin Straightener', price:0, desc:'IC Pin Straightener for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'IC Insertion Tool', price:0, desc:'IC Insertion Tool for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'PCB Test Hook Clips', price:0, desc:'PCB Test Hook Clips for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'Logic Analyzer 8 Channel', price:0, desc:'Logic Analyzer 8 Channel for Arduino electronics, robotics, automation and STEM projects.' },
+            { category:'tools', name:'USB Power Meter', price:0, desc:'USB Power Meter for Arduino electronics, robotics, automation and STEM projects.' },
+        ];
+
+        async function importArduinoProductCatalog() {
+            if (!confirm('Import 240 Arduino-related products (70 Kits, 100 Items, 70 Tools)? Only products that are not already present will be added.')) return;
+            try {
+                const existingNames = new Set(products.map(p => String(p.name || '').trim().toLowerCase()));
+                const missing = ARDUINO_PRODUCT_CATALOG.filter(item => !existingNames.has(item.name.trim().toLowerCase()));
+                if (!missing.length) { alert('Arduino catalog is already added. No duplicate products were created.'); return; }
+                const updates = {};
+                missing.forEach(item => {
+                    const key = db.ref('products').push().key;
+                    updates['products/' + key] = { category:item.category, name:item.name, price:0, desc:item.desc, image:makeArduinoCatalogImage(item.name,item.category) };
+                });
+                await db.ref().update(updates);
+                alert('Successfully added ' + missing.length + ' Arduino-related product(s). 70 Kits + 100 Items + 70 Tools are ready. Prices are Rs. 0 for you to manage.');
+            } catch (error) { console.error(error); alert('Arduino product import failed. Please try again.'); }
+        }
+        /* LTH Bulk Price Manager */
+        let bulkSelectedProductIds = new Set();
+        let bulkPricePreviewData = [];
+
+        function escapeBulkText(value) {
+            return String(value ?? '').replace(/[&<>"']/g, ch => ({
+                '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;'
+            }[ch]));
+        }
+
+        function getBulkCategoryLabel(category) {
+            return category === 'kits' ? 'Project Kits' : category === 'items' ? 'Project Items' : category === 'tools' ? 'Project Tools' : (category || 'Other');
+        }
+
+        function updateBulkSelectionCount() {
+            const validIds = new Set(products.map(p => String(p.firebaseId)));
+            bulkSelectedProductIds.forEach(id => { if (!validIds.has(String(id))) bulkSelectedProductIds.delete(id); });
+            const count = document.getElementById('bulk-selected-count');
+            if (count) count.innerText = `${bulkSelectedProductIds.size} selected`;
+        }
+
+        function renderBulkPriceProducts() {
+            const list = document.getElementById('bulk-product-list');
+            if (!list) return;
+
+            const query = (document.getElementById('bulk-product-search')?.value || '').trim().toLowerCase();
+            const category = document.getElementById('bulk-category-filter')?.value || 'all';
+            const filtered = products.filter(p => {
+                const name = String(p.name || '').toLowerCase();
+                return name.includes(query) && (category === 'all' || p.category === category);
+            });
+
+            if (!filtered.length) {
+                list.innerHTML = '<div class="empty-msg">No products found.</div>';
+                updateBulkSelectionCount();
+                return;
+            }
+
+            list.innerHTML = filtered.map(p => {
+                const id = String(p.firebaseId);
+                const checked = bulkSelectedProductIds.has(id) ? 'checked' : '';
+                const price = Number(p.price);
+                return `<label class="bulk-product-row">
+                    <input type="checkbox" ${checked} onchange="toggleBulkProduct('${escapeBulkText(id)}', this.checked)">
+                    <span class="bulk-product-name" title="${escapeBulkText(p.name || '')}">${escapeBulkText(p.name || 'Unnamed Product')}<span class="bulk-product-category">${escapeBulkText(getBulkCategoryLabel(p.category))}</span></span>
+                    <span class="bulk-product-price">Rs. ${Number.isFinite(price) ? price.toLocaleString('en-PK') : '0'}</span>
+                    <span style="font-size:11px;color:#6c757d;">ID: ${escapeBulkText(id)}</span>
+                </label>`;
+            }).join('');
+
+            updateBulkSelectionCount();
+        }
+
+        function toggleBulkProduct(firebaseId, checked) {
+            const id = String(firebaseId);
+            if (checked) bulkSelectedProductIds.add(id);
+            else bulkSelectedProductIds.delete(id);
+            updateBulkSelectionCount();
+            document.getElementById('bulk-price-preview').style.display = 'none';
+            bulkPricePreviewData = [];
+        }
+
+        function bulkSelectAll() {
+            const query = (document.getElementById('bulk-product-search')?.value || '').trim().toLowerCase();
+            const category = document.getElementById('bulk-category-filter')?.value || 'all';
+            products.forEach(p => {
+                const name = String(p.name || '').toLowerCase();
+                if (name.includes(query) && (category === 'all' || p.category === category)) bulkSelectedProductIds.add(String(p.firebaseId));
+            });
+            renderBulkPriceProducts();
+            document.getElementById('bulk-price-preview').style.display = 'none';
+            bulkPricePreviewData = [];
+        }
+
+        function bulkClearSelection() {
+            bulkSelectedProductIds.clear();
+            renderBulkPriceProducts();
+            document.getElementById('bulk-price-preview').style.display = 'none';
+            bulkPricePreviewData = [];
+        }
+
+        function prepareBulkPricePreview(direction) {
+            if (bulkSelectedProductIds.size === 0) {
+                alert('Please select at least one product.');
+                return;
+            }
+
+            const rawValue = document.getElementById('bulk-adjust-value').value.trim();
+            const value = Number(rawValue);
+            if (rawValue === '' || !Number.isFinite(value) || value < 0) {
+                alert('Please enter a valid adjustment value.');
+                return;
+            }
+
+            const type = document.getElementById('bulk-adjust-type').value;
+            bulkPricePreviewData = products.filter(p => bulkSelectedProductIds.has(String(p.firebaseId))).map(p => {
+                const oldPrice = Number(p.price);
+                const safeOldPrice = Number.isFinite(oldPrice) && oldPrice >= 0 ? oldPrice : 0;
+                let change = type === 'percentage' ? (safeOldPrice * value / 100) : value;
+                let newPrice = direction === 'increase' ? safeOldPrice + change : Math.max(0, safeOldPrice - change);
+                newPrice = Math.round(newPrice * 100) / 100;
+                return { firebaseId: String(p.firebaseId), name: p.name || 'Unnamed Product', oldPrice: safeOldPrice, newPrice };
+            });
+
+            const body = document.getElementById('bulk-preview-body');
+            body.innerHTML = bulkPricePreviewData.map(item => `<tr><td>${escapeBulkText(item.name)}</td><td>Rs. ${item.oldPrice.toLocaleString('en-PK')}</td><td><strong>Rs. ${item.newPrice.toLocaleString('en-PK')}</strong></td></tr>`).join('');
+            document.getElementById('bulk-price-preview').style.display = 'block';
+            document.getElementById('bulk-price-preview').scrollIntoView({ behavior:'smooth', block:'nearest' });
+        }
+
+        function confirmBulkPriceUpdate() {
+            const count = bulkPricePreviewData.length;
+            if (!count) {
+                alert('Please preview the price changes first.');
+                return;
+            }
+
+            if (!confirm(`Are you sure you want to update ${count} products?`)) return;
+
+            const updates = {};
+            bulkPricePreviewData.forEach(item => {
+                updates['products/' + item.firebaseId + '/price'] = item.newPrice;
+            });
+
+            db.ref().update(updates).then(() => {
+                alert(`Successfully updated prices for ${count} product(s).`);
+                bulkPricePreviewData = [];
+                document.getElementById('bulk-price-preview').style.display = 'none';
+                renderBulkPriceProducts();
+            }).catch(error => {
+                console.error('Bulk price update failed:', error);
+                alert('Price update failed. Please try again.');
+            });
+        }
+
         function openAdminModal() {
             document.getElementById('input-store-name').value = siteSettings.storeName;
             document.getElementById('input-whatsapp').value = siteSettings.whatsapp;
@@ -2425,6 +3045,7 @@
             document.getElementById('input-lock-target-time').value = siteSettings.lockTargetTime || '';
             document.getElementById('input-lock-msg').value = siteSettings.lockMsg || '';
 
+            renderBulkPriceProducts();
             document.getElementById('adminModal').style.display = 'flex';
         }
 
@@ -2497,6 +3118,36 @@
             });
         }
 
+
+        function formatPublicDescription(rawText) {
+            const text = String(rawText || '').trim();
+            if (!text) return '';
+            const lines = text.replace(/\r/g, '').split('\n');
+            const parts = [];
+            let paragraph = [];
+            const headingPattern = /^(?:#{1,3}\s+|(?:introduction|about us|territory(?:\s*(?:&|and)\s*support)?|community support|our step towards your support|what we offer|our mission|our vision|why choose us|services|contact us|features|welcome|lth lightning tech hub)\s*:?)$/i;
+            const flushParagraph = () => {
+                const joined = paragraph.join(' ').replace(/\s+/g, ' ').trim();
+                if (joined) parts.push('<div class="content-paragraph">' + escapeLeaderboardText(joined) + '</div>');
+                paragraph = [];
+            };
+            lines.forEach(line => {
+                const clean = line.trim();
+                if (!clean) { flushParagraph(); return; }
+                const headingMatch = clean.match(/^#{1,3}\s+(.+)$/);
+                const simpleHeading = !/[.!?]$/.test(clean) && clean.length <= 70 && headingPattern.test(clean);
+                if (headingMatch || simpleHeading) {
+                    flushParagraph();
+                    const title = headingMatch ? headingMatch[1].trim() : clean.replace(/:$/, '');
+                    parts.push('<div class="content-heading">' + escapeLeaderboardText(title) + '</div>');
+                } else {
+                    paragraph.push(clean);
+                }
+            });
+            flushParagraph();
+            return parts.join('');
+        }
+
         function switchPage(pageName) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-page'));
             document.querySelectorAll('.navbar button').forEach(btn => btn.classList.remove('active-tab'));
@@ -2512,6 +3163,7 @@
             let existingItem = cart.find(item => item.name === name);
             if (existingItem) { existingItem.qty += qty; } 
             else { cart.push({ name: name, price: price, qty: qty }); }
+            saveCurrentUserCart();
             updateCartUI();
             alert(name + " added to cart!");
         }
@@ -2556,49 +3208,77 @@
             totalPriceElem.innerText = finalTotal.toFixed(0);
         }
 
-        function sendToWhatsApp() {
-            let name = document.getElementById('cust-name').value;
-            let phone = document.getElementById('cust-phone').value;
-            let address = document.getElementById('cust-address').value;
-            let email = document.getElementById('cust-email').value;
+        // ===============================
+        // LTH → Google Sheets Connection
+        // ===============================
+        const GOOGLE_SHEETS_URL =
+            "https://script.google.com/macros/s/AKfycbz4JCK042ZsjITG9qYd9nNYIjHsmd5ilQFf7eeU1A4kRc3DQsB_hKXBJF5mHcBn97Vc/exec";
 
-            if (cart.length === 0) { alert("Please add items to your cart first!"); return; }
-            if (!name || !phone || !address) { alert("Please fill your name, phone, and address!"); return; }
+        async function saveOrderToGoogleSheet(order) {
+            try {
+                await fetch(GOOGLE_SHEETS_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    },
+                    body: JSON.stringify({
+                        orderId: order.orderId || "",
+                        date: order.date || new Date().toISOString(),
+                        customerName: order.customerName || "",
+                        phone: order.phone || "",
+                        product: order.product || "",
+                        quantity: order.quantity || "",
+                        price: order.price || "",
+                        total: order.total || "",
+                        address: order.address || "",
+                        status: order.status || "Pending"
+                    })
+                });
 
-            let subTotal = 0;
-            cart.forEach(item => { subTotal += (item.price * item.qty); });
-            let discPct = siteSettings.discount || 0;
-            let discountAmount = (subTotal * discPct) / 100;
-            let finalTotal = subTotal - discountAmount;
-
-            let message = `*New Order Received - ${siteSettings.storeName}*%0A%0A`;
-            message += `*Customer Name:* ${name}%0A`;
-            message += `*Phone:* ${phone}%0A`;
-            message += `*Address:* ${address}%0A`;
-            message += `*Email:* ${email}%0A%0A*Order Details:*%0A`;
-
-            cart.forEach(item => {
-                let itemTotal = item.price * item.qty;
-                message += `- ${item.name} (${item.qty} pcs) = ${itemTotal} PKR%0A`;
-            });
-            
-            message += `%0A*Subtotal:* ${subTotal} PKR`;
-            if (discPct > 0) {
-                message += `%0A*Discount (${discPct}%):* -${discountAmount.toFixed(0)} PKR`;
+                console.log("Order sent to Google Sheets successfully.");
+                return true;
+            } catch (error) {
+                console.error("Google Sheets Error:", error);
+                return false;
             }
-            message += `%0A*Final Total Price:* ${finalTotal.toFixed(0)} PKR`;
+        }
 
-            let waNumber = (siteSettings && siteSettings.whatsapp) ? siteSettings.whatsapp : "923043337555";
-            waNumber = waNumber.replace(/\D/g, '');
+        async function placeOrder() {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
 
-            let whatsappURL = `https://wa.me/${waNumber}?text=${message}`;
+            if (!currentLTHUser || !currentLTHUser.uid) { alert('Please login to your account before placing an order.'); openLoginGate(); return; }
+            if (cart.length === 0) { alert('Please add items to your cart first!'); return; }
+            if (!name || !phone || !address || !email) { alert('Please complete all customer information: Name, Phone, Address, and Email.'); return; }
 
-            let link = document.createElement('a');
-            link.href = whatsappURL;
-            link.target = '_blank';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            let subTotal=0; cart.forEach(item=>{subTotal+=(Number(item.price)*Number(item.qty));});
+            const discPct=Number(siteSettings.discount||0), discountAmount=(subTotal*discPct)/100, finalTotal=subTotal-discountAmount;
+            const orderId=generateOrderId(), orderDate=new Date().toISOString();
+
+            const grouped={};
+            cart.forEach(item=>{ const key=String(item.name||'').trim(); if(!grouped[key])grouped[key]={name:key,qty:0,amount:0}; grouped[key].qty+=Number(item.qty)||0; grouped[key].amount+=(Number(item.price)||0)*(Number(item.qty)||0); });
+            const orderDetails=Object.values(grouped).map(item=>`${item.name} × ${item.qty} = Rs. ${item.amount.toFixed(0)}`).join('\n');
+
+            const orderButton=document.getElementById('place-order-btn');
+            if(orderButton){orderButton.disabled=true;orderButton.innerHTML='Placing Order...';}
+            try {
+                // One request = one complete order row in Google Sheets.
+                const sheetSaved=await saveOrderToGoogleSheet({orderId,date:orderDate,customerName:name,phone,product:orderDetails,quantity:'',price:'',total:finalTotal.toFixed(0),address,status:'Pending'});
+                if(!sheetSaved)throw new Error('Google Sheets submission failed.');
+
+                await db.ref(LTH_USER_ORDERS_PATH+'/'+currentLTHUser.uid+'/'+orderId).set({orderId,date:orderDate,customerName:name,phone,email,address,orderDetails,finalTotal,discount:discountAmount,status:'Pending',createdAt:firebase.database.ServerValue.TIMESTAMP});
+                await saveUserProfileToFirebase();
+
+                alert(`Thank you for shopping!\n\nYour order is confirmed.\nOrder ID: ${orderId}`);
+                cart=[]; saveCurrentUserCart(); updateCartUI(); renderPreviousOrders();
+                document.getElementById('cust-name').value=''; document.getElementById('cust-phone').value=''; document.getElementById('cust-address').value=''; document.getElementById('cust-email').value='';
+            } catch(error) {
+                console.error('Order submission error:',error);
+                alert('We could not submit your order right now. Your order was NOT confirmed. Please try again.');
+            } finally { if(orderButton){orderButton.disabled=false;orderButton.innerHTML='Place Order';} }
         }
     </script>
 </body>
