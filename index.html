@@ -213,6 +213,13 @@ input,textarea,select,button{max-width:100%;}
  .nav-btn{min-width:80px;font-size:12px;}
 }
 
+
+/* Account corner, public browsing, and login overlay */
+.lth-account-corner{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:0 0 auto;min-width:46px;height:46px;padding:0 12px;border:2px solid #8abaff;border-radius:999px;background:#fff;color:#0b2d68;font-size:20px;cursor:pointer;box-shadow:0 5px 16px rgba(0,0,0,.18);z-index:20;white-space:nowrap}.lth-login-label{font-size:14px;font-weight:800}#lthAccountCornerDot{font-size:12px;color:#25d366;line-height:1}
+.lth-login-close{display:block;margin:0 0 12px auto;border:1px solid #cbd5e1;border-radius:8px;padding:7px 10px;background:#f8fafc;color:#0b2d68;font-weight:700;cursor:pointer}
+#loginScreen{display:none;position:fixed!important;inset:0;z-index:10000;overflow:auto;background:rgba(5,20,45,.88)!important;backdrop-filter:blur(5px);align-items:center;justify-content:center}
+#loginScreen .login-card{max-height:calc(100dvh - 24px);overflow:auto}
+@media(max-width:600px){.lth-account-corner{position:absolute;top:0;right:0;height:40px;min-width:40px;padding:0 9px;font-size:18px}.lth-login-label{font-size:12px}.header-row{position:relative;padding-top:4px;padding-right:0}.brand{min-width:0;padding-right:105px}.user-box{padding-top:4px}.lth-login-close{position:sticky;top:0}}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
@@ -226,15 +233,17 @@ input,textarea,select,button{max-width:100%;}
 ========================================================= -->
 <section id="loginScreen">
     <div class="login-card card">
+        <button type="button" class="lth-login-close" onclick="closeLoginOverlay()" aria-label="Return to store">✕ Back to store</button>
         <img class="login-logo" src="" data-lth-logo="true" id="loginLogo" alt="LTH Lightning Tech Hub Logo">
         <h1 class="login-title">⚡ LTH Lightning Tech Hub</h1>
-        <p class="login-subtitle">Login to continue</p>
+        <p class="login-subtitle">Sign in when you need your account or checkout</p>
 
-        <div class="notice" id="firebaseDiagnosticCard" style="margin:12px 0;text-align:left">
-            <div id="firebaseLoginStatus" style="font-weight:700">Firebase test has not been run.</div>
+        <details id="firebaseDiagnosticCard" class="notice" style="margin:12px 0;text-align:left">
+            <summary style="font-weight:700;cursor:pointer">Connection diagnostics (optional)</summary>
+            <div id="firebaseLoginStatus" style="font-weight:700;margin-top:8px">Firebase test has not been run.</div>
             <button type="button" class="btn btn-light btn-block" style="margin-top:8px" onclick="runFirebaseDiagnostics()">🧪 Test Firebase Connection</button>
             <div id="firebaseDiagnosticsResults" class="small" style="margin-top:8px;overflow-wrap:anywhere"></div>
-        </div>
+        </details>
 
         <div class="login-tabs">
             <button class="login-tab active" id="customerTab" onclick="showAuthPanel('customerLogin')">Customer</button>
@@ -274,8 +283,8 @@ input,textarea,select,button{max-width:100%;}
         </div>
 
         <div id="ownerLogin" class="auth-panel">
-            <div class="notice">🔐 Founder access is verified by Firebase Authentication and the verified Founder email. Credentials are not stored in this HTML.</div>
-            <div class="form-group"><label>Founder Email</label><input type="email" id="ownerLoginEmail" placeholder="Enter Founder email" autocomplete="username"></div>
+            <div class="notice">🔐 Founder access uses the configured Founder account. Only the password is needed here; account identity is checked securely by Firebase.</div>
+            <input type="hidden" id="ownerLoginEmail" autocomplete="username">
             <div class="form-group"><label>Founder Password</label><input type="password" id="ownerPassword" placeholder="Enter Founder password" autocomplete="current-password"></div>
             <button class="btn btn-dark btn-block" onclick="ownerLogin()">⚡ Enter Founder Panel</button>
             <button class="btn btn-light btn-block" style="margin-top:8px" onclick="showAuthPanel('customerLogin')">← Back to Customer</button>
@@ -295,11 +304,12 @@ input,textarea,select,button{max-width:100%;}
                     <img class="brand-logo" id="brandLogo" src="" data-lth-logo="true" alt="LTH Lightning Tech Hub Logo">
                     <div><h1 id="storeNameDisplay">LTH Lightning Tech Hub</h1><p>Electronics • Project Kits • Tools</p></div>
                 </div>
-                <div class="user-box">
+                <div class="user-box" id="lthUserBox" style="display:none">
                     <div class="user-label" id="userLabel">User</div>
                     <div id="firebaseConnectionStatus" style="font-size:11px;color:#bfe7ff;margin-top:2px">☁️ Connecting to Firebase...</div>
                     <button class="btn btn-danger" onclick="logout()">Logout</button>
                 </div>
+                <button type="button" class="lth-account-corner" id="lthAccountCorner" onclick="openAccountOrLogin()" aria-label="Login" title="Login">👤<span id="lthAccountCornerDot">•</span><span class="lth-login-label">Login</span></button>
             </div>
             <nav class="nav" id="mainNav">
                 <button class="nav-btn active" id="nav-home" onclick="switchPage('home')">🏠 Home</button>
@@ -403,12 +413,13 @@ input,textarea,select,button{max-width:100%;}
                     <div class="summary-row"><span>Total</span><strong class="summary-total">Rs. <span id="summaryTotal">0</span></strong></div>
                     <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="openCheckout()">🧾 Proceed to Checkout</button>
                     <div id="checkout" class="checkout">
+                        <div class="notice">🔐 Sign in is required before checkout. LTH accepts order requests through WhatsApp only. Review the details, then tap Send in WhatsApp to submit your order request.</div>
                         <h3>Customer Information</h3>
                         <div class="form-group"><label>Full Name</label><input id="orderName" type="text"></div>
                         <div class="form-group"><label>Contact Number</label><input id="orderPhone" type="tel"></div>
                         <div class="form-group"><label>Delivery Address</label><textarea id="orderAddress"></textarea></div>
                         <div class="form-group"><label>Gmail</label><input id="orderEmail" type="email"></div>
-                        <button class="btn btn-success btn-block" onclick="placeOrder()">✅ Place Order</button>
+                        <button class="btn btn-success btn-block" onclick="placeOrder()">💬 Continue Order on WhatsApp</button>
                         <button class="btn btn-light btn-block" style="margin-top:8px" onclick="closeCheckout()">Cancel</button>
                         <div id="orderStatus" class="status"></div>
                     </div>
@@ -649,7 +660,7 @@ const KEYS = {
 
 const DEFAULT_SETTINGS = {
     storeName: 'LTH Lightning Tech Hub',
-    whatsapp: '923043337555',
+    whatsapp: '923083337555',
     discount: 0,
     tax: 0,
     homeDescription: 'Explore electronics project kits, electronic components, tools and maker supplies.',
@@ -2053,10 +2064,12 @@ customerLogin = async function () {
     }
 };
 ownerLogin = async function () {
-    const email = accountEmailKey(document.getElementById('ownerLoginEmail').value);
+    const email = accountEmailKey(LTH_OWNER_EMAIL);
+    const ownerEmailField = document.getElementById('ownerLoginEmail');
+    if (ownerEmailField) ownerEmailField.value = email;
     const password = document.getElementById('ownerPassword').value;
     const status = document.getElementById('ownerLoginStatus');
-    if (!email || !password) return setStatus(status, 'Enter the Founder email and password.', false);
+    if (!password) return setStatus(status, 'Enter the Founder password.', false);
     if (email !== LTH_OWNER_EMAIL) return setStatus(status, 'Founder sign-in is restricted to the configured Founder account.', false);
     if (!LTH_AUTH) return setStatus(status, 'Firebase Authentication is unavailable. Check the Firebase SDK and project configuration.', false);
     setStatus(status, 'Verifying Founder credentials...', true);
@@ -3437,6 +3450,170 @@ placeOrder = async function () {
 };
 
 /* Firestore is intentionally not added: supplied data/schema are Firebase Realtime Database paths. */
+
+/* =========================================================
+   LTH CUSTOMER-FRIENDLY AUTH + WHATSAPP-ONLY CHECKOUT PATCH
+   Public browsing is allowed. Checkout still requires Firebase Auth.
+   Orders are sent as a prefilled WhatsApp message; the site does not
+   claim an order is placed until the customer presses Send in WhatsApp.
+========================================================= */
+const LTH_GUEST_CART_KEY='lth_guest_cart_v1';
+function loadCartForCurrentUser(){
+    if(currentUser)return loadJSON(cartKey(currentUser.email),[]);
+    return loadJSON(LTH_GUEST_CART_KEY,[]);
+}
+function saveCartForCurrentUser(){
+    if(currentUser)saveJSON(cartKey(currentUser.email),cart);
+    else saveJSON(LTH_GUEST_CART_KEY,cart);
+}
+const LTH_OPEN_APP_BEFORE_GUEST_MERGE=openApp;
+openApp=async function(session){
+    const guest=loadJSON(LTH_GUEST_CART_KEY,[]);
+    await LTH_OPEN_APP_BEFORE_GUEST_MERGE(session);
+    if(Array.isArray(guest)&&guest.length){
+        const merged=Array.isArray(cart)?cart.slice():[];
+        guest.forEach(g=>{const found=merged.find(x=>String(x.productId)===String(g.productId));if(found)found.qty=Math.max(1,number(found.qty))+Math.max(1,number(g.qty));else merged.push(g);});
+        cart=merged;saveJSON(cartKey(currentUser.email),cart);saveJSON(LTH_GUEST_CART_KEY,[]);renderCart();updateCartBadge();
+    }
+    lthUpdateAccountCorner();
+};
+// Keep the store visible if login fails; show the auth card as an overlay instead.
+lthShowLogin=function(message,panel){openLoginOverlay(panel||'customerLogin',message||'');};
+function openLoginOverlay(panel='customerLogin', message='') {
+    document.body.classList.add('lth-login-mode');
+    const overlay=document.getElementById('loginScreen');
+    if(overlay) overlay.style.display='flex';
+    if(panel) showAuthPanel(panel);
+    if(message) setStatus(document.getElementById(panel==='ownerLogin'?'ownerLoginStatus':'customerLoginStatus'),message,false);
+}
+function closeLoginOverlay(){
+    const overlay=document.getElementById('loginScreen');
+    if(overlay) overlay.style.display='none';
+    document.body.classList.remove('lth-login-mode');
+}
+function openAccountOrLogin(){
+    if(currentUser){
+        closeLoginOverlay();
+        switchPage('profile');
+        return;
+    }
+    openLoginOverlay('customerLogin','Please sign in to access your profile, previous bills and checkout.');
+}
+function lthUpdateAccountCorner(){
+    const btn=document.getElementById('lthAccountCorner');
+    const dot=document.getElementById('lthAccountCornerDot');
+    if(!btn)return;
+    btn.title=currentUser?'Open your profile and order history':'Login to access profile and checkout';
+    btn.setAttribute('aria-label',currentUser?'Open your profile and order history':'Login to access profile and checkout');
+    const label=btn.querySelector('.lth-login-label'); if(label)label.textContent=currentUser?'Account':'Login';
+    if(dot)dot.textContent=currentUser?'✓':'•';
+    const userBox=document.getElementById('lthUserBox'); if(userBox)userBox.style.display=currentUser?'flex':'none';
+}
+// Override the old full-screen login gate: browsing is public; checkout is protected.
+initialize = function(){
+    settings=loadSettings();
+    const app=document.getElementById('app'), login=document.getElementById('loginScreen');
+    if(app)app.style.display='block';
+    if(login)login.style.display='none';
+    document.body.classList.remove('lth-login-mode');
+    initAIBot();
+    renderAll();
+    lthUpdateAccountCorner();
+};
+// Keep the store visible when signed out; only show the login overlay when requested.
+initLTHAuth = function(){
+    if(!LTH_AUTH){
+        const app=document.getElementById('app'); if(app)app.style.display='block';
+        const login=document.getElementById('loginScreen'); if(login)login.style.display='none';
+        lthUpdateAccountCorner();
+        return;
+    }
+    LTH_AUTH.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(e=>console.warn('Auth persistence setup:',e));
+    LTH_AUTH.onAuthStateChanged(async user=>{
+        if(!user){
+            lthStopPrivateListeners(); currentUser=null; clearSession(); cart=[];
+            const app=document.getElementById('app'), login=document.getElementById('loginScreen');
+            if(app)app.style.display='block'; if(login)login.style.display='none';
+            document.body.classList.remove('lth-login-mode');
+            renderAll(); updateCartBadge(); lthUpdateAccountCorner();
+            return;
+        }
+        if(!user.emailVerified){
+            if(LTH_REGISTERING_ACCOUNT)return;
+            const panel=accountEmailKey(user.email)===LTH_OWNER_EMAIL?'ownerLogin':'customerLogin';
+            try{await LTH_AUTH.signOut();}catch(_){}
+            openLoginOverlay(panel,'Please verify your email before checkout and account access.');
+            return;
+        }
+        const role=accountEmailKey(user.email)===LTH_OWNER_EMAIL?'owner':'customer';
+        const session={uid:user.uid,email:accountEmailKey(user.email),name:user.displayName||(role==='owner'?'LTH Founder':user.email.split('@')[0]),role,emailVerified:true};
+        try{
+            await openApp(session); closeLoginOverlay(); lthUpdateAccountCorner(); lthStartPrivateListeners(session);
+            let pending=false; try{pending=sessionStorage.getItem('lth_checkout_after_login')==='1';sessionStorage.removeItem('lth_checkout_after_login');}catch(_){}
+            if(pending){switchPage('cart');openCheckout();}
+        }catch(e){console.error('Firebase sign-in bootstrap failed:',e);openLoginOverlay(role==='owner'?'ownerLogin':'customerLogin','Sign-in succeeded, but account data failed to load. Check Firebase Database Rules.');}
+    });
+};
+const LTH_OPEN_CHECKOUT_BEFORE_LOGIN = openCheckout;
+openCheckout = function(){
+    if(!cart.length)return alert('Your cart is empty. Add a product before checkout.');
+    if(!currentUser || !LTH_AUTH || !LTH_AUTH.currentUser || !LTH_AUTH.currentUser.emailVerified){
+        try{sessionStorage.setItem('lth_checkout_after_login','1');}catch(_){}
+        openLoginOverlay('customerLogin','Please log in or create an account first. After successful login, your checkout will open automatically.');
+        return;
+    }
+    closeLoginOverlay();
+    document.getElementById('checkout').classList.add('active');
+    loadProfileIntoCheckout();
+};
+// WhatsApp is the only order-request channel. No fake Firebase order record is created here.
+placeOrder = function(){
+    if(!currentUser || !LTH_AUTH || !LTH_AUTH.currentUser || LTH_AUTH.currentUser.uid!==currentUser.uid || !LTH_AUTH.currentUser.emailVerified){
+        try{sessionStorage.setItem('lth_checkout_after_login','1');}catch(_){}
+        openLoginOverlay('customerLogin','Please log in before sending your order through WhatsApp.');
+        return;
+    }
+    if(!cart.length)return alert('Your cart is empty.');
+    const name=document.getElementById('orderName').value.trim();
+    const phone=document.getElementById('orderPhone').value.trim();
+    const address=document.getElementById('orderAddress').value.trim();
+    const email=accountEmailKey(document.getElementById('orderEmail').value);
+    const status=document.getElementById('orderStatus');
+    if(!name||!phone||!address)return setStatus(status,'Please enter your name, contact number and delivery address.',false);
+    if(email!==accountEmailKey(currentUser.email))return setStatus(status,'Please use the email address of your signed-in account.',false);
+    const calc=finalCalculation();
+    if(calc.couponCode && calc.total<2000)return setStatus(status,'This coupon requires a final bill of at least Rs. 2,000.',false);
+    const whatsapp=String((settings&&settings.whatsapp)||DEFAULT_SETTINGS.whatsapp||'923083337555').replace(/\D/g,'');
+    if(!/^\d{10,15}$/.test(whatsapp))return setStatus(status,'LTH WhatsApp number is not configured correctly. Please contact the website owner.',false);
+    const items=cart.map((item,i)=>`${i+1}. ${item.name} × ${Math.max(1,Math.floor(number(item.qty)))} — Rs. ${money(number(item.price)*Math.max(1,Math.floor(number(item.qty))))}`).join('\n');
+    const message=[
+        'Assalam-o-Alaikum Lightning Tech Hub (LTH),',
+        'I would like to place an order through WhatsApp.',
+        '',`Customer: ${name}`,`Account email: ${currentUser.email}`,`Contact: ${phone}`,`Delivery address: ${address}`,'',
+        'ORDER ITEMS:',items,'',`Subtotal: Rs. ${money(calc.subtotal)}`,`Store discount: Rs. ${money(calc.discount)}`,`Tax: Rs. ${money(calc.tax)}`,`Coupon: ${calc.couponCode||'None'}`,`Coupon discount: Rs. ${money(calc.couponDiscount)}`,`Estimated total: Rs. ${money(calc.total)}`,'',
+        'Please confirm product availability, final total and delivery details in this WhatsApp chat. This is an order request; it is not confirmed until LTH replies.'
+    ].join('\n');
+    const url='https://wa.me/'+whatsapp+'?text='+encodeURIComponent(message);
+    const opened=window.open(url,'_blank');
+    if(opened)opened.opener=null;
+    if(!opened){
+        setStatus(status,'Your browser blocked the WhatsApp window. Use the button below to open WhatsApp, or allow pop-ups.',false);
+        let link=document.getElementById('lthWhatsAppFallback');
+        if(!link){link=document.createElement('a');link.id='lthWhatsAppFallback';link.className='btn btn-success btn-block';link.target='_blank';link.rel='noopener noreferrer';link.textContent='Open WhatsApp to Send Order';status?.insertAdjacentElement('afterend',link);}
+        link.href=url;link.style.display='block';return;
+    }
+    setStatus(status,'WhatsApp opened with your order details. Tap Send in WhatsApp to submit the order request. LTH will confirm it in the chat.',true);
+};
+logout=async function(){
+    try{if(LTH_AUTH&&LTH_AUTH.currentUser)await LTH_AUTH.signOut();}catch(e){console.error('Sign out failed:',e);}
+    lthStopPrivateListeners();currentUser=null;clearSession();cart=loadJSON(LTH_GUEST_CART_KEY,[]);
+    const app=document.getElementById('app'),login=document.getElementById('loginScreen');
+    if(app)app.style.display='block';if(login)login.style.display='none';document.body.classList.remove('lth-login-mode');
+    renderAll();updateCartBadge();lthUpdateAccountCorner();
+};
+// Make account button status accurate after the first public render.
+const LTH_OLD_UPDATE_USER_UI = updateUserUI;
+updateUserUI = function(){LTH_OLD_UPDATE_USER_UI();lthUpdateAccountCorner();};
 
 initialize();
 initFirebaseSync();
