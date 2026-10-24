@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LTH Lightning Tech Hub</title>
 <meta name="description" content="LTH Lightning Tech Hub - Electronics, Project Kits, Project Items and Tools.">
+<meta name="theme-color" content="#071b45">
 <style>
 :root{
     --primary:#126bff;
@@ -161,10 +162,61 @@ html,body{background:#0f2e5b !important;color:#fff !important}
 @media(max-width:900px){.dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.services-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.quick-actions{grid-template-columns:1fr}}
 @media(max-width:650px){.dashboard-grid,.services-grid{grid-template-columns:1fr}.ai-bot-panel{height:60vh}}
 
+
+/* LTH quality pass: complete product images, sensible responsive layout, movable AI helper. */
+.product-img,.cart-img,.owner-product-card img,.login-logo,.brand-logo{object-fit:contain!important;object-position:center center!important;}
+.product-img{height:220px!important;padding:10px;background:#f2f7ff;display:block;max-width:100%;}
+.cart-img{height:72px!important;padding:4px;flex:0 0 84px;}
+.owner-product-card img{height:180px!important;padding:8px;background:#f2f7ff;}
+.login-logo,.brand-logo{background:#fff;padding:4px;}
+.hero-image,.about-image{object-fit:cover;object-position:center center;max-width:100%;}
+img{max-width:100%;}
+input,textarea,select,button{max-width:100%;}
+.page,.section-card,.owner-section,.card,.product-body{min-width:0;}
+.product-desc,.order-items,.muted,.small{overflow-wrap:anywhere;}
+.owner-product-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));}
+.product-grid,.home-grid,.services-grid,.dashboard-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));}
+.table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.table-wrap table{min-width:620px;}
+.ai-bot-button{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;}
+.ai-bot-button.lth-dragging{cursor:grabbing;opacity:.88;}
+.ai-bot-head{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;}
+.ai-bot-head.lth-dragging{cursor:grabbing;}
+.ai-bot-panel{max-width:calc(100vw - 16px);max-height:calc(100dvh - 24px);}
+.ai-bot-messages{min-height:0;overflow-wrap:anywhere;}
+@media(max-width:900px){
+ .app-header{gap:10px;align-items:flex-start;flex-direction:column;}
+ .user-box{width:100%;justify-content:flex-start;}
+ .nav{display:flex;flex-wrap:wrap;gap:6px;}
+ .nav-btn{flex:1 1 auto;min-width:100px;}
+ .owner-actions>*{flex:1 1 120px;}
+}
+@media(max-width:650px){
+ .product-grid,.home-grid,.services-grid,.dashboard-grid,.grid-2{grid-template-columns:minmax(0,1fr)!important;}
+ .product-img{height:230px!important;}
+ .owner-product-card img{height:190px!important;}
+ .product-actions{flex-wrap:wrap;}
+ .cart-item{align-items:flex-start;gap:8px;flex-wrap:wrap;}
+ .cart-info{min-width:calc(100% - 100px);}
+ .cart-controls{width:100%;justify-content:flex-end;}
+ .page-title{font-size:22px;overflow-wrap:anywhere;}
+ .ai-bot-button{width:54px;height:54px;}
+ .ai-bot-panel{width:calc(100vw - 20px)!important;height:min(65dvh,520px)!important;}
+ .modal-box{width:calc(100vw - 20px);max-height:calc(100dvh - 24px);overflow:auto;}
+ .owner-section{padding:12px;}
+ .order-head{flex-wrap:wrap;gap:7px;}
+}
+@media(max-width:380px){
+ .login-card{padding:18px;}
+ .product-img{height:200px!important;}
+ .nav-btn{min-width:80px;font-size:12px;}
+}
+
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-functions-compat.js"></script>
 </head>
 <body>
 
@@ -432,7 +484,8 @@ html,body{background:#0f2e5b !important;color:#fff !important}
                     <div class="grid-2">
                         <div class="form-group"><label>Category</label><select id="adminProductCategory"><option value="kits">Project Kits</option><option value="items">Project Items</option><option value="tools">Project Tools</option></select></div>
                         <div class="form-group"><label>Product Name</label><input id="adminProductName"></div>
-                        <div class="form-group"><label>Price (PKR)</label><input id="adminProductPrice" type="number" min="0"></div>
+                        <div class="form-group"><label>Price (PKR)</label><input id="adminProductPrice" type="number" min="0" step="1"></div>
+                        <div class="form-group"><label>Stock (leave blank for untracked)</label><input id="adminProductStock" type="number" min="0" step="1" placeholder="Untracked"></div>
                         <div class="form-group"><label>Image</label><input id="adminProductImage" type="file" accept="image/*"></div>
                         <div class="form-group full"><label>Description</label><textarea id="adminProductDescription"></textarea></div>
                     </div>
@@ -495,7 +548,9 @@ html,body{background:#0f2e5b !important;color:#fff !important}
                         <div class="form-group"><label>Discount Value (PKR)</label><input id="adminCouponDiscount" type="number" min="1"></div>
                         <div class="form-group"><label>Minimum Previous Orders</label><input id="adminCouponMinOrders" type="number" value="4" min="0"></div>
                         <div class="form-group"><label>Minimum Lifetime Spend</label><input id="adminCouponMinSpend" type="number" value="2000" min="0"></div>
-                        <div class="form-group"><label>Minimum Final Cart</label><input id="adminCouponMinCart" type="number" value="2000" min="2000"></div>
+                        <div class="form-group"><label>Minimum Final Cart</label><input id="adminCouponMinCart" type="number" value="2000" min="0"></div>
+                        <div class="form-group"><label>Expiry Date &amp; Time (optional)</label><input id="adminCouponExpiry" type="datetime-local"></div>
+                        <div class="form-group"><label>Coupon Status</label><select id="adminCouponActive"><option value="true">Active</option><option value="false">Inactive</option></select></div>
                     </div>
                     <button class="btn btn-primary" onclick="createCoupon()">➕ Create / Update Coupon</button><div id="couponAdminStatus" class="status"></div>
                     <div id="adminCouponList" style="margin-top:14px"></div>
@@ -541,7 +596,8 @@ html,body{background:#0f2e5b !important;color:#fff !important}
         <input type="hidden" id="editId">
         <div class="form-group"><label>Category</label><select id="editCategory"><option value="kits">Project Kits</option><option value="items">Project Items</option><option value="tools">Project Tools</option></select></div>
         <div class="form-group"><label>Name</label><input id="editName"></div>
-        <div class="form-group"><label>Price</label><input id="editPrice" type="number" min="0"></div>
+        <div class="form-group"><label>Price (PKR)</label><input id="editPrice" type="number" min="0" step="1"></div>
+        <div class="form-group"><label>Stock (leave blank for untracked)</label><input id="editStock" type="number" min="0" step="1" placeholder="Untracked"></div>
         <div class="form-group"><label>Description</label><textarea id="editDescription"></textarea></div>
         <div class="form-group"><label>New Image (optional)</label><input id="editImage" type="file" accept="image/*"></div>
         <div class="owner-actions"><button class="btn btn-success" onclick="updateProduct()">💾 Update Product</button><button class="btn btn-light" onclick="closeEditModal()">Cancel</button></div>
@@ -1082,7 +1138,7 @@ function renderCouponPage() {
 
 function renderCouponOffers() {
     const box = document.getElementById('couponOffers');
-    const coupons = Object.values(loadCoupons()).filter(c => c && c.active);
+    const coupons = Object.values(loadCoupons()).filter(c => c && c.active && !lthCouponExpired(c));
     if (!coupons.length) return void (box.innerHTML = '<div class="empty">🎟️ No coupon offers available right now.</div>');
     box.innerHTML = coupons.map(c => `<div class="coupon-card"><div class="coupon-code">🎟️ ${esc(c.code)}</div><div class="muted small">Coupon Price: Rs. ${money(c.price)}<br>Maximum Discount: Rs. ${money(Math.min(number(c.price),number(c.discountValue)))}<br>Requires ${number(c.minOrders)} previous orders, Rs. ${money(c.minSpend)} lifetime spend, and a final eligible cart of at least Rs. ${money(c.minCart)}.</div><br><button class="btn btn-primary" onclick="requestCoupon('${String(c.code).replace(/'/g,"\\'")}')">💳 Request to Buy</button></div>`).join('');
 }
@@ -1458,12 +1514,12 @@ function lthNormalizeProduct(key,data){
         name:d.name||'', price:number(d.price),
         description:d.description ?? d.desc ?? '',
         desc:d.desc ?? d.description ?? '',
-        image:d.image||'', createdAt:d.createdAt||'', updatedAt:d.updatedAt||''
+        image:d.image||'', stock:(d.stock===undefined || d.stock===null || d.stock==='') ? null : Math.max(0, Math.floor(number(d.stock))), createdAt:d.createdAt||'', updatedAt:d.updatedAt||''
     };
 }
 function lthProductPayload(p){
     const desc=p.description ?? p.desc ?? '';
-    return { category:p.category||'', name:p.name||'', price:number(p.price), desc, description:desc, image:p.image||'', createdAt:p.createdAt||new Date().toISOString(), updatedAt:p.updatedAt||'' };
+    return { category:p.category||'', name:p.name||'', price:number(p.price), desc, description:desc, image:p.image||'', stock:(p.stock===undefined || p.stock===null || p.stock==='') ? null : Math.max(0, Math.floor(number(p.stock))), createdAt:p.createdAt||new Date().toISOString(), updatedAt:p.updatedAt||'' };
 }
 function lthNormalizeSettings(d){
     const x=d||{};
@@ -2477,14 +2533,13 @@ lthAIReply = function (raw) {
 /* Await protected admin writes instead of reporting success before Firebase confirms. */
 saveSettings = function (value) {
     const merged = { ...DEFAULT_SETTINGS, ...(value || {}) };
-    saveJSON(KEYS.settings, merged);
     if (!LTH_DB) return Promise.reject(new Error('Firebase Database is unavailable.'));
-    return LTH_DB.ref('settings').set(lthSettingsPayload(merged));
+    return LTH_DB.ref('settings').set(lthSettingsPayload(merged)).then(() => { saveJSON(KEYS.settings, merged); settings = merged; return true; });
 };
 saveCoupons = function (value) {
-    saveJSON(KEYS.coupons, value || {});
+    const safeValue = value || {};
     if (!LTH_DB) return Promise.reject(new Error('Firebase Database is unavailable.'));
-    return LTH_DB.ref('coupons').set(value || {});
+    return LTH_DB.ref('coupons').set(safeValue).then(() => { saveJSON(KEYS.coupons, safeValue); return true; });
 };
 saveGeneralSettings = async function () {
     if (!requireOwner()) return;
@@ -2549,13 +2604,29 @@ createCoupon = async function () {
     const discountValue = number(document.getElementById('adminCouponDiscount').value);
     const minOrders = Math.max(0, Math.floor(number(document.getElementById('adminCouponMinOrders').value)));
     const minSpend = Math.max(0, number(document.getElementById('adminCouponMinSpend').value));
-    const minCart = Math.max(2000, number(document.getElementById('adminCouponMinCart').value));
-    if (!code || price <= 0 || discountValue <= 0) return setStatus(status, 'Enter coupon code, price and discount value.', false);
-    if (!/^[A-Z0-9_-]+$/.test(code)) return setStatus(status, 'Coupon codes may contain only letters, numbers, hyphens and underscores.', false);
-    const coupons = loadCoupons(); coupons[code] = { code, price, discountValue, minOrders, minSpend, minCart, active: true, updatedAt: new Date().toISOString() };
-    setStatus(status, 'Saving coupon to Firebase...', true);
-    try { await saveCoupons(coupons); renderCouponPage(); renderOwnerPanel(); setStatus(status, 'Coupon saved to Firebase.', true); }
-    catch (e) { console.error('Coupon save failed:', e); setStatus(status, 'Coupon was not confirmed by Firebase. Check Founder verification and Rules.', false); }
+    const minCart = Math.max(0, number(document.getElementById('adminCouponMinCart').value));
+    const expiryRaw = (document.getElementById('adminCouponExpiry')?.value || '').trim();
+    const active = document.getElementById('adminCouponActive')?.value !== 'false';
+    if (!code || price <= 0 || discountValue <= 0) return setStatus(status, 'Enter coupon code, positive purchase price and positive maximum discount.', false);
+    if (!/^[A-Z0-9_-]{1,40}$/.test(code)) return setStatus(status, 'Coupon codes may contain only letters, numbers, hyphens and underscores.', false);
+    let expiresAt = null;
+    if (expiryRaw) {
+        const parsed = new Date(expiryRaw);
+        if (!Number.isFinite(parsed.getTime())) return setStatus(status, 'Expiry date/time is invalid.', false);
+        if (parsed.getTime() <= Date.now()) return setStatus(status, 'Expiry must be a future date/time.', false);
+        expiresAt = parsed.toISOString();
+    }
+    const coupons = loadCoupons();
+    coupons[code] = { ...(coupons[code] || {}), code, price, discountValue, minOrders, minSpend, minCart, active, expiresAt, updatedAt: new Date().toISOString() };
+    setStatus(status, 'Saving coupon settings to Firebase...', true);
+    try {
+        await saveCoupons(coupons);
+        renderCouponPage(); renderOwnerPanel();
+        setStatus(status, active ? 'Coupon saved as active.' : 'Coupon saved as inactive.', true);
+    } catch (e) {
+        console.error('Coupon save failed:', e);
+        setStatus(status, `Coupon was not saved to Firebase. ${e && e.message ? e.message : 'Check Founder verification and Database Rules.'}`, false);
+    }
 };
 deleteCoupon = async function (code) {
     if (!requireOwner()) return;
@@ -2564,9 +2635,671 @@ deleteCoupon = async function (code) {
     catch (e) { console.error('Coupon deletion failed:', e); alert('Coupon could not be deleted from Firebase.'); }
 };
 
+/* =========================================================
+   LTH FINAL INTEGRATION PATCH
+   Keep the existing sg-labs-store Realtime Database intact.
+   Secure checkout/coupon business validation runs in Cloud Functions.
+========================================================= */
+let LTH_FUNCTIONS = null;
+let LTH_FIREBASE_LEGACY_ACCOUNTS = {};
+try {
+    if (firebase.functions) LTH_FUNCTIONS = firebase.app().functions('asia-south1');
+} catch (e) {
+    console.warn('Firebase callable Functions could not initialize:', e);
+}
+
+const LTH_IMAGE_FALLBACK = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="640" height="440" viewBox="0 0 640 440"><rect width="640" height="440" fill="#eef5ff"/><g fill="none" stroke="#126bff" stroke-width="9"><rect x="210" y="90" width="220" height="180" rx="14"/><path d="M260 315h120M320 270v45M255 135h130M255 175h70"/></g><text x="320" y="375" font-family="Arial,sans-serif" font-size="30" text-anchor="middle" fill="#071b45">LTH Lightning Tech Hub</text></svg>');
+function lthParseStock(value) {
+    if (value === null || value === undefined || String(value).trim() === '') return null;
+    const n = Number(value);
+    if (!Number.isFinite(n) || n < 0 || !Number.isInteger(n)) throw new Error('Stock must be a whole number greater than or equal to zero, or left blank for untracked stock.');
+    return n;
+}
+function lthProductStockText(product) {
+    if (product.stock === null || product.stock === undefined || product.stock === '') return 'Stock: not tracked';
+    const n = Math.max(0, Math.floor(number(product.stock)));
+    return n === 0 ? 'Out of stock' : `In stock: ${n}`;
+}
+productImage = function(product) {
+    const image = product && typeof product.image === 'string' ? product.image.trim() : '';
+    return image || LTH_IMAGE_FALLBACK;
+};
+lthNormalizeProduct = function(key, data) {
+    const d = data || {};
+    const stock = d.stock === null || d.stock === undefined || d.stock === '' ? null : Math.max(0, Math.floor(number(d.stock)));
+    return {
+        id: String(key), firebaseId: String(key), category: lthNormalizeCategory(d.category),
+        name: String(d.name || ''), price: Math.max(0, number(d.price)),
+        description: String(d.description ?? d.desc ?? ''), desc: String(d.desc ?? d.description ?? ''),
+        image: typeof d.image === 'string' ? d.image : '', stock,
+        createdAt: d.createdAt || '', updatedAt: d.updatedAt || ''
+    };
+};
+lthProductPayload = function(p) {
+    const description = String(p.description ?? p.desc ?? '');
+    const payload = {
+        category: lthNormalizeCategory(p.category), name: String(p.name || '').trim(), price: Math.max(0, number(p.price)),
+        desc: description, description, image: typeof p.image === 'string' ? p.image : '',
+        createdAt: p.createdAt || new Date().toISOString(), updatedAt: p.updatedAt || ''
+    };
+    if (p.stock !== null && p.stock !== undefined && p.stock !== '') payload.stock = Math.max(0, Math.floor(number(p.stock)));
+    return payload;
+};
+
+/* Preserve locally cached legacy products when the live node is empty; never auto-delete product data. */
+const LTH_ORIGINAL_FIREBASE_SYNC_FINAL = initFirebaseSync;
+initFirebaseSync = function() {
+    LTH_ORIGINAL_FIREBASE_SYNC_FINAL();
+    if (!LTH_DB) return;
+    // Extra historical account node used by an earlier LTH version.
+    LTH_DB.ref('lthCustomerAccounts').on('value', snap => {
+        LTH_FIREBASE_LEGACY_ACCOUNTS = snap.val() || {};
+        if (isOwner()) renderOwnerCustomers();
+    }, e => console.warn('Legacy customer accounts could not be read:', e));
+};
+
+renderProducts = function(list = products) {
+    const targets = { kits: document.getElementById('kitsGrid'), items: document.getElementById('itemsGrid'), tools: document.getElementById('toolsGrid') };
+    Object.values(targets).forEach(el => { if (el) el.replaceChildren(); });
+    const counts = { kits: 0, items: 0, tools: 0 };
+    const all = Array.isArray(list) ? list : [];
+    all.forEach(product => {
+        const category = lthNormalizeCategory(product.category);
+        const target = targets[category];
+        if (!target) return;
+        counts[category]++;
+        const card = document.createElement('article');
+        card.className = 'product-card card';
+        const img = document.createElement('img');
+        img.className = 'product-img'; img.src = productImage(product); img.alt = product.name ? `${product.name} product image` : 'LTH product'; img.loading = 'lazy';
+        const body = document.createElement('div'); body.className = 'product-body';
+        const cat = document.createElement('div'); cat.className = 'product-category'; cat.textContent = category;
+        const title = document.createElement('h3'); title.className = 'product-name'; title.textContent = product.name || 'Unnamed product';
+        const desc = document.createElement('div'); desc.className = 'product-desc'; desc.textContent = product.description || product.desc || '';
+        const price = document.createElement('div'); price.className = 'product-price'; price.textContent = `Rs. ${money(product.price)}`;
+        const stock = document.createElement('div'); stock.className = 'muted small lth-stock'; stock.textContent = lthProductStockText(product);
+        const actions = document.createElement('div'); actions.className = 'product-actions';
+        const qty = document.createElement('input'); qty.className = 'qty'; qty.id = 'qty-' + String(product.id); qty.type = 'number'; qty.min = '1'; qty.step = '1'; qty.value = '1'; qty.setAttribute('aria-label', `Quantity for ${product.name || 'product'}`);
+        const btn = document.createElement('button'); btn.className = 'btn btn-primary'; btn.style.flex = '1'; btn.textContent = (product.stock !== null && product.stock !== undefined && number(product.stock) <= 0) ? 'Out of stock' : '🛒 Add to Cart';
+        const out = !!product.__localOnly || (product.stock !== null && product.stock !== undefined && number(product.stock) <= 0);
+        if (product.__localOnly) btn.textContent = 'Not synced to Firebase';
+        btn.disabled = out;
+        btn.addEventListener('click', () => addToCart(product.id));
+        actions.append(qty, btn); body.append(cat, title, desc, price, stock, actions); card.append(img, body); target.append(card);
+    });
+    Object.entries(targets).forEach(([category, target]) => {
+        if (target && !counts[category]) target.innerHTML = '<div class="empty" style="grid-column:1/-1">No products available in this category yet.</div>';
+    });
+};
+
+renderOwnerProducts = function() {
+    const box = document.getElementById('adminProductList'); if (!box) return;
+    if (!isOwner()) { box.innerHTML = '<div class="empty">Verified Founder access required.</div>'; return; }
+    if (!products.length) { box.innerHTML = '<div class="empty" style="grid-column:1/-1">No products found in the current database or local cache.</div>'; return; }
+    box.innerHTML = products.map(p => `<div class="owner-product-card"><img src="${esc(productImage(p))}" alt="${esc(p.name || 'Product image')}" loading="lazy"><h4>${esc(p.name)}</h4><div class="small muted">${esc(p.category)}<br>Rs. ${money(p.price)}<br>${esc(lthProductStockText(p))}<br>${esc(p.description || p.desc || '')}</div><div class="owner-actions"><button class="btn btn-primary" onclick="openEditModal('${esc(String(p.id))}')">✏️ Edit</button><button class="btn btn-danger" onclick="deleteProduct('${esc(String(p.id))}')">🗑️ Delete</button></div></div>`).join('');
+};
+openEditModal = function(id) {
+    if (!requireOwner()) return;
+    const product = products.find(p => String(p.id) === String(id)); if (!product) return alert('Product not found in the current product list.');
+    document.getElementById('editId').value = product.id;
+    document.getElementById('editCategory').value = lthNormalizeCategory(product.category);
+    document.getElementById('editName').value = product.name || '';
+    document.getElementById('editPrice').value = number(product.price);
+    document.getElementById('editStock').value = product.stock === null || product.stock === undefined ? '' : number(product.stock);
+    document.getElementById('editDescription').value = product.description || product.desc || '';
+    document.getElementById('editImage').value = '';
+    document.getElementById('editModal').classList.add('active');
+};
+clearProductForm = function() {
+    ['adminProductName','adminProductPrice','adminProductDescription','adminProductStock'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    const image = document.getElementById('adminProductImage'); if (image) image.value = '';
+};
+addProduct = async function() {
+    if (!requireOwner()) return;
+    const status = document.getElementById('adminProductStatus');
+    const category = lthNormalizeCategory(document.getElementById('adminProductCategory').value);
+    const name = document.getElementById('adminProductName').value.trim();
+    const description = document.getElementById('adminProductDescription').value.trim();
+    const price = Number(document.getElementById('adminProductPrice').value);
+    const stockInput = document.getElementById('adminProductStock').value;
+    const file = document.getElementById('adminProductImage').files[0];
+    if (!name || !description || !Number.isFinite(price) || price < 0 || !['kits','items','tools'].includes(category)) return setStatus(status, 'Enter a product name, valid category, non-negative price and description.', false);
+    let stock;
+    try { stock = lthParseStock(stockInput); } catch (e) { return setStatus(status, e.message, false); }
+    if (!LTH_DB) return setStatus(status, 'Firebase Database is unavailable; product was not saved.', false);
+    try {
+        const image = file ? await readImage(file) : '';
+        const ref = LTH_DB.ref('products').push();
+        const product = { id: ref.key, category, name, price, description, desc: description, image, stock, createdAt: new Date().toISOString() };
+        await ref.set(lthProductPayload(product));
+        products = products.filter(p => String(p.id) !== String(product.id)); products.push(product); saveJSON(KEYS.products, products);
+        clearProductForm(); renderAll(); renderOwnerPanel(); setStatus(status, 'Product saved to Firebase successfully.', true);
+    } catch (e) { console.error('Add product failed:', e); setStatus(status, `Product was not saved. ${e && e.message ? e.message : 'Check Founder verification and Database Rules.'}`, false); }
+};
+updateProduct = async function() {
+    if (!requireOwner()) return;
+    const id = document.getElementById('editId').value;
+    const index = products.findIndex(p => String(p.id) === String(id));
+    if (index < 0) return alert('Product not found.');
+    const category = lthNormalizeCategory(document.getElementById('editCategory').value);
+    const name = document.getElementById('editName').value.trim();
+    const price = Number(document.getElementById('editPrice').value);
+    const description = document.getElementById('editDescription').value.trim();
+    const stockInput = document.getElementById('editStock').value;
+    const file = document.getElementById('editImage').files[0];
+    if (!name || !description || !Number.isFinite(price) || price < 0 || !['kits','items','tools'].includes(category)) return alert('Enter a product name, valid category, non-negative price and description.');
+    let stock;
+    try { stock = lthParseStock(stockInput); } catch (e) { return alert(e.message); }
+    if (!LTH_DB) return alert('Firebase Database is unavailable; product was not updated.');
+    try {
+        const image = file ? await readImage(file) : (products[index].image || '');
+        const updated = { ...products[index], id: String(id), category, name, price, description, desc: description, image, stock, updatedAt: new Date().toISOString() };
+        await LTH_DB.ref('products/' + String(id)).set(lthProductPayload(updated));
+        products[index] = updated; saveJSON(KEYS.products, products); closeEditModal(); renderAll(); renderOwnerPanel(); alert('Product updated in Firebase successfully.');
+    } catch (e) { console.error('Product update failed:', e); alert(`Product update failed: ${e && e.message ? e.message : 'check Database Rules.'}`); }
+};
+deleteProduct = async function(id) {
+    if (!requireOwner()) return;
+    const product = products.find(p => String(p.id) === String(id)); if (!product) return;
+    if (!confirm(`Delete ${product.name}? This removes the product record, not historical order line items.`)) return;
+    if (!LTH_DB) return alert('Firebase Database is unavailable; product was not deleted.');
+    try {
+        await LTH_DB.ref('products/' + String(id)).remove();
+        products = products.filter(p => String(p.id) !== String(id)); cart = cart.filter(item => String(item.productId) !== String(id));
+        saveJSON(KEYS.products, products); saveCartForCurrentUser(); renderAll(); renderOwnerPanel();
+    } catch (e) { console.error('Delete product failed:', e); alert(`Product delete failed: ${e && e.message ? e.message : 'check Founder verification and Database Rules.'}`); }
+};
+
+/* Coupon price is the purchase fee; discountValue is the actual discount cap. */
+finalCalculation = function() {
+    const base = baseCalculation();
+    const applied = getAppliedCoupon();
+    let couponDiscount = 0; let couponCode = '';
+    if (applied && currentUser) {
+        const code = String(applied.code || '').trim().toUpperCase();
+        const wallet = getWalletFor(currentUser.email);
+        const owned = wallet[code];
+        const catalog = loadCoupons()[code] || {};
+        if (owned && owned.code && String(owned.code).toUpperCase() === code && owned.active !== false && !owned.used && catalog.active === true && !lthCouponExpired(owned) && !lthCouponExpired(catalog)) {
+            const discountCap = Math.max(0, number(owned.discountValue));
+            const proposed = Math.min(discountCap, Math.max(0, base.beforeCoupon));
+            const minCart = Math.max(0, number(owned.minCart ?? catalog.minCart ?? 2000));
+            if (proposed > 0 && base.beforeCoupon - proposed >= minCart) { couponDiscount = proposed; couponCode = code; }
+        }
+    }
+    return { ...base, couponDiscount, couponCode, total: Math.max(0, base.beforeCoupon - couponDiscount) };
+};
+renderCouponOffers = function() {
+    const box = document.getElementById('couponOffers'); if (!box) return;
+    const coupons = Object.values(loadCoupons()).filter(c => c && c.active && !lthCouponExpired(c));
+    if (!coupons.length) { box.innerHTML = '<div class="empty">🎟️ No coupon offers available right now.</div>'; return; }
+    box.innerHTML = coupons.map(c => `<div class="coupon-card"><div class="coupon-code">🎟️ ${esc(c.code)}</div><div class="muted small">Coupon Price: Rs. ${money(c.price)}<br>Maximum Discount: Rs. ${money(c.discountValue)}<br>Requires ${number(c.minOrders)} previous orders, Rs. ${money(c.minSpend)} lifetime spend, and a final bill of at least Rs. ${money(c.minCart ?? 2000)}.${c.expiresAt ? `<br>Expires: ${esc(new Date(c.expiresAt).toLocaleString('en-PK'))}` : ''}</div><br><button class="btn btn-primary" onclick="requestCoupon('${esc(String(c.code).toUpperCase())}')">💳 Request to Buy</button></div>`).join('');
+};
+applyCoupon = function(code) {
+    if (!currentUser) return alert('Please sign in first.');
+    if (!cart.length) return alert('Add items to your cart first.');
+    const normalized = String(code || '').trim().toUpperCase();
+    const wallet = getWalletFor(currentUser.email); const coupon = wallet[normalized]; const catalog = loadCoupons()[normalized] || {};
+    if (!coupon || !coupon.code || String(coupon.code).toUpperCase() !== normalized || coupon.active === false || coupon.used || catalog.active !== true || lthCouponExpired(coupon) || lthCouponExpired(catalog)) return alert('This coupon is invalid, inactive, already used or not in your wallet.');
+    const base = baseCalculation(); const discount = Math.min(Math.max(0, number(coupon.discountValue)), base.beforeCoupon);
+    const minCart = Math.max(0, number(coupon.minCart ?? catalog.minCart ?? 2000));
+    if (base.beforeCoupon - discount < minCart) return alert(`This coupon requires a final bill of at least Rs. ${money(minCart)} after discount. Add more items or choose another coupon.`);
+    setAppliedCoupon({ code: normalized, discountValue: number(coupon.discountValue) }); renderCart(); switchPage('cart'); alert(`Coupon applied: ${normalized}`);
+};
+requestCoupon = async function(code) {
+    if (!currentUser || !LTH_AUTH || !LTH_AUTH.currentUser || !LTH_AUTH.currentUser.emailVerified) return alert('Please sign in with a verified email first.');
+    const normalized = String(code || '').trim().toUpperCase();
+    const status = document.getElementById('couponAdminStatus');
+    if (!LTH_FUNCTIONS) return alert('Secure coupon request service is unavailable. Deploy the included Firebase Functions before requesting a coupon.');
+    try {
+        if (status) setStatus(status, 'Checking eligibility with Firebase...', true);
+        const result = await LTH_FUNCTIONS.httpsCallable('requestLthCoupon')({ couponCode: normalized });
+        const purchase = result.data || {};
+        const purchases = loadPurchases().filter(p => String(p.purchaseId) !== String(purchase.purchaseId));
+        purchases.unshift(purchase); saveJSON(KEYS.purchases, purchases); renderCouponPage();
+        if (status) setStatus(status, `Coupon request saved. Reference: ${purchase.purchaseId || 'confirmed'}.`, true);
+        alert(`Coupon purchase request saved.\n\nReference: ${purchase.purchaseId || 'LTH coupon request'}\nAmount: Rs. ${money(purchase.price)}\n\nWaiting for Founder payment confirmation.`);
+    } catch (e) {
+        console.error('Secure coupon request failed:', e);
+        const msg = e && e.message ? e.message : 'Firebase could not validate this coupon request.';
+        alert(msg);
+    }
+};
+confirmCouponPayment = async function(purchaseId) {
+    if (!requireOwner()) return;
+    const purchase = loadPurchases().find(p => String(p.purchaseId) === String(purchaseId));
+    if (!purchase) return alert('Coupon request was not found in the currently loaded records. Refresh the Owner Panel and retry.');
+    if (purchase.status !== 'pending_payment') return alert('This coupon request is no longer pending.');
+    if (!confirm(`Confirm payment for ${purchase.couponCode} from ${purchase.email}?`)) return;
+    if (!LTH_FUNCTIONS) return alert('Secure coupon confirmation service is unavailable. Deploy the included Firebase Functions first.');
+    try {
+        await LTH_FUNCTIONS.httpsCallable('confirmLthCouponPayment')({ uid: purchase.uid || '', purchaseId: purchase.purchaseId, customerEmail: purchase.email || '' });
+        alert('Payment confirmed and coupon activated in Firebase.');
+        renderOwnerPanel(); renderCouponPage();
+    } catch (e) {
+        console.error('Coupon confirmation failed:', e);
+        alert(e && e.message ? e.message : 'Coupon payment update failed; it was not reported as confirmed.');
+    }
+};
+placeOrder = async function() {
+    if (!currentUser || !LTH_AUTH || !LTH_AUTH.currentUser || LTH_AUTH.currentUser.uid !== currentUser.uid || !LTH_AUTH.currentUser.emailVerified) return alert('Please sign in with a verified account before ordering.');
+    if (!cart.length) return alert('Your cart is empty.');
+    const name = document.getElementById('orderName').value.trim();
+    const phone = document.getElementById('orderPhone').value.trim();
+    const address = document.getElementById('orderAddress').value.trim();
+    const typedEmail = accountEmailKey(document.getElementById('orderEmail').value);
+    const status = document.getElementById('orderStatus');
+    if (!name || !phone || !address) return setStatus(status, 'Please complete your name, phone and delivery address.', false);
+    if (typedEmail && typedEmail !== accountEmailKey(currentUser.email)) return setStatus(status, 'Order email must match the signed-in account.', false);
+    if (!LTH_FUNCTIONS) return setStatus(status, 'Secure checkout is not deployed yet. Deploy the included Cloud Functions; the order has not been submitted.', false);
+    const button = document.querySelector('button[onclick="placeOrder()"]');
+    if (button && button.disabled) return;
+    if (button) { button.disabled = true; button.dataset.originalText = button.textContent; button.textContent = 'Submitting order…'; }
+    setStatus(status, 'Verifying current product prices, stock and coupon with Firebase…', true);
+    try {
+        const applied = getAppliedCoupon();
+        const requestId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : makeId('REQ');
+        const result = await LTH_FUNCTIONS.httpsCallable('placeLthOrder')({
+            requestId,
+            customerName: name,
+            phone,
+            address,
+            items: cart.map(item => ({ productId: String(item.productId), qty: Math.max(1, Math.floor(number(item.qty))) })),
+            couponCode: applied && applied.code ? String(applied.code).toUpperCase() : ''
+        });
+        const order = result.data || {};
+        if (!order.orderId) throw new Error('The server response did not contain an order number. Check order history before retrying.');
+        const cached = { orderId: order.orderId, uid: currentUser.uid, date: order.date || new Date().toISOString(), customerName: name, email: currentUser.email, phone, address, items: order.items || [], subtotal: number(order.subtotal), discount: number(order.discount), tax: number(order.tax), couponCode: order.couponCode || '', couponDiscount: number(order.couponDiscount), finalTotal: number(order.finalTotal), status: order.status || 'Pending' };
+        saveOrderFor(currentUser.email, cached);
+        setAppliedCoupon(null); cart = []; saveCartForCurrentUser(); updateCartBadge(); renderCart(); renderOrders(); renderDashboard(); renderCouponPage(); closeCheckout();
+        setStatus(status, `Order placed. Order ID: ${cached.orderId}. Final total: Rs. ${money(cached.finalTotal)}.`, true);
+        alert(`Thank you for shopping!\n\nOrder ID: ${cached.orderId}\nFinal Total: Rs. ${money(cached.finalTotal)}`);
+    } catch (e) {
+        console.error('Secure order placement failed:', e);
+        const msg = e && e.message ? e.message : 'Firebase did not confirm this order.';
+        setStatus(status, `${msg} Your cart has been kept; check Order History before retrying in case the network response was interrupted.`, false);
+    } finally {
+        if (button) { button.disabled = false; button.textContent = button.dataset.originalText || '✅ Place Order'; delete button.dataset.originalText; }
+    }
+};
+updateOrderStatus = async function(uid, orderId, statusValue) {
+    if (!requireOwner()) return;
+    const allowed = ['Pending','Processing','Shipped','Delivered'];
+    if (!allowed.includes(statusValue)) return alert('Choose a valid order status.');
+    if (!LTH_FUNCTIONS) return alert('Secure order-status service is unavailable. Deploy the included Firebase Functions first.');
+    try {
+        await LTH_FUNCTIONS.httpsCallable('updateLthOrderStatus')({ uid: String(uid), orderId: String(orderId), status: statusValue });
+        alert(`Order ${orderId} updated to ${statusValue}.`);
+    } catch (e) { console.error('Order status update failed:', e); alert(e && e.message ? e.message : 'Order status was not updated.'); }
+};
+renderOrders = function() {
+    const container = document.getElementById('ordersList'); if (!container || !currentUser) return;
+    const orders = orderListFor(currentUser.email);
+    if (!orders.length) { container.innerHTML = '<div class="empty">📋 No previous orders found for this account. If older records exist under a different legacy UID, check the account index and Firebase Rules.</div>'; return; }
+    container.innerHTML = orders.map(order => {
+        const itemText = (order.items || []).map(i => `${i.name || 'Item'} × ${number(i.qty)} = Rs. ${money(number(i.price) * number(i.qty))}`).join('\n');
+        const details = itemText || order.orderDetails || order.product || 'Details are not available in this legacy record.';
+        const when = order.date || (order.createdAt ? new Date(Number(order.createdAt) || order.createdAt).toLocaleString('en-PK') : '');
+        const total = order.finalTotal ?? order.total ?? order.grandTotal ?? 0;
+        return `<div class="order-card"><div class="order-head"><span class="order-id">Order ID: ${esc(order.orderId || order.id || '')}</span><span>${esc(when)}</span><span class="order-status">${esc(order.status || 'Pending')}</span></div><div class="order-items">${esc(details)}<br><br><strong>Subtotal:</strong> Rs. ${money(order.subtotal ?? order.subTotal ?? 0)}<br><strong>Global Discount:</strong> Rs. ${money(order.discount ?? order.discountAmount ?? 0)}<br><strong>Tax:</strong> Rs. ${money(order.tax ?? order.taxAmount ?? 0)}<br><strong>Coupon:</strong> ${esc(order.couponCode || 'None')}<br><strong>Coupon Discount:</strong> Rs. ${money(order.couponDiscount ?? 0)}</div><div class="order-total">Final Total: Rs. ${money(total)}</div></div>`;
+    }).join('');
+};
+renderOwnerOrders = function() {
+    const box = document.getElementById('adminOrders'); if (!box) return;
+    if (!isOwner()) { box.innerHTML = '<div class="empty">Verified Founder access required.</div>'; return; }
+    const rows = allOrders();
+    if (!rows.length) { box.innerHTML = '<div class="empty">No orders were returned from the current Firebase query or local cache.</div>'; return; }
+    const choices = ['Pending','Processing','Shipped','Delivered'];
+    box.innerHTML = rows.map(o => {
+        const uid = String(o.uid || o.firebaseUid || '');
+        const orderId = String(o.orderId || o.id || '');
+        const lines = (o.items || []).map(i => `${i.name || 'Item'} × ${number(i.qty)} = Rs. ${money(number(i.price) * number(i.qty))}`).join('\n');
+        const details = lines || o.orderDetails || o.product || 'Legacy order details are not available.';
+        const total = o.finalTotal ?? o.total ?? o.grandTotal ?? 0;
+        const when = o.date || (o.createdAt ? new Date(Number(o.createdAt) || o.createdAt).toLocaleString('en-PK') : '');
+        const options = choices.map(v => `<option value="${v}" ${String(o.status || 'Pending') === v ? 'selected' : ''}>${v}</option>`).join('');
+        const statusControls = uid && orderId ? `<div class="owner-actions"><select aria-label="Order status">${options}</select><button class="btn btn-primary" onclick="updateOrderStatus('${esc(uid)}','${esc(orderId)}',this.parentElement.querySelector('select').value)">Update Status</button></div>` : '<div class="small muted">This legacy order has no resolvable UID; status update is disabled to avoid changing the wrong record.</div>';
+        return `<div class="order-card"><div class="order-head"><span class="order-id">${esc(orderId)}</span><span>${esc(when)}</span><span class="order-status">${esc(o.status || 'Pending')}</span></div><div class="order-items"><strong>Customer:</strong> ${esc(o.customerName || o.name || '')}<br><strong>Email:</strong> ${esc(o.email || '')}<br><strong>Phone:</strong> ${esc(o.phone || o.contact || '')}<br><strong>Address:</strong> ${esc(o.address || o.deliveryAddress || '')}<br><br><strong>Items / Details:</strong><br>${esc(details)}<br><br><strong>Subtotal:</strong> Rs. ${money(o.subtotal ?? o.subTotal ?? 0)}<br><strong>Discount:</strong> Rs. ${money(o.discount ?? o.discountAmount ?? 0)}<br><strong>Tax:</strong> Rs. ${money(o.tax ?? o.taxAmount ?? 0)}<br><strong>Coupon:</strong> ${esc(o.couponCode || 'None')}<br><strong>Coupon Discount:</strong> Rs. ${money(o.couponDiscount ?? 0)}<br><strong>Final Total:</strong> Rs. ${money(total)}</div>${statusControls}</div>`;
+    }).join('');
+};
+renderOwnerCustomers = function() {
+    const box = document.getElementById('adminCustomerRecords'); if (!box) return;
+    if (!isOwner()) { box.textContent = 'Verified Founder access required.'; return; }
+    const rowsByEmail = new Map();
+    const addRecord = (key, record, legacy=false) => {
+        if (!record || typeof record !== 'object') return;
+        let email = accountEmailKey(record.email || record.gmail || record.customerEmail || '');
+        if (!email) { try { const decoded = decodeURIComponent(String(key)); if (decoded.includes('@')) email = accountEmailKey(decoded); } catch (_) {} }
+        const uid = String(record.uid || record.firebaseUid || key || '');
+        const prev = email ? (rowsByEmail.get(email) || {}) : {};
+        const data = { ...prev, uid: record.uid || prev.uid || uid, name: record.name || record.displayName || record.customerName || prev.name || 'Customer', email: email || prev.email || '', phone: record.phone || record.contact || prev.phone || '', address: record.address || record.deliveryAddress || prev.address || '', source: legacy ? 'legacy record' : 'Firebase profile' };
+        rowsByEmail.set(data.email || `${legacy ? 'legacy-' : 'profile-'}${uid}`, data);
+    };
+    Object.entries(LTH_FIREBASE_ACCOUNTS || {}).forEach(([key, rec]) => addRecord(key, rec, false));
+    Object.entries(LTH_FIREBASE_LEGACY_ACCOUNTS || {}).forEach(([key, rec]) => addRecord(key, rec, true));
+    Object.entries(LTH_FIREBASE_PROFILES || {}).forEach(([key, rec]) => addRecord(key, rec, false));
+    const rows = Array.from(rowsByEmail.values()).sort((a,b) => String(a.email).localeCompare(String(b.email)));
+    if (!rows.length) { box.innerHTML = '<div class="empty">No customer records were returned. Verify the existing lthUsers, lthProfiles and lthCustomerAccounts paths and their Rules.</div>'; return; }
+    box.innerHTML = '<div class="table-wrap"><table class="leaderboard"><thead><tr><th>Customer</th><th>Email</th><th>Phone</th><th>Delivery Address</th><th>Record</th></tr></thead><tbody>' + rows.map(r => `<tr><td>${esc(r.name)}</td><td>${esc(r.email)}</td><td>${esc(r.phone)}</td><td>${esc(r.address)}</td><td>${esc(r.source)}</td></tr>`).join('') + '</tbody></table></div>';
+};
+const LTH_ORIGINAL_RENDER_OWNER_PANEL_FINAL = renderOwnerPanel;
+renderOwnerPanel = function() {
+    if (!isOwner()) return;
+    LTH_ORIGINAL_RENDER_OWNER_PANEL_FINAL();
+    renderOwnerCustomers();
+};
+
+/* A live, empty products snapshot must not silently erase the local snapshot. */
+const LTH_ORIGINAL_RENDER_PUBLIC_SETTINGS_FINAL = renderPublicSettings;
+renderPublicSettings = function() {
+    LTH_ORIGINAL_RENDER_PUBLIC_SETTINGS_FINAL();
+    const hero = document.getElementById('heroImage'); const about = document.getElementById('aboutImage');
+    [hero, about].forEach(img => { if (img && img.src && img.getAttribute('src') && !img.dataset.lthImageFallbackBound) { img.dataset.lthImageFallbackBound = '1'; img.addEventListener('error', () => { img.style.display = 'none'; }, { once: true }); } });
+};
+const LTH_ORIGINAL_OPEN_APP_FINAL = openApp;
+openApp = async function(session) {
+    await LTH_ORIGINAL_OPEN_APP_FINAL(session);
+    if (LTH_AUTH && LTH_AUTH.currentUser && currentUser && currentUser.uid === LTH_AUTH.currentUser.uid) {
+        // The old cache is not an authority, but customer-visible legacy order rows remain available during reconciliation.
+        renderOrders(); renderDashboard();
+    }
+};
+
+/* Ensure all images recover gracefully from broken URLs and images show the whole product. */
+document.addEventListener('error', event => {
+    const img = event.target;
+    if (!(img instanceof HTMLImageElement) || img.dataset.lthFallbackApplied === '1') return;
+    if (img.classList.contains('hero-image') || img.classList.contains('about-image')) { img.style.display = 'none'; return; }
+    img.dataset.lthFallbackApplied = '1'; img.src = LTH_IMAGE_FALLBACK;
+}, true);
+
+/* Movable AI launcher and draggable chat header (pointer events work with mouse and touch). */
+function initLTHDragAgent() {
+    const button = document.getElementById('aiBotButton'); const panel = document.getElementById('aiBotPanel'); const head = panel && panel.querySelector('.ai-bot-head');
+    if (!button || !panel || button.dataset.lthDragInitialized) return;
+    button.dataset.lthDragInitialized = '1'; button.title = 'Drag to move; tap to open the LTH Assistant'; if (head) head.title = 'Drag this header to move the AI Assistant';
+    let buttonPoint = null, panelPoint = null, suppressClickUntil = 0;
+    const read = key => { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (_) { return null; } };
+    const clamp = (x,y,w,h) => ({ x: Math.max(8, Math.min(x, Math.max(8, window.innerWidth - w - 8))), y: Math.max(8, Math.min(y, Math.max(8, window.innerHeight - h - 8))) });
+    const setButton = (x,y,persist=true) => {
+        const p = clamp(x,y,button.offsetWidth||56,button.offsetHeight||56);
+        button.style.left = p.x + 'px'; button.style.top = p.y + 'px'; button.style.right = 'auto'; button.style.bottom = 'auto';
+        buttonPoint = p; if (persist) try { localStorage.setItem('lth_ai_button_position_v1', JSON.stringify(p)); } catch (_) {}
+        if (panel.classList.contains('open') && !panelPoint) anchorPanel(false);
+    };
+    const anchorPanel = (persist=true) => {
+        const width = Math.min(panel.offsetWidth || 360, window.innerWidth - 16); const height = Math.min(panel.offsetHeight || 460, window.innerHeight - 24);
+        const desired = clamp((buttonPoint?.x ?? 16), (buttonPoint?.y ?? window.innerHeight - 74) - height - 12, width, height);
+        panel.style.left = desired.x + 'px'; panel.style.top = desired.y + 'px'; panel.style.right = 'auto'; panel.style.bottom = 'auto';
+        if (persist && panelPoint) try { localStorage.setItem('lth_ai_panel_position_v1', JSON.stringify(desired)); } catch (_) {}
+        return desired;
+    };
+    const savedButton = read('lth_ai_button_position_v1');
+    if (savedButton && Number.isFinite(savedButton.x) && Number.isFinite(savedButton.y)) setButton(savedButton.x, savedButton.y, false);
+    else setButton(16, Math.max(8, window.innerHeight - (button.offsetHeight || 58) - 16), false);
+    const savedPanel = read('lth_ai_panel_position_v1');
+    if (savedPanel && Number.isFinite(savedPanel.x) && Number.isFinite(savedPanel.y)) { panelPoint = clamp(savedPanel.x,savedPanel.y,panel.offsetWidth||360,panel.offsetHeight||460); panel.style.left=panelPoint.x+'px'; panel.style.top=panelPoint.y+'px'; panel.style.right='auto'; panel.style.bottom='auto'; }
+    let active = null;
+    const start = (event, target) => {
+        if (event.button !== undefined && event.button !== 0) return;
+        if (target === 'panel' && event.target.closest('button,input,textarea,a,select')) return;
+        event.preventDefault();
+        const rect = (target === 'button' ? button : panel).getBoundingClientRect();
+        active = { target, pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, x: rect.left, y: rect.top, moved: false };
+        (target === 'button' ? button : head).classList.add('lth-dragging');
+        try { (target === 'button' ? button : head).setPointerCapture(event.pointerId); } catch (_) {}
+    };
+    const move = event => {
+        if (!active || event.pointerId !== active.pointerId) return;
+        const dx=event.clientX-active.startX, dy=event.clientY-active.startY;
+        if (Math.abs(dx)+Math.abs(dy)>5) active.moved=true;
+        if (!active.moved) return;
+        if (active.target==='button') setButton(active.x+dx, active.y+dy, true);
+        else {
+            const p=clamp(active.x+dx,active.y+dy,panel.offsetWidth||360,panel.offsetHeight||460);
+            panel.style.left=p.x+'px';panel.style.top=p.y+'px';panel.style.right='auto';panel.style.bottom='auto';panelPoint=p;
+            try{localStorage.setItem('lth_ai_panel_position_v1',JSON.stringify(p));}catch(_){}
+        }
+    };
+    const end = event => {
+        if (!active || (event && event.pointerId !== undefined && event.pointerId !== active.pointerId)) return;
+        if (active.moved) suppressClickUntil=Date.now()+500;
+        (active.target==='button' ? button : head).classList.remove('lth-dragging');
+        active=null;
+    };
+    button.addEventListener('pointerdown', e=>start(e,'button'));
+    document.addEventListener('pointermove',move,{passive:false}); document.addEventListener('pointerup',end); document.addEventListener('pointercancel',end);
+    button.addEventListener('click',e=>{ if(Date.now()<suppressClickUntil){e.preventDefault();e.stopImmediatePropagation();} },true);
+    if (head) head.addEventListener('pointerdown',e=>start(e,'panel'));
+    const originalOpen = openAIBot;
+    openAIBot = function() { originalOpen(); if (!panelPoint) anchorPanel(false); };
+    const originalClose = closeAIBot;
+    closeAIBot = function() { originalClose(); };
+    window.addEventListener('resize',()=>{
+        const p=clamp(buttonPoint?.x??16,buttonPoint?.y??window.innerHeight-74,button.offsetWidth||56,button.offsetHeight||56); setButton(p.x,p.y,true);
+        if(panelPoint){const q=clamp(panelPoint.x,panelPoint.y,panel.offsetWidth||360,panel.offsetHeight||460);panelPoint=q;panel.style.left=q.x+'px';panel.style.top=q.y+'px';}
+        else if(panel.classList.contains('open')) anchorPanel(false);
+    });
+}
+
+/* Firestore is intentionally not added: the supplied project/data paths are Realtime Database. */
+
+/* =========================================================
+   LTH REPAIR PATCH 2 — listener privacy, legacy data and scores
+========================================================= */
+function lthCouponExpired(coupon) {
+    if (!coupon || !coupon.expiresAt) return false;
+    const t = new Date(coupon.expiresAt).getTime();
+    return Number.isFinite(t) && t <= Date.now();
+}
+
+// Realtime Database remains the source of truth. Never read private account/order data globally.
+initFirebaseSync = function () {
+    if (!LTH_DB) {
+        LTH_FIREBASE_ONLINE = false;
+        lthFirebaseStatus(false, '⚠️ Firebase failed to initialize — showing local cache only');
+        return;
+    }
+    products = loadJSON(KEYS.products, []);
+    LTH_DB.ref('.info/connected').on('value', snap => {
+        LTH_FIREBASE_ONLINE = !!snap.val();
+        lthFirebaseStatus(LTH_FIREBASE_ONLINE, LTH_FIREBASE_ONLINE ? '☁️ Firebase Realtime Database connected' : '⚠️ Firebase offline — waiting to reconnect');
+    }, e => { console.error('Firebase connection status failed:', e); lthFirebaseStatus(false, '⚠️ Connection status unavailable'); });
+    LTH_DB.ref('settings').on('value', snap => {
+        const value = snap.val();
+        if (value) {
+            settings = lthNormalizeSettings(value); saveJSON(KEYS.settings, settings);
+            renderPublicSettings(); updateLockStatusBox(); applyLockState(); renderCart();
+        }
+    }, e => { console.error('Firebase settings read failed:', e); lthFirebaseStatus(false, '⚠️ Settings read denied — check Database Rules'); });
+    LTH_DB.ref('products').on('value', snap => {
+        const raw = snap.val() || {};
+        if (Object.keys(raw).length) {
+            products = Object.keys(raw).map(key => lthNormalizeProduct(key, raw[key]));
+            products.forEach(p => { p.__localOnly = false; });
+            saveJSON(KEYS.products, products);
+        } else {
+            // Do not upload or delete anything automatically. Cached items are only a visual fallback.
+            const cached = loadJSON(KEYS.products, []);
+            products = Array.isArray(cached) ? cached.map(p => ({ ...p, __localOnly: true })) : [];
+            if (isOwner() && products.length) {
+                const note = document.getElementById('adminProductStatus');
+                if (note) setStatus(note, 'Firebase products node returned empty. Showing local cached products for reference; edit/save each item to upload it, or verify the database path before checkout.', false);
+            }
+        }
+        renderProducts(products); renderCart(); renderDashboard();
+        if (isOwner()) renderOwnerPanel();
+    }, e => {
+        console.error('Firebase products read failed:', e);
+        products = loadJSON(KEYS.products, []);
+        renderProducts(products); renderCart();
+        lthFirebaseStatus(false, '⚠️ Products read denied — check Firebase Database Rules');
+    });
+    LTH_DB.ref('coupons').on('value', snap => {
+        const raw = snap.val() || {};
+        saveJSON(KEYS.coupons, raw); renderCouponPage(); if (isOwner()) renderOwnerPanel();
+    }, e => console.error('Firebase coupons read failed:', e));
+    // Deliberately no direct listener at leaderboard/lightning: legacy records may contain private emails.
+    refreshLTHLeaderboard();
+};
+
+// Add the old customerAccounts record path to Founder view only, without giving customer sessions root access.
+const LTH_ORIGINAL_START_PRIVATE_PATCH2 = lthStartPrivateListeners;
+lthStartPrivateListeners = function (session) {
+    LTH_ORIGINAL_START_PRIVATE_PATCH2(session);
+    if (!session || !LTH_AUTH || !LTH_AUTH.currentUser || LTH_AUTH.currentUser.uid !== session.uid) return;
+    refreshLTHLeaderboard();
+    if (!isOwner() || !LTH_DB) return;
+    const legacyAccountsRef = LTH_DB.ref('lthCustomerAccounts');
+    lthBindPrivate(legacyAccountsRef, snap => {
+        LTH_FIREBASE_LEGACY_ACCOUNTS = snap.val() || {};
+        renderOwnerCustomers();
+    }, error => console.warn('Legacy customer-account records unavailable to Founder:', error));
+    if (LTH_FUNCTIONS) {
+        LTH_FUNCTIONS.httpsCallable('getLthAdminLeaderboard')({}).then(result => {
+            LTH_FIREBASE_ADMIN_SCORES = Array.isArray(result.data) ? result.data : [];
+            renderOwnerGameScores();
+        }).catch(error => console.warn('Founder leaderboard query failed:', error));
+    }
+};
+
+let LTH_FIREBASE_ADMIN_SCORES = [];
+async function refreshLTHLeaderboard() {
+    if (!LTH_FUNCTIONS || !LTH_AUTH || !LTH_AUTH.currentUser || !LTH_AUTH.currentUser.emailVerified) {
+        LTH_FIREBASE_SCORES = [];
+        renderLeaderboard();
+        return;
+    }
+    try {
+        const result = await LTH_FUNCTIONS.httpsCallable('getLthLeaderboard')({});
+        LTH_FIREBASE_SCORES = Array.isArray(result.data) ? result.data : [];
+        saveJSON(KEYS.scores, LTH_FIREBASE_SCORES.slice(0, 10));
+        renderLeaderboard();
+    } catch (error) {
+        console.warn('Private-safe public leaderboard request failed:', error);
+        // Preserve previously displayed scores as a cache, without reading private database nodes.
+        renderLeaderboard();
+    }
+}
+saveScore = async function () {
+    if (!currentUser || !LTH_AUTH || !LTH_AUTH.currentUser || !LTH_AUTH.currentUser.emailVerified) return alert('Please sign in with a verified account first.');
+    const name = document.getElementById('scoreName').value.trim();
+    if (!name) return alert('Enter your display name.');
+    if (pendingScore <= 0) return;
+    if (!LTH_FUNCTIONS) return alert('Score service is not deployed. The score was not saved.');
+    const message = document.getElementById('gameMessage');
+    if (message) message.textContent = 'Saving score securely…';
+    try {
+        const result = await LTH_FUNCTIONS.httpsCallable('saveLthScore')({ name, score: pendingScore });
+        pendingScore = 0;
+        document.getElementById('scoreName').value = '';
+        document.getElementById('scoreSaveBox').classList.add('hidden');
+        if (message) message.textContent = '✅ Score saved.';
+        await refreshLTHLeaderboard();
+        if (isOwner()) {
+            const admin = await LTH_FUNCTIONS.httpsCallable('getLthAdminLeaderboard')({});
+            LTH_FIREBASE_ADMIN_SCORES = Array.isArray(admin.data) ? admin.data : [];
+            renderOwnerGameScores();
+        }
+    } catch (error) {
+        console.error('Secure score save failed:', error);
+        if (message) message.textContent = error && error.message ? error.message : 'Score could not be saved.';
+    }
+};
+renderLeaderboard = function () {
+    const box = document.getElementById('leaderboard'); if (!box) return;
+    const scores = (Array.isArray(LTH_FIREBASE_SCORES) && LTH_FIREBASE_SCORES.length) ? LTH_FIREBASE_SCORES : loadJSON(KEYS.scores, []);
+    if (!scores.length) { box.innerHTML = '<div class="empty">🏆 No scores have been returned yet. Sign in and try again.</div>'; return; }
+    box.innerHTML = '<div class="table-wrap"><table><thead><tr><th>#</th><th>Player</th><th>Points</th></tr></thead><tbody>' + scores.slice(0,10).map((row, i) => `<tr class="${row.mine ? 'lth-you-row' : ''}"><td>${i+1}</td><td>${esc(row.name || 'Player')}</td><td>${number(row.score)}</td></tr>`).join('') + '</tbody></table></div>';
+};
+renderOwnerGameScores = function () {
+    const box = document.getElementById('adminScores'); if (!box) return;
+    if (!isOwner()) { box.innerHTML = 'Founder access only.'; return; }
+    const scores = Array.isArray(LTH_FIREBASE_ADMIN_SCORES) ? LTH_FIREBASE_ADMIN_SCORES : [];
+    if (!scores.length) { box.innerHTML = '<div class="empty">No score records were returned yet. If prior scores exist, deploy the Functions and verify access.</div>'; return; }
+    box.innerHTML = '<div class="table-wrap"><table class="leaderboard"><thead><tr><th>Player</th><th>Email</th><th>Score</th><th>Date</th></tr></thead><tbody>' + scores.map(row => `<tr><td>${esc(row.name || 'Player')}</td><td>${esc(row.email || '')}</td><td>${number(row.score)}</td><td>${esc(row.createdAt || '')}</td></tr>`).join('') + '</tbody></table></div>';
+};
+
+// Keep RTDB snapshots and old browser-only cached records distinct so local data is never claimed as confirmed.
+lthFlattenOrdersSnapshot = function (raw) {
+    const map = {};
+    const add = (uid, id, value, localRoot = false) => {
+        if (!value || typeof value !== 'object' || Array.isArray(value)) return;
+        const order = { orderId: value.orderId || id, ...value, uid: value.uid || value.firebaseUid || uid || '', firebaseUid: value.uid || value.firebaseUid || uid || '', firebaseKey: value.firebaseKey || id, rootLevel: !!localRoot, localOnly: false };
+        const email = accountEmailKey(order.email || '') || '__legacy_unassigned__';
+        if (!map[email]) map[email] = [];
+        map[email].push(order);
+    };
+    Object.entries(raw || {}).forEach(([key, value]) => {
+        if (!value || typeof value !== 'object' || Array.isArray(value)) return;
+        const looksLikeOrder = ['orderId','status','orderDetails','product','items','finalTotal','grandTotal','subTotal'].some(field => Object.prototype.hasOwnProperty.call(value, field));
+        if (looksLikeOrder) { add(value.uid || value.firebaseUid || '', key, value, true); return; }
+        Object.entries(value).forEach(([id, order]) => add(key, id, order));
+    });
+    Object.keys(map).forEach(email => map[email].sort((a,b) => String(b.date || b.createdAt || '').localeCompare(String(a.date || a.createdAt || ''))));
+    return map;
+};
+allOrders = function () {
+    const remoteMap = LTH_FIREBASE_ORDERS || {};
+    const localMap = loadOrdersMap();
+    const remote = [];
+    Object.entries(remoteMap).forEach(([email, rows]) => (rows || []).forEach(row => remote.push({ ...row, __emailKey: email, localOnly: false })));
+    const result = [...remote];
+    const keys = new Set(remote.map(row => `${String(row.orderId || row.id || '')}|${accountEmailKey(row.email || row.__emailKey || '')}`));
+    Object.entries(localMap || {}).forEach(([email, rows]) => (rows || []).forEach(row => {
+        const key = `${String(row.orderId || row.id || '')}|${accountEmailKey(row.email || email || '')}`;
+        if (!keys.has(key)) { result.push({ ...row, email: row.email || email, localOnly: true }); keys.add(key); }
+    }));
+    return result.sort((a,b) => String(b.date || b.createdAt || '').localeCompare(String(a.date || a.createdAt || '')));
+};
+orderListFor = function (email) {
+    const key = accountEmailKey(email);
+    const remote = Array.isArray(LTH_FIREBASE_ORDERS[key]) ? LTH_FIREBASE_ORDERS[key] : [];
+    const cache = loadOrdersMap()[key] || [];
+    const ids = new Set(remote.map(row => String(row.orderId || row.id || '')));
+    return [...remote, ...cache.filter(row => !ids.has(String(row.orderId || row.id || ''))).map(row => ({ ...row, localOnly: true, email: row.email || key }))]
+        .sort((a,b) => String(b.date || b.createdAt || '').localeCompare(String(a.date || a.createdAt || '')));
+};
+
+// Preserve Firebase database child keys when updating old/legacy order statuses.
+const LTH_ORIGINAL_RENDER_OWNER_ORDERS_PATCH2 = renderOwnerOrders;
+renderOwnerOrders = function () {
+    if (!isOwner()) return LTH_ORIGINAL_RENDER_OWNER_ORDERS_PATCH2();
+    const box = document.getElementById('adminOrders'); if (!box) return;
+    const rows = allOrders();
+    if (!rows.length) { box.innerHTML = '<div class="empty">No records were returned. Verify the existing lthOrderHistory path and Database Rules; an empty query is not proof the data was deleted.</div>'; return; }
+    const choices = ['Pending','Processing','Shipped','Delivered'];
+    box.innerHTML = rows.map(o => {
+        const uid = String(o.firebaseUid || o.uid || '');
+        const orderId = String(o.orderId || o.id || '');
+        const dbKey = String(o.firebaseKey || orderId);
+        const lines = (o.items || []).map(item => `${item.name || 'Item'} × ${number(item.qty)} = Rs. ${money(number(item.price) * number(item.qty))}`).join('\n');
+        const details = lines || o.orderDetails || o.product || 'Legacy order details are not available.';
+        const total = o.finalTotal ?? o.total ?? o.grandTotal ?? 0;
+        const when = o.date || (o.createdAt ? new Date(Number(o.createdAt) || o.createdAt).toLocaleString('en-PK') : '');
+        const options = choices.map(v => `<option value="${v}" ${String(o.status || 'Pending') === v ? 'selected' : ''}>${v}</option>`).join('');
+        const statusControls = uid && dbKey && !o.localOnly && !o.rootLevel ? `<div class="owner-actions"><select aria-label="Order status">${options}</select><button class="btn btn-primary" onclick="updateOrderStatus('${esc(uid)}','${esc(dbKey)}',this.parentElement.querySelector('select').value)">Update Status</button></div>` : '<div class="small muted">Local/legacy copy only: status update disabled until its Firebase UID and order key are verified.</div>';
+        const localNote = o.localOnly ? '<p class="small muted">⚠ Browser-cached record — not confirmed in Firebase.</p>' : '';
+        return `<div class="order-card"><div class="order-head"><span class="order-id">${esc(orderId)}</span><span>${esc(when)}</span><span class="order-status">${esc(o.status || 'Pending')}</span></div>${localNote}<div class="order-items"><strong>Customer:</strong> ${esc(o.customerName || o.name || '')}<br><strong>Email:</strong> ${esc(o.email || '')}<br><strong>Phone:</strong> ${esc(o.phone || o.contact || '')}<br><strong>Address:</strong> ${esc(o.address || o.deliveryAddress || '')}<br><br><strong>Items / Details:</strong><br>${esc(details)}<br><br><strong>Subtotal:</strong> Rs. ${money(o.subtotal ?? o.subTotal ?? 0)}<br><strong>Discount:</strong> Rs. ${money(o.discount ?? o.discountAmount ?? 0)}<br><strong>Tax:</strong> Rs. ${money(o.tax ?? o.taxAmount ?? 0)}<br><strong>Coupon:</strong> ${esc(o.couponCode || 'None')}<br><strong>Coupon Discount:</strong> Rs. ${money(o.couponDiscount ?? 0)}<br><strong>Final Total:</strong> Rs. ${money(total)}</div>${statusControls}</div>`;
+    }).join('');
+};
+
+// Checkout requests are server-validated; local-only fallback products cannot be ordered until saved to RTDB.
+const LTH_ORIGINAL_PLACE_ORDER_PATCH2 = placeOrder;
+placeOrder = async function () {
+    if (cart.some(item => products.some(p => String(p.id) === String(item.productId) && p.__localOnly))) {
+        alert('One or more products are only present in this browser cache and are not currently confirmed in Firebase. Save them from the Founder panel first, then retry.');
+        return;
+    }
+    return LTH_ORIGINAL_PLACE_ORDER_PATCH2();
+};
+
+/* Firestore is intentionally not added: supplied data/schema are Firebase Realtime Database paths. */
+
 initialize();
 initFirebaseSync();
 initLTHAuth();
+initLTHDragAgent();
 </script>
 </body>
 </html>
