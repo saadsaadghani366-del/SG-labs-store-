@@ -163,6 +163,7 @@ html,body{background:#0f2e5b !important;color:#fff !important}
 
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 </head>
 <body>
@@ -206,16 +207,16 @@ html,body{background:#0f2e5b !important;color:#fff !important}
         </div>
 
         <div id="forgotPassword" class="auth-panel">
-            <div class="notice">This is the simple localStorage password recovery system. It does not send an email.</div>
-            <div class="form-group"><label>Customer Gmail</label><input id="resetEmail" type="email" placeholder="Enter your Gmail"></div>
-            <div class="form-group"><label>New Password</label><input id="resetPassword" type="password" placeholder="Enter a new password"></div>
-            <button class="btn btn-warning btn-block" onclick="resetCustomerPassword()">🔄 Reset Password</button>
+            <div class="notice">Firebase will send a secure password-reset link to your email address.</div>
+            <div class="form-group"><label>Account Gmail</label><input id="resetEmail" type="email" placeholder="Enter your account Gmail" autocomplete="email"></div>
+            <button class="btn btn-warning btn-block" onclick="resetCustomerPassword()">📧 Send Password Reset Email</button>
             <button class="btn btn-light btn-block" style="margin-top:8px" onclick="showAuthPanel('customerLogin')">← Back to Login</button>
             <div id="resetStatus" class="status"></div>
         </div>
 
         <div id="ownerLogin" class="auth-panel">
-            <div class="notice">🔐 Founder access is private. Enter the Founder password to continue.</div>
+            <div class="notice">🔐 Founder access is verified by Firebase Authentication and the verified Founder email. Credentials are not stored in this HTML.</div>
+            <div class="form-group"><label>Founder Email</label><input type="email" id="ownerLoginEmail" placeholder="Enter Founder email" autocomplete="username"></div>
             <div class="form-group"><label>Founder Password</label><input type="password" id="ownerPassword" placeholder="Enter Founder password" autocomplete="current-password"></div>
             <button class="btn btn-dark btn-block" onclick="ownerLogin()">⚡ Enter Founder Panel</button>
             <button class="btn btn-light btn-block" style="margin-top:8px" onclick="showAuthPanel('customerLogin')">← Back to Customer</button>
@@ -511,6 +512,12 @@ html,body{background:#0f2e5b !important;color:#fff !important}
                 </div>
 
                 <div class="owner-section">
+                    <h3>👥 Customer Records</h3>
+                    <p class="small muted">Authorized Founder view of Firebase customer profiles.</p>
+                    <div id="adminCustomerRecords"></div>
+                </div>
+
+                <div class="owner-section">
                     <h3>🏆 Lightning Challenge Scores</h3>
                     <div id="adminScores"></div>
                 </div>
@@ -560,7 +567,6 @@ html,body{background:#0f2e5b !important;color:#fff !important}
 ========================================================= */
 
 const FOUNDER_EMAIL = 'lightingtechhub@gmail.com';
-const FOUNDER_PASSWORD = 'Lightning Tech Hub 1238';
 
 const KEYS = {
     accounts: 'lth_accounts_v1',
@@ -698,69 +704,19 @@ function showAuthPanel(id) {
 }
 
 function registerCustomer() {
-    const name = document.getElementById('registerName').value.trim();
-    const email = accountEmailKey(document.getElementById('registerEmail').value);
-    const password = document.getElementById('registerPassword').value;
-    const status = document.getElementById('registerStatus');
-
-    if (!name || !email || !password) return setStatus(status, 'Please complete all fields.', false);
-    if (!/^\S+@gmail\.com$/i.test(email)) return setStatus(status, 'Please use a Gmail address.', false);
-    if (email === FOUNDER_EMAIL.toLowerCase()) return setStatus(status, 'This Gmail is reserved for the Founder.', false);
-    if (password.length < 6) return setStatus(status, 'Password must be at least 6 characters.', false);
-
-    const accounts = loadAccounts();
-    if (accounts[email]) return setStatus(status, 'This customer account already exists.', false);
-
-    accounts[email] = { name, email, password, role: 'customer', createdAt: new Date().toISOString() };
-    saveAccounts(accounts);
-    saveJSON(KEYS.profiles, { ...profileMap(), [email]: { name, email, phone:'', address:'' } });
-
-    setStatus(status, 'Account created successfully. Please login.', true);
-    document.getElementById('registerName').value = '';
-    document.getElementById('registerEmail').value = '';
-    document.getElementById('registerPassword').value = '';
+    setStatus(document.getElementById('registerStatus'), 'Secure Firebase account creation is initialized below.', false);
 }
 
 function customerLogin() {
-    const email = accountEmailKey(document.getElementById('customerLoginEmail').value);
-    const password = document.getElementById('customerLoginPassword').value;
-    const status = document.getElementById('customerLoginStatus');
-
-    const accounts = loadAccounts();
-    const account = accounts[email];
-
-    if (!email || !password) return setStatus(status, 'Please enter Gmail and password.', false);
-    if (!account) return setStatus(status, 'Customer account not found.', false);
-    if (account.password !== password) return setStatus(status, 'Incorrect password.', false);
-
-    openApp({ name: account.name, email: account.email, role: 'customer' });
+    setStatus(document.getElementById('customerLoginStatus'), 'Secure Firebase sign-in is initialized below.', false);
 }
 
 function ownerLogin() {
-    const password = document.getElementById('ownerPassword').value;
-    const status = document.getElementById('ownerLoginStatus');
-
-    if (password !== FOUNDER_PASSWORD) return setStatus(status, 'Founder password is incorrect.', false);
-
-    openApp({ name: 'LTH Founder', email: FOUNDER_EMAIL, role: 'owner' });
+    setStatus(document.getElementById('ownerLoginStatus'), 'Founder sign-in uses Firebase Authentication.', false);
 }
 
 function resetCustomerPassword() {
-    const email = accountEmailKey(document.getElementById('resetEmail').value);
-    const newPassword = document.getElementById('resetPassword').value;
-    const status = document.getElementById('resetStatus');
-    const accounts = loadAccounts();
-
-    if (!/^\S+@gmail\.com$/i.test(email)) return setStatus(status, 'Please enter a valid Gmail.', false);
-    if (!accounts[email]) return setStatus(status, 'Customer account not found.', false);
-    if (email === FOUNDER_EMAIL.toLowerCase()) return setStatus(status, 'Founder password is set in the code.', false);
-    if (newPassword.length < 6) return setStatus(status, 'New password must be at least 6 characters.', false);
-
-    accounts[email].password = newPassword;
-    saveAccounts(accounts);
-    setStatus(status, 'Password changed. You can now login.', true);
-    document.getElementById('resetEmail').value = '';
-    document.getElementById('resetPassword').value = '';
+    setStatus(document.getElementById('resetStatus'), 'Password recovery uses the Firebase reset-email flow.', false);
 }
 
 function setStatus(el, msg, ok) {
@@ -1461,13 +1417,17 @@ const LTH_FIREBASE_CONFIG = {
     measurementId: "G-RC7E0RMX4P"
 };
 let LTH_DB = null;
+let LTH_AUTH = null;
 let LTH_FIREBASE_ONLINE = false;
 let LTH_FIREBASE_ORDERS = {};
 let LTH_FIREBASE_ACCOUNTS = {};
+let LTH_FIREBASE_PROFILES = {};
+let LTH_FIREBASE_WALLETS = {};
 let LTH_FIREBASE_SCORES = [];
 try {
     if (!firebase.apps.length) firebase.initializeApp(LTH_FIREBASE_CONFIG);
     LTH_DB = firebase.database();
+    LTH_AUTH = firebase.auth();
 } catch (error) {
     console.error('Firebase initialization failed:', error);
 }
@@ -1564,114 +1524,31 @@ function allOrders(){
 
 /* Customer account login can work from Firebase on another device. */
 async function lthGetRemoteAccount(email){
-    if(!LTH_DB)return null;
-    try{
-        const snap=await LTH_DB.ref('lthCustomerAccounts/'+lthFirebaseEmailKey(email)).once('value');
-        return snap.exists() ? snap.val() : null;
-    }catch(e){ console.error(e); return null; }
+    return null; // Legacy custom-password accounts are intentionally not used for authentication.
 }
+
 async function lthResolveUid(email,fallback){
-    if(!LTH_DB)return fallback||null;
-    try{
-        const idx=await LTH_DB.ref('lthAccountIndex/'+lthFirebaseEmailKey(email)).once('value');
-        if(idx.exists() && idx.val()) return idx.val();
-        const snap=await LTH_DB.ref('lthUsers').orderByChild('email').equalTo(accountEmailKey(email)).once('value');
-        let found=null; snap.forEach(c=>{if(!found)found=c.key;});
-        return found || fallback || null;
-    }catch(e){ console.error(e); return fallback||null; }
+    return null; // New orders must always use the Firebase Authentication UID.
 }
+
 async function lthSyncAccount(account){
-    if(!LTH_DB||!account)return;
-    const email=accountEmailKey(account.email);
-    const uid=account.uid || ('lth_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9));
-    account.uid=uid;
-    const payload={uid,name:account.name||'',email,passwordHash:account.passwordHash||'',createdAt:account.createdAt||new Date().toISOString(),updatedAt:firebase.database.ServerValue.TIMESTAMP};
-    await LTH_DB.ref('lthAccountIndex/'+lthFirebaseEmailKey(email)).set(uid);
-    await LTH_DB.ref('lthCustomerAccounts/'+lthFirebaseEmailKey(email)).set(payload);
-    await LTH_DB.ref('lthUsers/'+uid).update({uid,email,displayName:account.name||'',updatedAt:firebase.database.ServerValue.TIMESTAMP});
+    throw new Error('Legacy custom-password account sync is disabled; use Firebase Authentication.');
 }
+
 async function lthSyncIdentity(user){
-    if(!LTH_DB||!user||user.role==='owner')return user;
-    user.uid=await lthResolveUid(user.email,user.uid) || ('lth_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9));
-    await LTH_DB.ref('lthAccountIndex/'+lthFirebaseEmailKey(user.email)).set(user.uid);
-    await LTH_DB.ref('lthUsers/'+user.uid).update({uid:user.uid,email:accountEmailKey(user.email),displayName:user.name||'',lastLoginAt:firebase.database.ServerValue.TIMESTAMP});
-    const accounts=loadAccounts();
-    const key=accountEmailKey(user.email);
-    if(accounts[key]){ accounts[key].uid=user.uid; saveAccounts(accounts); }
-    setSession(user);
-    return user;
+    throw new Error('Legacy custom-password identity sync is disabled; use Firebase Authentication.');
 }
 
 async function registerCustomer(){
-    const name=document.getElementById('registerName').value.trim();
-    const email=accountEmailKey(document.getElementById('registerEmail').value);
-    const password=document.getElementById('registerPassword').value;
-    const status=document.getElementById('registerStatus');
-    if(!name||!email||!password)return setStatus(status,'Please complete all fields.',false);
-    if(!/^\S+@gmail\.com$/i.test(email))return setStatus(status,'Please use a Gmail address.',false);
-    if(email===FOUNDER_EMAIL.toLowerCase())return setStatus(status,'This Gmail is reserved for the Founder.',false);
-    if(password.length<6)return setStatus(status,'Password must be at least 6 characters.',false);
-    const accounts=loadAccounts();
-    if(accounts[email])return setStatus(status,'This customer account already exists.',false);
-    const uid='lth_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,10);
-    const passwordHash=await lthHashPassword(password);
-    const account={name,email,uid,passwordHash,role:'customer',createdAt:new Date().toISOString()};
-    accounts[email]=account; saveAccounts(accounts);
-    const profiles=profileMap(); profiles[email]={name,email,phone:'',address:''}; saveProfileMap(profiles);
-    let synced=false;
-    try{
-        if(!LTH_DB) throw new Error('Firebase database is not initialized');
-        await lthSyncAccount(account);
-        synced=true;
-    }catch(e){console.error('Firebase account sync failed:',e);}
-    setStatus(status,
-        synced
-            ? 'Account created and synced to Firebase. Please login.'
-            : 'Account created on this browser, but Firebase sync failed. Check the database connection and rules before using it on another device.',
-        synced
-    );
-    document.getElementById('registerName').value=''; document.getElementById('registerEmail').value=''; document.getElementById('registerPassword').value='';
+    setStatus(document.getElementById('registerStatus'), 'Please use the secure Firebase Authentication flow.', false);
 }
 
 async function customerLogin(){
-    const email=accountEmailKey(document.getElementById('customerLoginEmail').value);
-    const password=document.getElementById('customerLoginPassword').value;
-    const status=document.getElementById('customerLoginStatus');
-    if(!email||!password)return setStatus(status,'Please enter Gmail and password.',false);
-    setStatus(status,'Signing in...',true);
-    let accounts=loadAccounts(); let account=accounts[email];
-    try{
-        if(!account){
-            const remote=await lthGetRemoteAccount(email);
-            if(remote){ account={...remote,role:'customer'}; accounts[email]=account; saveAccounts(accounts); }
-        }
-        if(!account)return setStatus(status,'Customer account not found.',false);
-        const hash=await lthHashPassword(password);
-        const valid=account.passwordHash ? account.passwordHash===hash : account.password===password;
-        if(!valid)return setStatus(status,'Incorrect password.',false);
-        if(!account.uid)account.uid=await lthResolveUid(email,null)||('lth_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,10));
-        account.email=email; account.role='customer'; account.passwordHash=account.passwordHash||hash; delete account.password;
-        accounts[email]=account; saveAccounts(accounts);
-        try{await lthSyncAccount(account);}catch(e){console.error(e);}
-        await openApp({name:account.name||'Customer',email,uid:account.uid,role:'customer'});
-        setStatus(status,'',true);
-    }catch(e){console.error(e);setStatus(status,'Login failed. Please try again.',false);}
+    setStatus(document.getElementById('customerLoginStatus'), 'Please use the secure Firebase Authentication flow.', false);
 }
 
 async function resetCustomerPassword(){
-    const email=accountEmailKey(document.getElementById('resetEmail').value);
-    const newPassword=document.getElementById('resetPassword').value;
-    const status=document.getElementById('resetStatus');
-    const accounts=loadAccounts();
-    if(!/^\S+@gmail\.com$/i.test(email))return setStatus(status,'Please enter a valid Gmail.',false);
-    if(email===FOUNDER_EMAIL.toLowerCase())return setStatus(status,'Founder password is fixed in this website.',false);
-    if(newPassword.length<6)return setStatus(status,'New password must be at least 6 characters.',false);
-    if(!accounts[email]){const remote=await lthGetRemoteAccount(email);if(remote){accounts[email]={...remote,role:'customer'};}}
-    if(!accounts[email])return setStatus(status,'Customer account not found.',false);
-    accounts[email].passwordHash=await lthHashPassword(newPassword); delete accounts[email].password; saveAccounts(accounts);
-    try{await lthSyncAccount(accounts[email]);}catch(e){console.error(e);}
-    setStatus(status,'Password changed. You can now login.',true);
-    document.getElementById('resetEmail').value=''; document.getElementById('resetPassword').value='';
+    setStatus(document.getElementById('resetStatus'), 'Password recovery uses Firebase Authentication.', false);
 }
 
 /* Firebase profile storage, with local cache retained for offline fallback. */
@@ -1753,19 +1630,7 @@ async function confirmCouponPayment(purchaseId){
 
 /* Orders: write to original Firebase path as well as local cache. */
 async function placeOrder(){
-    if(!currentUser)return alert('Please login first.');if(!cart.length)return alert('Your cart is empty.');
-    const name=document.getElementById('orderName').value.trim(),phone=document.getElementById('orderPhone').value.trim(),address=document.getElementById('orderAddress').value.trim(),email=accountEmailKey(document.getElementById('orderEmail').value),status=document.getElementById('orderStatus');
-    if(!name||!phone||!address||!email)return setStatus(status,'Please complete all checkout information.',false);
-    const calc=finalCalculation();if(calc.couponCode&&calc.total<2000){setStatus(status,'Coupon cannot be applied unless your final bill remains at least Rs. 2,000.',false);return alert('Please increase your bill to at least Rs. 2,000.');}
-    const order={orderId:makeId('LTH'),date:new Date().toISOString(),customerName:name,email,phone,address,items:cart.map(i=>({productId:i.productId,name:i.name,price:number(i.price),qty:number(i.qty)})),subtotal:calc.subtotal,discount:calc.discount,tax:calc.tax,couponCode:calc.couponCode,couponDiscount:calc.couponDiscount,finalTotal:calc.total,status:'Pending'};
-    try{
-        const uid=await lthResolveUid(email,currentUser.uid);if(uid){currentUser.uid=uid;setSession(currentUser);}else throw new Error('No Firebase user identity');
-        if(!LTH_DB)throw new Error('Firebase unavailable');
-        await LTH_DB.ref('lthOrderHistory/'+uid+'/'+order.orderId).set({...order,createdAt:firebase.database.ServerValue.TIMESTAMP});
-        saveOrderFor(email,order);
-        if(calc.couponCode){const wallet=getWalletFor(email);if(wallet[calc.couponCode]){wallet[calc.couponCode].used=true;wallet[calc.couponCode].usedAt=new Date().toISOString();setWalletFor(email,wallet);}setAppliedCoupon(null);}
-        cart=[];saveCartForCurrentUser();updateCartBadge();renderCart();renderOrders();renderCouponPage();closeCheckout();setStatus(status,'Order placed and saved to Firebase. Order ID: '+order.orderId,true);alert('Thank you for shopping!\n\nOrder ID: '+order.orderId);
-    }catch(e){console.error(e);setStatus(status,'Order could not be saved to Firebase. Please try again.',false);alert('We could not submit your order right now. Your order was NOT confirmed. Please try again.');}
+    alert('Secure checkout is initialized below.');
 }
 
 /* Realtime leaderboard uses the original path: leaderboard/lightning. */
@@ -1937,9 +1802,771 @@ lthAIReply = function(raw){
 const LTH_LOGO_DATA = "data:image/webp;base64,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";
 document.querySelectorAll("[data-lth-logo]").forEach(img => { img.src = LTH_LOGO_DATA; });
 
-/* Start realtime backend before the app startup call. */
-initFirebaseSync();
+/* =========================================================
+   SECURE AUTH + RULES-COMPATIBLE DATA FLOW
+   Keep the existing project/database and legacy records. Do not
+   trust browser-stored role/password data for authentication.
+========================================================= */
+const LTH_OWNER_EMAIL = 'lightingtechhub@gmail.com';
+let LTH_REGISTERING_ACCOUNT = false;
+let LTH_LEGACY_ACCOUNT_UID = null;
+let LTH_PRIVATE_BINDINGS = [];
+let LTH_ACTIVE_ORDER_REF = null;
+let LTH_ACTIVE_PURCHASE_REF = null;
+let LTH_ACTIVE_WALLET_REF = null;
+let LTH_ACTIVE_USERS_REF = null;
+let LTH_ACTIVE_PROFILES_REF = null;
+
+function lthIsVerifiedOwnerUser(user) {
+    return !!user && !!user.emailVerified && accountEmailKey(user.email) === LTH_OWNER_EMAIL;
+}
+isOwner = function () {
+    const authUser = LTH_AUTH && LTH_AUTH.currentUser;
+    return !!currentUser && currentUser.role === 'owner' &&
+        accountEmailKey(currentUser.email) === LTH_OWNER_EMAIL &&
+        !!authUser && authUser.uid === currentUser.uid && lthIsVerifiedOwnerUser(authUser);
+};
+requireOwner = function () {
+    if (isOwner()) return true;
+    alert('Founder access requires a signed-in, email-verified Firebase Founder account.');
+    return false;
+};
+
+function lthAuthMessage(error) {
+    const code = String(error && error.code || '');
+    const messages = {
+        'auth/invalid-email': 'Please enter a valid email address.',
+        'auth/user-not-found': 'No Firebase Authentication account exists for this email.',
+        'auth/wrong-password': 'The password is incorrect.',
+        'auth/invalid-credential': 'Email or password is incorrect.',
+        'auth/email-already-in-use': 'An account with this email already exists. Please log in instead.',
+        'auth/weak-password': 'Use a stronger password with at least 6 characters.',
+        'auth/operation-not-allowed': 'Firebase Console must enable Email/Password under Authentication → Sign-in method.',
+        'auth/too-many-requests': 'Too many attempts. Please wait and try again.',
+        'auth/network-request-failed': 'Network error. Check your internet connection and try again.',
+        'auth/unauthorized-domain': 'This website domain is not authorized in Firebase Authentication settings.',
+        'auth/missing-email': 'Enter the email address for this account.',
+        'auth/requires-recent-login': 'Please sign in again and retry this operation.'
+    };
+    return messages[code] || (error && error.message) || 'Authentication failed. Check Firebase Authentication settings and try again.';
+}
+function lthShowLogin(message, panel) {
+    currentUser = null;
+    cart = [];
+    const app = document.getElementById('app');
+    const login = document.getElementById('loginScreen');
+    if (app) app.style.display = 'none';
+    if (login) login.style.display = 'flex';
+    if (panel) showAuthPanel(panel);
+    if (message) {
+        const target = panel === 'ownerLogin' ? document.getElementById('ownerLoginStatus') : document.getElementById('customerLoginStatus');
+        setStatus(target, message, false);
+    }
+}
+function lthStopPrivateListeners() {
+    LTH_PRIVATE_BINDINGS.forEach(binding => {
+        try { binding.ref.off(binding.event || 'value', binding.callback); } catch (e) { console.warn('Could not detach Firebase listener:', e); }
+    });
+    LTH_PRIVATE_BINDINGS = [];
+    LTH_ACTIVE_ORDER_REF = null;
+    LTH_ACTIVE_PURCHASE_REF = null;
+    LTH_ACTIVE_WALLET_REF = null;
+    LTH_ACTIVE_USERS_REF = null;
+    LTH_ACTIVE_PROFILES_REF = null;
+    LTH_LEGACY_ACCOUNT_UID = null;
+}
+function lthBindPrivate(ref, callback, errorCallback) {
+    const fail = errorCallback || (e => console.error('Private Firebase listener failed:', e));
+    ref.on('value', callback, fail);
+    LTH_PRIVATE_BINDINGS.push({ ref, callback, event: 'value' });
+}
+function lthFlattenPurchaseRecords(raw) {
+    const rows = [];
+    Object.keys(raw || {}).forEach(key => {
+        const value = raw[key];
+        if (!value || typeof value !== 'object') return;
+        if (value.purchaseId || value.status || value.couponCode) {
+            rows.push({ purchaseId: value.purchaseId || key, ...value });
+            return;
+        }
+        Object.keys(value).forEach(id => {
+            const child = value[id];
+            if (child && typeof child === 'object') rows.push({ purchaseId: child.purchaseId || id, ...child, uid: child.uid || key });
+        });
+    });
+    const unique = new Map();
+    rows.forEach(row => unique.set(String(row.purchaseId), row));
+    return Array.from(unique.values()).sort((a,b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
+}
+function lthFlattenOrdersSnapshot(raw) {
+    const map = {};
+    Object.keys(raw || {}).forEach(uid => {
+        const perUser = raw[uid] || {};
+        Object.keys(perUser).forEach(id => {
+            const rawOrder = perUser[id];
+            if (!rawOrder || typeof rawOrder !== 'object') return;
+            const order = { orderId: rawOrder.orderId || id, ...rawOrder };
+            // Keep legacy rows even when an old record has no email; Founder can still review it.
+            const email = accountEmailKey(order.email || '') || '__legacy_unassigned__';
+            if (!map[email]) map[email] = [];
+            map[email].push({ ...order, uid: order.uid || uid });
+        });
+    });
+    Object.keys(map).forEach(email => map[email].sort((a,b) => String(b.date || b.createdAt || '').localeCompare(String(a.date || a.createdAt || ''))));
+    return map;
+}
+async function lthFindAuthUidByEmail(email) {
+    const normalized = accountEmailKey(email);
+    if (currentUser && normalized === accountEmailKey(currentUser.email)) return currentUser.uid;
+    if (!isOwner() || !LTH_DB) return null;
+    try {
+        const snap = await LTH_DB.ref('lthUsers').orderByChild('email').equalTo(normalized).once('value');
+        let found = null;
+        snap.forEach(child => { if (!found) found = child.key; });
+        return found;
+    } catch (e) {
+        console.error('Could not resolve customer UID:', e);
+        return null;
+    }
+}
+
+/* Replace old custom password storage with Firebase Authentication. */
+registerCustomer = async function () {
+    const name = document.getElementById('registerName').value.trim();
+    const email = accountEmailKey(document.getElementById('registerEmail').value);
+    const password = document.getElementById('registerPassword').value;
+    const status = document.getElementById('registerStatus');
+    if (!name || !email || !password) return setStatus(status, 'Please complete all fields.', false);
+    if (!/^\S+@gmail\.com$/i.test(email)) return setStatus(status, 'Please use a Gmail address.', false);
+    if (email === LTH_OWNER_EMAIL) return setStatus(status, 'This email is reserved for the Founder.', false);
+    if (password.length < 6) return setStatus(status, 'Password must be at least 6 characters.', false);
+    if (!LTH_AUTH) return setStatus(status, 'Firebase Authentication failed to initialize. Check the Firebase SDK and project config.', false);
+    setStatus(status, 'Creating your Firebase account...', true);
+    LTH_REGISTERING_ACCOUNT = true;
+    try {
+        const credential = await LTH_AUTH.createUserWithEmailAndPassword(email, password);
+        if (credential.user && name) await credential.user.updateProfile({ displayName: name });
+        await credential.user.sendEmailVerification();
+        await LTH_AUTH.signOut();
+        LTH_REGISTERING_ACCOUNT = false;
+        document.getElementById('registerName').value = '';
+        document.getElementById('registerEmail').value = '';
+        document.getElementById('registerPassword').value = '';
+        showAuthPanel('customerLogin');
+        setStatus(document.getElementById('customerLoginStatus'), 'Account created. Check your email and verify it before logging in.', true);
+    } catch (e) {
+        LTH_REGISTERING_ACCOUNT = false;
+        try { if (LTH_AUTH.currentUser && !LTH_AUTH.currentUser.emailVerified) await LTH_AUTH.signOut(); } catch (_) {}
+        console.error('Customer registration failed:', e);
+        setStatus(status, lthAuthMessage(e), false);
+    }
+};
+customerLogin = async function () {
+    const email = accountEmailKey(document.getElementById('customerLoginEmail').value);
+    const password = document.getElementById('customerLoginPassword').value;
+    const status = document.getElementById('customerLoginStatus');
+    if (!email || !password) return setStatus(status, 'Please enter Gmail and password.', false);
+    if (email === LTH_OWNER_EMAIL) return setStatus(status, 'Use the Founder tab to sign in with the Founder account.', false);
+    if (!LTH_AUTH) return setStatus(status, 'Firebase Authentication is unavailable. Check the Firebase SDK and project configuration.', false);
+    setStatus(status, 'Signing in securely...', true);
+    try {
+        const credential = await LTH_AUTH.signInWithEmailAndPassword(email, password);
+        if (!credential.user.emailVerified) {
+            try { await credential.user.sendEmailVerification(); } catch (_) {}
+            await LTH_AUTH.signOut();
+            return setStatus(status, 'Please verify your email first. A verification email was sent again if Firebase allowed it.', false);
+        }
+        setStatus(status, 'Sign-in verified. Loading your records...', true);
+    } catch (e) {
+        console.error('Customer login failed:', e);
+        setStatus(status, lthAuthMessage(e), false);
+    }
+};
+ownerLogin = async function () {
+    const email = accountEmailKey(document.getElementById('ownerLoginEmail').value);
+    const password = document.getElementById('ownerPassword').value;
+    const status = document.getElementById('ownerLoginStatus');
+    if (!email || !password) return setStatus(status, 'Enter the Founder email and password.', false);
+    if (email !== LTH_OWNER_EMAIL) return setStatus(status, 'Founder sign-in is restricted to the configured Founder account.', false);
+    if (!LTH_AUTH) return setStatus(status, 'Firebase Authentication is unavailable. Check the Firebase SDK and project configuration.', false);
+    setStatus(status, 'Verifying Founder credentials...', true);
+    try {
+        const credential = await LTH_AUTH.signInWithEmailAndPassword(email, password);
+        if (!credential.user.emailVerified) {
+            try { await credential.user.sendEmailVerification(); } catch (_) {}
+            await LTH_AUTH.signOut();
+            return setStatus(status, 'The Founder email must be verified in Firebase Authentication before admin access is granted.', false);
+        }
+        setStatus(status, 'Founder verified. Opening the Admin Panel...', true);
+    } catch (e) {
+        console.error('Founder login failed:', e);
+        setStatus(status, lthAuthMessage(e), false);
+    }
+};
+resetCustomerPassword = async function () {
+    const email = accountEmailKey(document.getElementById('resetEmail').value);
+    const status = document.getElementById('resetStatus');
+    if (!/^\S+@gmail\.com$/i.test(email)) return setStatus(status, 'Please enter a valid Gmail address.', false);
+    if (!LTH_AUTH) return setStatus(status, 'Firebase Authentication is unavailable.', false);
+    try {
+        await LTH_AUTH.sendPasswordResetEmail(email);
+        setStatus(status, 'Password reset email sent. Follow the secure link from Firebase to choose a new password.', true);
+        document.getElementById('resetEmail').value = '';
+    } catch (e) {
+        console.error('Password reset email failed:', e);
+        setStatus(status, lthAuthMessage(e), false);
+    }
+};
+logout = async function () {
+    try {
+        if (LTH_AUTH) await LTH_AUTH.signOut();
+    } catch (e) { console.error('Firebase sign-out failed:', e); }
+    lthStopPrivateListeners();
+    currentUser = null;
+    clearSession();
+    cart = [];
+    lthShowLogin('', 'customerLogin');
+};
+
+/* Never trust an old localStorage session to grant access. */
+initialize = function () {
+    settings = loadSettings();
+    if (document.getElementById('loginScreen')) document.getElementById('loginScreen').style.display = 'flex';
+    if (document.getElementById('app')) document.getElementById('app').style.display = 'none';
+    initAIBot();
+};
+openApp = async function (session) {
+    if (!LTH_AUTH || !LTH_AUTH.currentUser || LTH_AUTH.currentUser.uid !== session.uid || !LTH_AUTH.currentUser.emailVerified) {
+        return lthShowLogin('Your Firebase sign-in session is not verified. Please log in again.', session.role === 'owner' ? 'ownerLogin' : 'customerLogin');
+    }
+    currentUser = { ...session, email: accountEmailKey(LTH_AUTH.currentUser.email), emailVerified: true };
+    currentUser.role = currentUser.email === LTH_OWNER_EMAIL ? 'owner' : 'customer';
+    setSession(currentUser);
+    settings = loadSettings();
+    products = loadJSON(KEYS.products, []);
+    cart = loadCartForCurrentUser();
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    updateUserUI();
+    renderAll();
+    applyLockState();
+    if (currentUser.role === 'customer' && LTH_DB) {
+        try {
+            await LTH_DB.ref('lthUsers/' + currentUser.uid).update({ uid: currentUser.uid, email: currentUser.email, displayName: currentUser.name || '', lastLoginAt: firebase.database.ServerValue.TIMESTAMP });
+            const remote = await LTH_DB.ref('lthProfiles/' + currentUser.uid).once('value');
+            if (remote.exists()) {
+                const map = profileMap(); map[currentUser.email] = { ...remote.val(), email: currentUser.email }; saveProfileMap(map);
+            } else {
+                await LTH_DB.ref('lthProfiles/' + currentUser.uid).update({ name: currentUser.name || '', email: currentUser.email, phone: '', address: '', createdAt: firebase.database.ServerValue.TIMESTAMP });
+            }
+            cart = loadCartForCurrentUser();
+            renderAll();
+        } catch (e) {
+            console.error('Customer profile bootstrap failed:', e);
+            lthFirebaseStatus(false, '⚠️ Signed in, but profile sync was denied. Check Firebase Database Rules.');
+        }
+    }
+};
+
+/* Profile save is bound to the authenticated UID; never to a typed email. */
+saveProfile = async function () {
+    if (!currentUser || !LTH_AUTH || !LTH_AUTH.currentUser || currentUser.uid !== LTH_AUTH.currentUser.uid) return alert('Please sign in again.');
+    const name = document.getElementById('profileName').value.trim();
+    const phone = document.getElementById('profilePhone').value.trim();
+    const address = document.getElementById('profileAddress').value.trim();
+    const status = document.getElementById('profileStatus');
+    if (!name) return setStatus(status, 'Name is required.', false);
+    const profile = { uid: currentUser.uid, name, email: currentUser.email, phone, address, updatedAt: firebase.database.ServerValue.TIMESTAMP };
+    try {
+        if (!LTH_DB) throw new Error('Firebase Database is unavailable.');
+        await LTH_DB.ref('lthProfiles/' + currentUser.uid).update(profile);
+        await LTH_DB.ref('lthUsers/' + currentUser.uid).update({ uid: currentUser.uid, email: currentUser.email, displayName: name, phone, updatedAt: firebase.database.ServerValue.TIMESTAMP });
+        const map = profileMap(); map[currentUser.email] = { ...profile, updatedAt: new Date().toISOString() }; saveProfileMap(map);
+        currentUser.name = name; setSession(currentUser); updateUserUI();
+        setStatus(status, 'Profile saved to Firebase successfully.', true);
+        if (isOwner()) renderOwnerPanel();
+    } catch (e) {
+        console.error('Profile save failed:', e);
+        setStatus(status, 'Profile could not be saved to Firebase. Check the lthProfiles/lthUsers rules.', false);
+    }
+};
+
+/* Safe customer-scoped coupon data paths. Keep old flat records untouched. */
+loadPurchases = function () { return loadJSON(KEYS.purchases, []); };
+savePurchases = function (rows) {
+    const purchases = Array.isArray(rows) ? rows : [];
+    saveJSON(KEYS.purchases, purchases);
+    if (!LTH_DB || !currentUser) return Promise.reject(new Error('A signed-in Firebase user is required to save coupon requests.'));
+    const writes = [];
+    purchases.forEach(p => {
+        if (!p || !p.purchaseId) return;
+        let uid = p.uid || '';
+        if (!uid && isOwner()) return; // don't rewrite legacy records until their owner UID is resolved
+        if (!uid && accountEmailKey(p.email) === accountEmailKey(currentUser.email)) uid = currentUser.uid;
+        if (!uid) return;
+        p.uid = uid;
+        if (isOwner() || uid === currentUser.uid) writes.push(LTH_DB.ref('couponPurchases/' + uid + '/' + String(p.purchaseId)).set({ ...p, uid }));
+    });
+    return Promise.all(writes);
+};
+setWalletFor = async function (email, wallet) {
+    const normalized = accountEmailKey(email);
+    const all = loadWallets();
+    const previous = all[normalized] || {};
+    if (!LTH_DB || !currentUser || !LTH_AUTH || !LTH_AUTH.currentUser) throw new Error('A signed-in Firebase user is required to save coupon wallets.');
+    let uid = normalized === accountEmailKey(currentUser.email) ? currentUser.uid : null;
+    if (isOwner()) {
+        if (!uid) uid = await lthFindAuthUidByEmail(normalized);
+        if (!uid) throw new Error('Could not safely resolve the customer Firebase UID for this coupon wallet.');
+        await LTH_DB.ref('couponWallets/' + uid).set(wallet || {});
+    } else {
+        if (normalized !== accountEmailKey(currentUser.email) || uid !== currentUser.uid) throw new Error('Customers can only update their own coupon usage.');
+        const writes = [];
+        Object.keys(wallet || {}).forEach(code => {
+            if (wallet[code] && wallet[code].used === true && (!previous[code] || previous[code].used !== true)) {
+                writes.push(LTH_DB.ref('couponWallets/' + uid + '/' + code + '/used').set(true));
+                if (LTH_LEGACY_ACCOUNT_UID) writes.push(LTH_DB.ref('couponWallets/' + lthFirebaseEmailKey(normalized) + '/' + code + '/used').set(true));
+            }
+        });
+        await Promise.all(writes);
+    }
+    all[normalized] = wallet || {}; saveWallets(all);
+};
+requestCoupon = async function (code) {
+    if (!currentUser || !LTH_AUTH || !LTH_AUTH.currentUser) return alert('Please sign in before requesting a coupon.');
+    const coupons = loadCoupons(), coupon = coupons[code];
+    if (!coupon || !coupon.active) return alert('Coupon is not available.');
+    const eligibility = couponEligibility();
+    if (eligibility.orders < number(coupon.minOrders)) return alert(`You need at least ${coupon.minOrders} previous orders.`);
+    if (eligibility.spend < number(coupon.minSpend)) return alert(`You need at least Rs. ${money(coupon.minSpend)} lifetime spend.`);
+    const wallet = getWalletFor(currentUser.email);
+    if (wallet[code] && !wallet[code].used) return alert('You already own this coupon.');
+    const purchases = loadPurchases();
+    if (purchases.some(p => p.email === currentUser.email && p.couponCode === code && p.status === 'pending_payment')) return alert('Your purchase request is already waiting for payment confirmation.');
+    const purchase = { purchaseId: makeId('LTH-CP'), uid: currentUser.uid, email: currentUser.email, customerName: currentUser.name, couponCode: code, price: number(coupon.price), discountValue: number(coupon.discountValue), status: 'pending_payment', createdAt: new Date().toISOString() };
+    purchases.unshift(purchase);
+    try {
+        await savePurchases(purchases);
+        renderCouponPage();
+        alert(`Coupon purchase request saved.\n\nReference: ${purchase.purchaseId}\nAmount: Rs. ${money(purchase.price)}\n\nWaiting for Founder payment confirmation.`);
+    } catch (e) {
+        console.error('Coupon purchase request failed:', e);
+        setStatus(document.getElementById('couponAdminStatus'), 'Coupon request could not be saved. Check Firebase Rules.', false);
+        alert('Coupon request was not confirmed by Firebase. Please retry later.');
+    }
+};
+confirmCouponPayment = async function (purchaseId) {
+    if (!requireOwner()) return;
+    const purchases = loadPurchases();
+    const index = purchases.findIndex(p => p.purchaseId === purchaseId);
+    if (index < 0) return alert('Coupon request not found in the loaded records.');
+    const purchase = purchases[index];
+    if (purchase.status !== 'pending_payment') return;
+    if (!confirm(`Confirm payment for ${purchase.couponCode} from ${purchase.email}?`)) return;
+    try {
+        const uid = purchase.uid || await lthFindAuthUidByEmail(purchase.email);
+        if (!uid) throw new Error('Customer Firebase UID was not found; the legacy request was kept unchanged.');
+        purchase.uid = uid; purchase.status = 'paid'; purchase.confirmedAt = new Date().toISOString();
+        const wallet = getWalletFor(purchase.email);
+        wallet[purchase.couponCode] = { code: purchase.couponCode, price: purchase.price, discountValue: purchase.discountValue, active: true, used: false, purchaseId: purchase.purchaseId, activatedAt: new Date().toISOString() };
+        await LTH_DB.ref('couponPurchases/' + uid + '/' + purchase.purchaseId).set({ ...purchase, uid });
+        await setWalletFor(purchase.email, wallet);
+        purchases[index] = purchase; saveJSON(KEYS.purchases, purchases);
+        renderOwnerPanel(); renderCouponPage();
+        alert('Payment confirmed and coupon activated in Firebase.');
+    } catch (e) {
+        console.error('Coupon payment confirmation failed:', e);
+        alert('Coupon payment update failed. The request has not been reported as confirmed; check Firebase Rules and customer UID.');
+    }
+};
+
+/* Checkout only writes under the actual signed-in UID and waits for Firebase. */
+placeOrder = async function () {
+    if (!currentUser || !LTH_AUTH || !LTH_AUTH.currentUser || LTH_AUTH.currentUser.uid !== currentUser.uid || !LTH_AUTH.currentUser.emailVerified) return alert('Please sign in with a verified account before ordering.');
+    if (!cart.length) return alert('Your cart is empty.');
+    const name = document.getElementById('orderName').value.trim();
+    const phone = document.getElementById('orderPhone').value.trim();
+    const address = document.getElementById('orderAddress').value.trim();
+    const typedEmail = accountEmailKey(document.getElementById('orderEmail').value);
+    const email = accountEmailKey(currentUser.email);
+    const status = document.getElementById('orderStatus');
+    if (!name || !phone || !address) return setStatus(status, 'Please complete your name, phone and delivery address.', false);
+    if (typedEmail && typedEmail !== email) return setStatus(status, 'Order email must match the signed-in account. Please use your account email.', false);
+    if (!LTH_DB) return setStatus(status, 'Firebase Database is unavailable. Your order was not submitted.', false);
+    const calc = finalCalculation();
+    if (calc.couponCode && calc.total < 2000) { setStatus(status, 'Coupon cannot be applied unless the final bill remains at least Rs. 2,000.', false); return; }
+    const order = {
+        orderId: makeId('LTH'), uid: currentUser.uid, date: new Date().toISOString(), customerName: name, email,
+        phone, address, items: cart.map(i => ({ productId: i.productId, name: i.name, price: number(i.price), qty: number(i.qty) })),
+        subtotal: calc.subtotal, discount: calc.discount, tax: calc.tax, couponCode: calc.couponCode,
+        couponDiscount: calc.couponDiscount, finalTotal: calc.total, status: 'Pending'
+    };
+    setStatus(status, 'Submitting order to Firebase...', true);
+    try {
+        await LTH_DB.ref('lthOrderHistory/' + currentUser.uid + '/' + order.orderId).set({ ...order, createdAt: firebase.database.ServerValue.TIMESTAMP });
+        saveOrderFor(email, order);
+        let couponSyncWarning = '';
+        if (calc.couponCode) {
+            const wallet = getWalletFor(email);
+            if (wallet[calc.couponCode]) {
+                wallet[calc.couponCode].used = true; wallet[calc.couponCode].usedAt = new Date().toISOString();
+                try { await setWalletFor(email, wallet); }
+                catch (couponError) { console.error('Order saved, but coupon-use state failed to sync:', couponError); couponSyncWarning = ' The order is saved, but coupon-use status needs review.'; }
+            }
+            setAppliedCoupon(null);
+        }
+        cart = []; saveCartForCurrentUser(); updateCartBadge(); renderCart(); renderOrders(); renderCouponPage(); closeCheckout();
+        setStatus(status, 'Order placed and saved to Firebase. Order ID: ' + order.orderId + '.' + couponSyncWarning, !couponSyncWarning);
+        alert('Thank you for shopping!\n\nOrder ID: ' + order.orderId + (couponSyncWarning ? '\n\nPlease contact LTH to verify coupon status.' : ''));
+    } catch (e) {
+        console.error('Order placement failed:', e);
+        setStatus(status, 'Firebase did not confirm this order. It was not treated as successfully submitted. Please retry after checking Database Rules.', false);
+        alert('Order could not be confirmed. Your cart has been kept so you can retry.');
+    }
+};
+
+/* Public listeners (products/settings/coupons/leaderboard) plus truthful status reporting. */
+initFirebaseSync = function () {
+    if (!LTH_DB) {
+        LTH_FIREBASE_ONLINE = false;
+        lthFirebaseStatus(false, '⚠️ Firebase failed to initialize — local cache only');
+        return;
+    }
+    LTH_DB.ref('.info/connected').on('value', snap => {
+        LTH_FIREBASE_ONLINE = !!snap.val();
+        lthFirebaseStatus(LTH_FIREBASE_ONLINE, LTH_FIREBASE_ONLINE ? '☁️ Firebase Realtime Database connected' : '⚠️ Firebase offline — waiting to reconnect');
+    }, e => { console.error('Firebase connection status failed:', e); lthFirebaseStatus(false, '⚠️ Firebase connection status check failed'); });
+    LTH_DB.ref('settings').on('value', snap => {
+        const value = snap.val();
+        if (value) {
+            settings = lthNormalizeSettings(value); saveJSON(KEYS.settings, settings);
+            renderPublicSettings(); updateLockStatusBox(); applyLockState(); renderCart();
+        }
+    }, e => { console.error('Firebase settings read failed:', e); lthFirebaseStatus(false, '⚠️ Settings read denied — check Firebase Database Rules'); });
+    LTH_DB.ref('products').on('value', snap => {
+        const raw = snap.val() || {};
+        products = Object.keys(raw).map(key => lthNormalizeProduct(key, raw[key]));
+        saveJSON(KEYS.products, products); renderProducts(products); renderCart(); renderDashboard();
+        if (isOwner()) renderOwnerPanel();
+    }, e => { console.error('Firebase products read failed:', e); lthFirebaseStatus(false, '⚠️ Products read denied — check Firebase Database Rules'); });
+    LTH_DB.ref('coupons').on('value', snap => {
+        saveJSON(KEYS.coupons, snap.val() || {}); renderCouponPage(); if (isOwner()) renderOwnerPanel();
+    }, e => console.error('Firebase coupons read failed:', e));
+    LTH_DB.ref('leaderboard/lightning').on('value', snap => {
+        const rows = []; snap.forEach(child => rows.push({ id: child.key, ...(child.val() || {}) }));
+        rows.sort((a,b) => number(b.score) - number(a.score)); LTH_FIREBASE_SCORES = rows; saveJSON(KEYS.scores, rows.slice(0,100));
+        renderLeaderboard(); if (isOwner()) renderOwnerGameScores();
+    }, e => console.error('Firebase leaderboard read failed:', e));
+};
+
+/* Private listener setup is run only after a verified Firebase sign-in. */
+function lthStartPrivateListeners(session) {
+    lthStopPrivateListeners();
+    if (!LTH_DB || !session || !LTH_AUTH || !LTH_AUTH.currentUser || LTH_AUTH.currentUser.uid !== session.uid) return;
+    const owner = isOwner();
+    const orderRef = owner ? LTH_DB.ref('lthOrderHistory') : LTH_DB.ref('lthOrderHistory/' + session.uid);
+    LTH_ACTIVE_ORDER_REF = orderRef;
+    lthBindPrivate(orderRef, snap => {
+        if (owner) {
+            LTH_FIREBASE_ORDERS = lthFlattenOrdersSnapshot(snap.val() || {});
+            saveOrdersMap(LTH_FIREBASE_ORDERS);
+        } else {
+            const raw = snap.val() || {};
+            const rows = Object.keys(raw).map(id => ({ orderId: raw[id]?.orderId || id, ...(raw[id] || {}) })).sort((a,b) => String(b.date || '').localeCompare(String(a.date || '')));
+            LTH_FIREBASE_ORDERS = { [accountEmailKey(session.email)]: rows };
+            const local = loadOrdersMap(); local[accountEmailKey(session.email)] = rows; saveOrdersMap(local);
+        }
+        renderOrders(); renderDashboard(); if (isOwner()) renderOwnerPanel();
+    }, e => {
+        console.error('Firebase order history read denied:', e);
+        const target = document.getElementById('adminOrders');
+        if (owner && target) target.innerHTML = '<div class="empty">Orders could not load. Check that the verified Founder account and Database Rules are configured for this project.</div>';
+    });
+    if (!owner) {
+        // Compatibility: look up this email's old custom-login UID without granting root reads.
+        LTH_DB.ref('lthAccountIndex/' + lthFirebaseEmailKey(session.email)).once('value').then(indexSnap => {
+            const legacyUid = indexSnap.val();
+            if (!legacyUid || legacyUid === session.uid || !LTH_AUTH.currentUser || LTH_AUTH.currentUser.uid !== session.uid) return;
+            LTH_LEGACY_ACCOUNT_UID = legacyUid;
+            const legacyOrderRef = LTH_DB.ref('lthOrderHistory/' + legacyUid);
+            lthBindPrivate(legacyOrderRef, legacySnap => {
+                const raw = legacySnap.val() || {};
+                const legacyRows = Object.keys(raw).map(id => ({ orderId: raw[id]?.orderId || id, ...(raw[id] || {}), email: raw[id]?.email || session.email, uid: legacyUid }));
+                const emailKey = accountEmailKey(session.email);
+                const currentRows = (LTH_FIREBASE_ORDERS[emailKey] || []);
+                const byId = new Map(currentRows.map(row => [String(row.orderId || row.id), row]));
+                legacyRows.forEach(row => { const key = String(row.orderId || row.id); if (!byId.has(key)) byId.set(key, row); });
+                const merged = Array.from(byId.values()).sort((a,b) => String(b.date || '').localeCompare(String(a.date || '')));
+                LTH_FIREBASE_ORDERS = { ...LTH_FIREBASE_ORDERS, [emailKey]: merged };
+                const cache = loadOrdersMap(); cache[emailKey] = merged; saveOrdersMap(cache);
+                renderOrders(); renderDashboard();
+            }, e => console.warn('Legacy customer order history could not be read:', e));
+        }).catch(e => console.warn('No legacy account mapping available for this customer:', e));
+    }
+    const purchaseRef = owner ? LTH_DB.ref('couponPurchases') : LTH_DB.ref('couponPurchases/' + session.uid);
+    LTH_ACTIVE_PURCHASE_REF = purchaseRef;
+    lthBindPrivate(purchaseRef, snap => {
+        const raw = snap.val() || {};
+        const rows = owner ? lthFlattenPurchaseRecords(raw) : Object.keys(raw).map(id => ({ purchaseId: raw[id]?.purchaseId || id, ...(raw[id] || {}), uid: session.uid }));
+        if (!owner) {
+            const legacy = loadPurchases().filter(p => p.email === session.email && !rows.some(r => r.purchaseId === p.purchaseId));
+            rows.push(...legacy);
+        }
+        rows.sort((a,b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
+        saveJSON(KEYS.purchases, rows); renderCouponPage(); if (isOwner()) renderOwnerPanel();
+    }, e => console.error('Firebase coupon purchase read denied:', e));
+    if (!owner) {
+        LTH_DB.ref('couponPurchases').orderByChild('email').equalTo(session.email).once('value').then(legacySnap => {
+            const raw = legacySnap.val() || {};
+            const legacyRows = Object.keys(raw).map(id => ({ purchaseId: raw[id]?.purchaseId || id, ...(raw[id] || {}), uid: raw[id]?.uid || LTH_LEGACY_ACCOUNT_UID || '' }));
+            if (!legacyRows.length) return;
+            const current = loadPurchases();
+            const byId = new Map(current.map(row => [String(row.purchaseId), row]));
+            legacyRows.forEach(row => { if (!byId.has(String(row.purchaseId))) byId.set(String(row.purchaseId), row); });
+            const merged = Array.from(byId.values()).sort((a,b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
+            saveJSON(KEYS.purchases, merged); renderCouponPage();
+        }).catch(e => console.warn('Legacy coupon history was unavailable:', e));
+    }
+    const walletRef = owner ? LTH_DB.ref('couponWallets') : LTH_DB.ref('couponWallets/' + session.uid);
+    LTH_ACTIVE_WALLET_REF = walletRef;
+    lthBindPrivate(walletRef, snap => {
+        const raw = snap.val() || {};
+        LTH_FIREBASE_WALLETS = raw;
+        const all = loadWallets();
+        if (owner) {
+            Object.keys(raw).forEach(uidOrLegacyKey => {
+                const value = raw[uidOrLegacyKey] || {};
+                if (value && typeof value === 'object' && Object.values(value).some(v => v && (v.code || v.purchaseId))) {
+                    const account = LTH_FIREBASE_ACCOUNTS[uidOrLegacyKey] || {};
+                    if (account.email) all[accountEmailKey(account.email)] = value;
+                    else { try { all[decodeURIComponent(uidOrLegacyKey)] = value; } catch (_) { all[uidOrLegacyKey] = value; } }
+                }
+            });
+        } else {
+            all[accountEmailKey(session.email)] = raw;
+        }
+        saveWallets(all); renderCouponPage(); if (isOwner()) renderOwnerPanel();
+    }, e => console.error('Firebase coupon wallet read denied:', e));
+    if (!owner) {
+        const legacyWalletRef = LTH_DB.ref('couponWallets/' + lthFirebaseEmailKey(session.email));
+        lthBindPrivate(legacyWalletRef, legacySnap => {
+            const legacyWallet = legacySnap.val() || {};
+            if (!Object.keys(legacyWallet).length) return;
+            const all = loadWallets();
+            const currentWallet = all[accountEmailKey(session.email)] || {};
+            all[accountEmailKey(session.email)] = { ...legacyWallet, ...currentWallet };
+            saveWallets(all); renderCouponPage();
+        }, e => console.warn('Legacy coupon wallet was unavailable:', e));
+    }
+    if (owner) {
+        LTH_ACTIVE_USERS_REF = LTH_DB.ref('lthUsers');
+        lthBindPrivate(LTH_ACTIVE_USERS_REF, snap => {
+            LTH_FIREBASE_ACCOUNTS = snap.val() || {};
+            const wallets = LTH_FIREBASE_WALLETS || {};
+            const localWallets = loadWallets();
+            Object.keys(wallets).forEach(uidOrLegacyKey => {
+                const val = wallets[uidOrLegacyKey] || {};
+                const account = LTH_FIREBASE_ACCOUNTS[uidOrLegacyKey] || {};
+                if (account.email && val && typeof val === 'object') localWallets[accountEmailKey(account.email)] = val;
+                else { try { const decoded = decodeURIComponent(uidOrLegacyKey); if (decoded.includes('@')) localWallets[accountEmailKey(decoded)] = val; } catch (_) {} }
+            });
+            saveWallets(localWallets);
+            renderDashboard(); renderOwnerPanel();
+        }, e => console.error('Firebase customer records read denied:', e));
+        LTH_ACTIVE_PROFILES_REF = LTH_DB.ref('lthProfiles');
+        lthBindPrivate(LTH_ACTIVE_PROFILES_REF, snap => {
+            LTH_FIREBASE_PROFILES = snap.val() || {};
+            renderOwnerPanel();
+        }, e => console.error('Firebase customer profiles read denied:', e));
+    } else {
+        LTH_DB.ref('lthUsers/' + session.uid).once('value').then(snap => {
+            const value = snap.val() || {};
+            const map = profileMap();
+            if (value.displayName && !map[session.email]?.name) { map[session.email] = { ...(map[session.email] || {}), name: value.displayName, email: session.email }; saveProfileMap(map); }
+        }).catch(e => console.warn('Current customer profile record unavailable:', e));
+    }
+}
+/* Show both current and legacy order schemas in the Founder inbox. */
+renderOwnerOrders = function () {
+    const box = document.getElementById('adminOrders');
+    if (!box) return;
+    if (!isOwner()) { box.innerHTML = '<div class="empty">Verified Founder access required.</div>'; return; }
+    const rows = allOrders();
+    if (!rows.length) { box.innerHTML = '<div class="empty">No customer orders found in Firebase yet.</div>'; return; }
+    box.innerHTML = rows.map(order => {
+        const itemText = (order.items || []).map(item => `${item.name || 'Item'} × ${number(item.qty)} = Rs. ${money(number(item.price) * number(item.qty))}`).join('\\n');
+        const details = itemText || order.orderDetails || order.product || 'Legacy order details are not present in this record.';
+        const total = order.finalTotal ?? order.total ?? order.grandTotal ?? 0;
+        const date = order.date || (order.createdAt ? new Date(Number(order.createdAt) || order.createdAt).toLocaleString('en-PK') : '');
+        return `<div class="order-card"><div class="order-head"><span class="order-id">${esc(order.orderId || order.id || '')}</span><span>${esc(date)}</span><span class="order-status">${esc(order.status || 'Pending')}</span></div><div class="order-items"><strong>Customer:</strong> ${esc(order.customerName || order.name || '')}<br><strong>Gmail:</strong> ${esc(order.email || '')}<br><strong>Phone:</strong> ${esc(order.phone || order.contact || '')}<br><strong>Address:</strong> ${esc(order.address || order.deliveryAddress || '')}<br><br><strong>Items / Details:</strong><br>${esc(details)}<br><br><strong>Subtotal:</strong> Rs. ${money(order.subtotal ?? order.subTotal ?? 0)}<br><strong>Discount:</strong> Rs. ${money(order.discount ?? order.discountAmount ?? 0)}<br><strong>Tax:</strong> Rs. ${money(order.tax ?? order.taxAmount ?? 0)}<br><strong>Coupon:</strong> ${esc(order.couponCode || 'None')}<br><strong>Final Total:</strong> Rs. ${money(total)}</div></div>`;
+    }).join('');
+};
+
+function renderOwnerCustomers() {
+    const box = document.getElementById('adminCustomerRecords');
+    if (!box) return;
+    if (!isOwner()) { box.textContent = 'Verified Founder access required.'; return; }
+    const users = LTH_FIREBASE_ACCOUNTS || {};
+    const profiles = LTH_FIREBASE_PROFILES || {};
+    const ids = Array.from(new Set([...Object.keys(users), ...Object.keys(profiles)]));
+    if (!ids.length) { box.innerHTML = '<div class="empty">No Firebase customer records found yet.</div>'; return; }
+    const rows = ids.map(uid => {
+        const user = users[uid] || {};
+        const profile = profiles[uid] || {};
+        return { uid, name: profile.name || user.displayName || user.name || 'Customer', email: profile.email || user.email || '', phone: profile.phone || user.phone || '', address: profile.address || user.address || '' };
+    }).sort((a,b) => String(a.email).localeCompare(String(b.email)));
+    box.innerHTML = '<div class="table-wrap"><table class="leaderboard"><thead><tr><th>Customer</th><th>Gmail</th><th>Phone</th><th>Delivery Address</th></tr></thead><tbody>' + rows.map(r => `<tr><td>${esc(r.name)}</td><td>${esc(r.email)}</td><td>${esc(r.phone)}</td><td>${esc(r.address)}</td></tr>`).join('') + '</tbody></table></div>';
+}
+const LTH_ORIGINAL_RENDER_OWNER_PANEL = renderOwnerPanel;
+renderOwnerPanel = function () {
+    if (!isOwner()) return;
+    LTH_ORIGINAL_RENDER_OWNER_PANEL();
+    renderOwnerCustomers();
+};
+
+/* Authentication state is the source of truth; localStorage sessions are only ignored cache. */
+function initLTHAuth() {
+    if (!LTH_AUTH) {
+        lthShowLogin('Firebase Authentication could not initialize. Check the Auth SDK and Firebase project configuration.', 'customerLogin');
+        return;
+    }
+    LTH_AUTH.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(e => console.warn('Firebase Auth persistence setup:', e));
+    LTH_AUTH.onAuthStateChanged(async user => {
+        if (!user) {
+            lthStopPrivateListeners();
+            currentUser = null; clearSession(); cart = [];
+            const app = document.getElementById('app'); const login = document.getElementById('loginScreen');
+            if (app) app.style.display = 'none'; if (login) login.style.display = 'flex';
+            updateCartBadge();
+            return;
+        }
+        if (!user.emailVerified) {
+            if (LTH_REGISTERING_ACCOUNT) {
+                const app = document.getElementById('app'); const login = document.getElementById('loginScreen');
+                if (app) app.style.display = 'none'; if (login) login.style.display = 'flex';
+                return;
+            }
+            const isFounderAttempt = accountEmailKey(user.email) === LTH_OWNER_EMAIL;
+            const panel = isFounderAttempt ? 'ownerLogin' : 'customerLogin';
+            try { await LTH_AUTH.signOut(); } catch (_) {}
+            lthShowLogin('Email verification is required before this account can access the website.', panel);
+            return;
+        }
+        const role = accountEmailKey(user.email) === LTH_OWNER_EMAIL ? 'owner' : 'customer';
+        const session = { uid: user.uid, email: accountEmailKey(user.email), name: user.displayName || (role === 'owner' ? 'LTH Founder' : user.email.split('@')[0]), role, emailVerified: true };
+        try {
+            await openApp(session);
+            lthStartPrivateListeners(session);
+        } catch (e) {
+            console.error('Firebase sign-in bootstrap failed:', e);
+            lthShowLogin('Sign-in succeeded, but user data could not be loaded. Check Firebase Database Rules.', role === 'owner' ? 'ownerLogin' : 'customerLogin');
+        }
+    });
+}
+
+/* Never tell the visitor they are connected solely because initialization succeeded. */
+lthAIReply = function (raw) {
+    const q = String(raw || '').toLowerCase().trim();
+    if (/firebase|database|cloud|realtime/.test(q)) return LTH_FIREBASE_ONLINE ? 'Firebase Realtime Database reports an active connection. Some records may still be denied by Database Rules.' : 'Firebase Realtime Database is not currently reporting an active connection. Check the connection indicator and Database Rules.';
+    if (/founder|owner/.test(q)) return 'Founder access is checked against the email-verified Firebase Authentication account. The Founder email is not shown as prefilled in the login form.';
+    if (/login|account|register|password/.test(q)) return 'Customer accounts use Firebase Email/Password Authentication and email verification. Password recovery sends a secure Firebase reset email.';
+    if (/dashboard|cash|stats/.test(q)) return isOwner() ? 'The verified Founder dashboard loads Firebase-backed product, order, coupon and customer profile records where the Database Rules permit access.' : 'The dashboard shows products, cart items, and records for the signed-in customer account.';
+    return LTH_ORIGINAL_AI_REPLY(raw);
+};
+
+/* Await protected admin writes instead of reporting success before Firebase confirms. */
+saveSettings = function (value) {
+    const merged = { ...DEFAULT_SETTINGS, ...(value || {}) };
+    saveJSON(KEYS.settings, merged);
+    if (!LTH_DB) return Promise.reject(new Error('Firebase Database is unavailable.'));
+    return LTH_DB.ref('settings').set(lthSettingsPayload(merged));
+};
+saveCoupons = function (value) {
+    saveJSON(KEYS.coupons, value || {});
+    if (!LTH_DB) return Promise.reject(new Error('Firebase Database is unavailable.'));
+    return LTH_DB.ref('coupons').set(value || {});
+};
+saveGeneralSettings = async function () {
+    if (!requireOwner()) return;
+    const status = document.getElementById('generalStatus');
+    settings = loadSettings();
+    settings.storeName = document.getElementById('adminStoreName').value.trim() || DEFAULT_SETTINGS.storeName;
+    settings.whatsapp = document.getElementById('adminWhatsapp').value.trim() || DEFAULT_SETTINGS.whatsapp;
+    settings.discount = Math.max(0, Math.min(100, number(document.getElementById('adminDiscount').value)));
+    settings.tax = Math.max(0, Math.min(100, number(document.getElementById('adminTax').value)));
+    settings.homeDescription = document.getElementById('adminHomeDescription').value.trim();
+    settings.aboutText = document.getElementById('adminAboutText').value.trim();
+    setStatus(status, 'Saving settings to Firebase...', true);
+    try { await saveSettings(settings); renderAll(); loadOwnerSettingsForm(); setStatus(status, 'General settings saved to Firebase.', true); }
+    catch (e) { console.error('General settings save failed:', e); setStatus(status, 'Settings were not confirmed by Firebase. Check Database Rules and Founder verification.', false); }
+};
+saveImages = async function () {
+    if (!requireOwner()) return;
+    const status = document.getElementById('imageStatus'); settings = loadSettings();
+    try {
+        const hero = document.getElementById('adminHeroImage').files[0], about = document.getElementById('adminAboutImage').files[0], charity = document.getElementById('adminCharityImage').files[0];
+        if (hero) settings.heroImage = await readImage(hero);
+        if (about) settings.aboutImage = await readImage(about);
+        if (charity) settings.charityImage = await readImage(charity);
+        setStatus(status, 'Saving images and settings to Firebase...', true);
+        await saveSettings(settings);
+        renderPublicSettings(); ['adminHeroImage','adminAboutImage','adminCharityImage'].forEach(id => document.getElementById(id).value='');
+        setStatus(status, 'Images/settings saved to Firebase.', true);
+    } catch (e) { console.error('Image settings save failed:', e); setStatus(status, 'Image/settings save failed. The changes were not confirmed by Firebase.', false); }
+};
+saveSocialLinks = async function () {
+    if (!requireOwner()) return;
+    const status = document.getElementById('socialStatus'); settings = loadSettings();
+    settings.facebook = document.getElementById('adminFacebook').value.trim();
+    settings.instagram = document.getElementById('adminInstagram').value.trim();
+    settings.youtube = document.getElementById('adminYoutube').value.trim();
+    settings.tiktok = document.getElementById('adminTiktok').value.trim();
+    settings.customSocial = document.getElementById('adminCustomSocial').value.trim();
+    setStatus(status, 'Saving social links to Firebase...', true);
+    try { await saveSettings(settings); renderPublicSettings(); setStatus(status, 'Social links saved to Firebase.', true); }
+    catch (e) { console.error('Social links save failed:', e); setStatus(status, 'Social links were not confirmed by Firebase.', false); }
+};
+saveLockSettings = async function () {
+    if (!requireOwner()) return;
+    settings = loadSettings();
+    settings.lockEnabled = document.getElementById('adminLockEnabled').value === 'true';
+    settings.lockTime = document.getElementById('adminLockTime').value;
+    settings.lockMessage = document.getElementById('adminLockMessage').value.trim() || DEFAULT_SETTINGS.lockMessage;
+    try { await saveSettings(settings); updateLockStatusBox(); applyLockState(); setStatus(document.getElementById('lockStatus'), 'Lock settings saved to Firebase.', true); }
+    catch (e) { console.error('Lock settings save failed:', e); setStatus(document.getElementById('lockStatus'), 'Lock settings could not be saved to Firebase.', false); }
+};
+unlockNow = async function () {
+    if (!requireOwner()) return;
+    settings = loadSettings(); settings.lockEnabled = false; settings.lockTime = '';
+    try { await saveSettings(settings); updateLockStatusBox(); applyLockState(); alert('Website unlocked and settings saved to Firebase.'); }
+    catch (e) { console.error('Unlock save failed:', e); alert('Unable to save unlock settings to Firebase.'); }
+};
+createCoupon = async function () {
+    if (!requireOwner()) return;
+    const status = document.getElementById('couponAdminStatus');
+    const code = document.getElementById('adminCouponCode').value.trim().toUpperCase();
+    const price = number(document.getElementById('adminCouponPrice').value);
+    const discountValue = number(document.getElementById('adminCouponDiscount').value);
+    const minOrders = Math.max(0, Math.floor(number(document.getElementById('adminCouponMinOrders').value)));
+    const minSpend = Math.max(0, number(document.getElementById('adminCouponMinSpend').value));
+    const minCart = Math.max(2000, number(document.getElementById('adminCouponMinCart').value));
+    if (!code || price <= 0 || discountValue <= 0) return setStatus(status, 'Enter coupon code, price and discount value.', false);
+    if (!/^[A-Z0-9_-]+$/.test(code)) return setStatus(status, 'Coupon codes may contain only letters, numbers, hyphens and underscores.', false);
+    const coupons = loadCoupons(); coupons[code] = { code, price, discountValue, minOrders, minSpend, minCart, active: true, updatedAt: new Date().toISOString() };
+    setStatus(status, 'Saving coupon to Firebase...', true);
+    try { await saveCoupons(coupons); renderCouponPage(); renderOwnerPanel(); setStatus(status, 'Coupon saved to Firebase.', true); }
+    catch (e) { console.error('Coupon save failed:', e); setStatus(status, 'Coupon was not confirmed by Firebase. Check Founder verification and Rules.', false); }
+};
+deleteCoupon = async function (code) {
+    if (!requireOwner()) return;
+    const coupons = loadCoupons(); delete coupons[code];
+    try { await saveCoupons(coupons); renderOwnerPanel(); renderCouponPage(); }
+    catch (e) { console.error('Coupon deletion failed:', e); alert('Coupon could not be deleted from Firebase.'); }
+};
+
 initialize();
+initFirebaseSync();
+initLTHAuth();
 </script>
 </body>
 </html>
