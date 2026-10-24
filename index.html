@@ -184,6 +184,7 @@ input,textarea,select,button{max-width:100%;}
 .ai-bot-head.lth-dragging{cursor:grabbing;}
 .ai-bot-panel{max-width:calc(100vw - 16px);max-height:calc(100dvh - 24px);}
 .ai-bot-messages{min-height:0;overflow-wrap:anywhere;}
+.lth-login-mode #aiBotButton,.lth-login-mode #aiBotPanel{display:none!important;}
 @media(max-width:900px){
  .app-header{gap:10px;align-items:flex-start;flex-direction:column;}
  .user-box{width:100%;justify-content:flex-start;}
@@ -228,6 +229,12 @@ input,textarea,select,button{max-width:100%;}
         <img class="login-logo" src="" data-lth-logo="true" id="loginLogo" alt="LTH Lightning Tech Hub Logo">
         <h1 class="login-title">⚡ LTH Lightning Tech Hub</h1>
         <p class="login-subtitle">Login to continue</p>
+
+        <div class="notice" id="firebaseDiagnosticCard" style="margin:12px 0;text-align:left">
+            <div id="firebaseLoginStatus" style="font-weight:700">Firebase test has not been run.</div>
+            <button type="button" class="btn btn-light btn-block" style="margin-top:8px" onclick="runFirebaseDiagnostics()">🧪 Test Firebase Connection</button>
+            <div id="firebaseDiagnosticsResults" class="small" style="margin-top:8px;overflow-wrap:anywhere"></div>
+        </div>
 
         <div class="login-tabs">
             <button class="login-tab active" id="customerTab" onclick="showAuthPanel('customerLogin')">Customer</button>
@@ -787,6 +794,7 @@ function openApp(session) {
     settings = loadSettings();
     products = loadJSON(KEYS.products, []);
     cart = loadCartForCurrentUser();
+    document.body.classList.remove('lth-login-mode');
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     updateUserUI();
@@ -1902,13 +1910,19 @@ function lthAuthMessage(error) {
         'auth/network-request-failed': 'Network error. Check your internet connection and try again.',
         'auth/unauthorized-domain': 'This website domain is not authorized in Firebase Authentication settings.',
         'auth/missing-email': 'Enter the email address for this account.',
-        'auth/requires-recent-login': 'Please sign in again and retry this operation.'
+        'auth/requires-recent-login': 'Please sign in again and retry this operation.',
+        'auth/api-key-not-valid.-please-pass-a-valid-api-key.': 'Firebase rejected the API key. Confirm this file uses the API key for sg-labs-store.',
+        'auth/invalid-api-key': 'Firebase rejected the API key. Confirm the Firebase web app configuration.',
+        'auth/configuration-not-found': 'Firebase Authentication is not configured for this project. Enable Email/Password in Firebase Console.',
+        'auth/network-request-failed': 'Firebase request could not reach the server. Check internet, browser extensions and network restrictions.'
     };
     return messages[code] || (error && error.message) || 'Authentication failed. Check Firebase Authentication settings and try again.';
 }
 function lthShowLogin(message, panel) {
     currentUser = null;
     cart = [];
+    document.body.classList.add('lth-login-mode');
+    closeAIBot();
     const app = document.getElementById('app');
     const login = document.getElementById('loginScreen');
     if (app) app.style.display = 'none';
@@ -2087,6 +2101,7 @@ logout = async function () {
 /* Never trust an old localStorage session to grant access. */
 initialize = function () {
     settings = loadSettings();
+    document.body.classList.add('lth-login-mode');
     if (document.getElementById('loginScreen')) document.getElementById('loginScreen').style.display = 'flex';
     if (document.getElementById('app')) document.getElementById('app').style.display = 'none';
     initAIBot();
@@ -2479,6 +2494,88 @@ renderOwnerPanel = function () {
     LTH_ORIGINAL_RENDER_OWNER_PANEL();
     renderOwnerCustomers();
 };
+
+/* Read-only Firebase diagnostics. These checks do not write or alter customer data. */
+async function runFirebaseDiagnostics() {
+    const top = document.getElementById('firebaseLoginStatus');
+    const output = document.getElementById('firebaseDiagnosticsResults');
+    if (top) top.textContent = 'Testing Firebase services…';
+    if (output) output.textContent = '';
+    const rows = [];
+    const add = (ok, title, detail) => rows.push({ ok: !!ok, title, detail: String(detail || '') });
+    const render = () => {
+        if (!output) return;
+        output.innerHTML = rows.map(r => `<div style="margin-top:6px;color:${r.ok ? '#166534' : '#92400e'}">${r.ok ? '✅' : '⚠️'} <strong>${esc(r.title)}:</strong> ${esc(r.detail)}</div>`).join('');
+        if (top) top.textContent = rows.every(r => r.ok) ? 'Firebase checks completed.' : 'Firebase needs attention — see the exact result below.';
+    };
+    if (typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) {
+        add(false, 'Firebase SDK/config', 'Firebase SDK did not load or initialize. Check internet access and the Firebase script URLs/configuration.');
+        render(); return;
+    }
+    add(true, 'Firebase SDK/config', `SDK initialized for project ${LTH_FIREBASE_CONFIG.projectId}.`);
+    if (!LTH_AUTH) add(false, 'Authentication SDK', 'firebase.auth() was not initialized. Reload the page and check browser-console errors.');
+    else if (LTH_AUTH.currentUser) add(true, 'Authentication', `Signed in as ${LTH_AUTH.currentUser.email || 'user'}; email verified: ${!!LTH_AUTH.currentUser.emailVerified}.`);
+    else add(true, 'Authentication SDK', 'SDK initialized; no user is currently signed in. Login errors show whether Email/Password or the website domain is misconfigured.');
+    if (!LTH_DB) {
+        add(false, 'Realtime Database', 'Database SDK was not initialized. Verify databaseURL and the database SDK script.');
+        render(); return;
+    }
+    let connected = false;
+    let connectionError = '';
+    try {
+        connected = await new Promise(resolve => {
+            const ref = LTH_DB.ref('.info/connected');
+            let finished = false;
+            const finish = value => {
+                if (finished) return;
+                finished = true;
+                clearTimeout(timer);
+                ref.off('value', callback);
+                resolve(value);
+            };
+            const callback = snap => { if (snap.val() === true) finish(true); };
+            const errorCallback = err => { connectionError = err && err.message || String(err); finish(false); };
+            const timer = setTimeout(() => finish(false), 8000);
+            ref.on('value', callback, errorCallback);
+        });
+    } catch (e) { connectionError = e && e.message || String(e); }
+    if (!connected) {
+        add(false, 'Realtime Database connection', connectionError || 'No realtime connection within 8 seconds. Check internet, database URL, Firebase service status and browser network restrictions.');
+        render(); return;
+    }
+    add(true, 'Realtime Database connection', 'The client reports an active connection to the configured Realtime Database.');
+    const publicReads = await Promise.all([
+        ['products read permission', () => LTH_DB.ref('products').limitToFirst(1).once('value')],
+        ['settings read permission', () => LTH_DB.ref('settings').once('value')]
+    ].map(async ([label, fn]) => {
+        try {
+            const snap = await Promise.race([fn(), new Promise((_, reject) => setTimeout(() => reject(new Error('Read timed out after 8 seconds.')), 8000))]);
+            add(true, label, snap.exists() ? 'Read succeeded.' : 'Read succeeded, but this path is currently empty.');
+        } catch (e) {
+            const code = e && e.code ? `${e.code}: ` : '';
+            add(false, label, `${code}${e && e.message || 'Read failed'}. Check Database Rules and the active database URL.`);
+        }
+    }));
+    if (LTH_FUNCTIONS) {
+        try {
+            const result = await LTH_FUNCTIONS.httpsCallable('lthHealthCheck')({});
+            const data = result && result.data || {};
+            add(true, 'Cloud Functions', `Backend responded; database admin read succeeded; products: ${number(data.productsCount)}; settings present: ${!!data.settingsPresent}; role: ${data.role || 'verified user'}.`);
+        } catch (e) {
+            const code = String(e && e.code || '').toLowerCase();
+            if (code.endsWith('unauthenticated') || code === 'unauthenticated') {
+                add(true, 'Cloud Functions', 'Health endpoint exists and responds. Sign in with a verified account to test its backend database read.');
+            } else if (code.endsWith('not-found') || code === 'not-found') {
+                add(false, 'Cloud Functions', 'lthHealthCheck was not found. Deploy the included functions from the LTH project folder.');
+            } else {
+                add(false, 'Cloud Functions', `${e && e.code ? e.code + ': ' : ''}${e && e.message || 'Request failed'}. Check deployment, region asia-south1, billing and APIs.`);
+            }
+        }
+    } else {
+        add(false, 'Cloud Functions SDK', 'Callable SDK did not initialize. Check firebase-functions-compat.js and reload the page.');
+    }
+    render();
+}
 
 /* Authentication state is the source of truth; localStorage sessions are only ignored cache. */
 function initLTHAuth() {
@@ -2881,6 +2978,47 @@ confirmCouponPayment = async function(purchaseId) {
         alert(e && e.message ? e.message : 'Coupon payment update failed; it was not reported as confirmed.');
     }
 };
+async function lthStableCheckoutRequestId(payload) {
+    const fingerprintSource = JSON.stringify({
+        uid: currentUser.uid,
+        customerName: payload.customerName,
+        phone: payload.phone,
+        address: payload.address,
+        items: [...payload.items].sort((a, b) => String(a.productId).localeCompare(String(b.productId))),
+        couponCode: payload.couponCode
+    });
+    // Store only a fingerprint and request token; never store the delivery address in this retry cache.
+    let fingerprint;
+    try {
+        if (window.crypto && crypto.subtle) {
+            const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(fingerprintSource));
+            fingerprint = Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+        } else {
+            let h = 2166136261;
+            for (let i = 0; i < fingerprintSource.length; i++) h = Math.imul(h ^ fingerprintSource.charCodeAt(i), 16777619);
+            fingerprint = (h >>> 0).toString(16);
+        }
+    } catch (_) {
+        let h = 2166136261;
+        for (let i = 0; i < fingerprintSource.length; i++) h = Math.imul(h ^ fingerprintSource.charCodeAt(i), 16777619);
+        fingerprint = (h >>> 0).toString(16);
+    }
+    const storageKey = 'lth_pending_checkout_v1_' + String(currentUser.uid);
+    let previous = null;
+    try { previous = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch (_) {}
+    if (previous && previous.fingerprint === fingerprint && /^[A-Za-z0-9_-]{1,128}$/.test(previous.requestId || '')) return previous.requestId;
+    const requestId = 'REQ-' + ((window.crypto && crypto.randomUUID) ? crypto.randomUUID() : makeId('REQ')).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 110);
+    try { localStorage.setItem(storageKey, JSON.stringify({ fingerprint, requestId })); } catch (_) {}
+    return requestId;
+}
+function lthClearStableCheckoutRequestId(requestId) {
+    if (!currentUser) return;
+    const storageKey = 'lth_pending_checkout_v1_' + String(currentUser.uid);
+    try {
+        const pending = JSON.parse(localStorage.getItem(storageKey) || 'null');
+        if (pending && pending.requestId === requestId) localStorage.removeItem(storageKey);
+    } catch (_) {}
+}
 placeOrder = async function() {
     if (!currentUser || !LTH_AUTH || !LTH_AUTH.currentUser || LTH_AUTH.currentUser.uid !== currentUser.uid || !LTH_AUTH.currentUser.emailVerified) return alert('Please sign in with a verified account before ordering.');
     if (!cart.length) return alert('Your cart is empty.');
@@ -2896,28 +3034,30 @@ placeOrder = async function() {
     if (button && button.disabled) return;
     if (button) { button.disabled = true; button.dataset.originalText = button.textContent; button.textContent = 'Submitting order…'; }
     setStatus(status, 'Verifying current product prices, stock and coupon with Firebase…', true);
+    let requestId = '';
     try {
         const applied = getAppliedCoupon();
-        const requestId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : makeId('REQ');
-        const result = await LTH_FUNCTIONS.httpsCallable('placeLthOrder')({
-            requestId,
+        const checkoutPayload = {
             customerName: name,
             phone,
             address,
             items: cart.map(item => ({ productId: String(item.productId), qty: Math.max(1, Math.floor(number(item.qty))) })),
             couponCode: applied && applied.code ? String(applied.code).toUpperCase() : ''
-        });
+        };
+        requestId = await lthStableCheckoutRequestId(checkoutPayload);
+        const result = await LTH_FUNCTIONS.httpsCallable('placeLthOrder')({ requestId, ...checkoutPayload });
         const order = result.data || {};
         if (!order.orderId) throw new Error('The server response did not contain an order number. Check order history before retrying.');
         const cached = { orderId: order.orderId, uid: currentUser.uid, date: order.date || new Date().toISOString(), customerName: name, email: currentUser.email, phone, address, items: order.items || [], subtotal: number(order.subtotal), discount: number(order.discount), tax: number(order.tax), couponCode: order.couponCode || '', couponDiscount: number(order.couponDiscount), finalTotal: number(order.finalTotal), status: order.status || 'Pending' };
         saveOrderFor(currentUser.email, cached);
         setAppliedCoupon(null); cart = []; saveCartForCurrentUser(); updateCartBadge(); renderCart(); renderOrders(); renderDashboard(); renderCouponPage(); closeCheckout();
         setStatus(status, `Order placed. Order ID: ${cached.orderId}. Final total: Rs. ${money(cached.finalTotal)}.`, true);
+        lthClearStableCheckoutRequestId(requestId);
         alert(`Thank you for shopping!\n\nOrder ID: ${cached.orderId}\nFinal Total: Rs. ${money(cached.finalTotal)}`);
     } catch (e) {
         console.error('Secure order placement failed:', e);
         const msg = e && e.message ? e.message : 'Firebase did not confirm this order.';
-        setStatus(status, `${msg} Your cart has been kept; check Order History before retrying in case the network response was interrupted.`, false);
+        setStatus(status, `${msg} Your cart has been kept; check Order History before retrying in case the network response was interrupted. The same cart and details will reuse the same request token.`, false);
     } finally {
         if (button) { button.disabled = false; button.textContent = button.dataset.originalText || '✅ Place Order'; delete button.dataset.originalText; }
     }
@@ -3088,9 +3228,11 @@ function initLTHDragAgent() {
    LTH REPAIR PATCH 2 — listener privacy, legacy data and scores
 ========================================================= */
 function lthCouponExpired(coupon) {
-    if (!coupon || !coupon.expiresAt) return false;
-    const t = new Date(coupon.expiresAt).getTime();
-    return Number.isFinite(t) && t <= Date.now();
+    if (!coupon || coupon.expiresAt === undefined || coupon.expiresAt === null || coupon.expiresAt === '') return false;
+    const raw = coupon.expiresAt;
+    const t = typeof raw === 'number' ? raw : (/^\d{10,13}$/.test(String(raw).trim()) ? Number(raw) : Date.parse(String(raw)));
+    // Fail closed when an expiry exists but cannot be parsed.
+    return !Number.isFinite(t) || t <= Date.now();
 }
 
 // Realtime Database remains the source of truth. Never read private account/order data globally.
